@@ -44,7 +44,6 @@ public class ToDoListActivity extends AppCompatActivity implements
 
     Button btnDatePicker, btnTimePicker;
     EditText txtDate, txtTime;
-    private int mYear, mMonth, mDay, mHour, mMinute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,14 +127,19 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         btnDatePicker= new Button(this);
         btnDatePicker.setText("Choisir date"); //mettre dans res
+
         btnTimePicker= new Button(this);
         btnTimePicker.setText("Choisir heure"); //mettre dans res
+
         txtDate= new EditText(this);
         txtDate.setWidth(200);
         txtDate.setHint("DD/MM/YYY"); //mettre dans res
+        txtDate.setText("");
+
         txtTime=new EditText(this);
         txtTime.setWidth(200);
         txtTime.setHint("HH:MM"); //mettre dans res
+        txtTime.setText("");
 
 
         btnDatePicker.setOnClickListener(this);
@@ -173,6 +177,17 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if(txtDate.getText().toString().equals("")){ //si pas de date (peut importe si heure)
+                            //TODO : mettre uniquement le string de la tache dans BDD
+                        }
+                        else{
+                            if(txtTime.getText().toString().equals("")){ // si date mais pas heure
+                                txtDate.setText("00:00");
+                            }
+                            //TODO : mettre le string de la tache + heure + date dans BDD
+                        }
+
+                        //met le string de la tache dans BDD
                         String task = String.valueOf(taskEditText.getText());
                         SQLiteDatabase db = mHelper.getWritableDatabase();
                         ContentValues values = new ContentValues();
@@ -196,6 +211,8 @@ public class ToDoListActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
+        int mYear, mMonth, mDay, mHour, mMinute;
+
         if (v == btnDatePicker) {
 
             // Get Current Date
