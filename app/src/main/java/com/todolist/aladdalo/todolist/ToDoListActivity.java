@@ -1,5 +1,7 @@
 package com.todolist.aladdalo.todolist;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -11,17 +13,27 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.todolist.aladdalo.todolist.db.TaskContract;
 import com.todolist.aladdalo.todolist.db.TaskDbHelper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
-public class ToDoListActivity extends AppCompatActivity {
+public class ToDoListActivity extends AppCompatActivity implements
+        View.OnClickListener {
 
     private static final String TAG = "ToDoListActivity";
 
@@ -29,6 +41,10 @@ public class ToDoListActivity extends AppCompatActivity {
     private ListView mTaskListView;
 
     private ArrayAdapter<String> mAdapter;
+
+    Button btnDatePicker, btnTimePicker;
+    EditText txtDate, txtTime;
+    private int mYear, mMonth, mDay, mHour, mMinute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,36 +112,131 @@ public class ToDoListActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.action_add_task:
-                Log.d(TAG, "Add a new task");
-                final EditText taskEditText = new EditText(this);
-                AlertDialog dialog = new AlertDialog.Builder(this)
-                        .setTitle("Add a new task")
-                        .setMessage("What do you want to do next?")
-                        .setView(taskEditText)
-                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String task = String.valueOf(taskEditText.getText());
-                                SQLiteDatabase db = mHelper.getWritableDatabase();
-                                ContentValues values = new ContentValues();
-                                values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
-                                db.insertWithOnConflict(TaskContract.TaskEntry.TABLE,
-                                        null,
-                                        values,
-                                        SQLiteDatabase.CONFLICT_REPLACE);
-                                db.close();
-                                updateUI();
-
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .create();
-                dialog.show();
+                addnewtask();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void addnewtask(){
+        final EditText taskEditText = new EditText(this);
+        taskEditText.setHint("Description tâche"); //mettre dans res
+
+
+
+        btnDatePicker= new Button(this);
+        btnDatePicker.setText("Choisir date"); //mettre dans res
+        btnTimePicker= new Button(this);
+        btnTimePicker.setText("Choisir heure"); //mettre dans res
+        txtDate= new EditText(this);
+        txtDate.setWidth(200);
+        txtDate.setHint("DD/MM/YYY"); //mettre dans res
+        txtTime=new EditText(this);
+        txtTime.setWidth(200);
+        txtTime.setHint("HH:MM"); //mettre dans res
+
+
+        btnDatePicker.setOnClickListener(this);
+        btnTimePicker.setOnClickListener(this);
+
+
+        final LinearLayout linearLayout = new LinearLayout(this);
+        final LinearLayout date = new LinearLayout(this);
+        final LinearLayout time = new LinearLayout(this);
+
+        date.setOrientation(LinearLayout.HORIZONTAL);
+        date.addView(txtDate);
+        date.addView(btnDatePicker);
+
+        time.setOrientation(LinearLayout.HORIZONTAL);
+        time.addView(txtTime);
+        time.addView(btnTimePicker);
+
+        linearLayout.addView(taskEditText);
+        linearLayout.addView(date);
+        linearLayout.addView(time);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+        //TextView textView = (TextView)findViewById(R.id.text_view);
+        ViewGroup.LayoutParams params = taskEditText.getLayoutParams();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        taskEditText.setLayoutParams(params);
+
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Ajouter une nouvelle tache")
+                .setMessage("Que voulez vous faire ensuite ?")
+                .setView(linearLayout)
+                .setPositiveButton("Ajouter", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String task = String.valueOf(taskEditText.getText());
+                        SQLiteDatabase db = mHelper.getWritableDatabase();
+                        ContentValues values = new ContentValues();
+                        values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
+                        db.insertWithOnConflict(TaskContract.TaskEntry.TABLE,
+                                null,
+                                values,
+                                SQLiteDatabase.CONFLICT_REPLACE);
+                        db.close();
+                        updateUI();
+
+                    }
+                })
+                .setNegativeButton("Annuler", null)
+                .create();
+
+
+        dialog.show();
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if (v == btnDatePicker) {
+
+            // Get Current Date
+            final Calendar c = Calendar.getInstance();
+            mYear = c.get(Calendar.YEAR);
+            mMonth = c.get(Calendar.MONTH);
+            mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                    new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(DatePicker view, int year,
+                                              int monthOfYear, int dayOfMonth) {
+
+                            txtDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+
+                        }
+                    }, mYear, mMonth, mDay);
+            datePickerDialog.show();
+        }
+        if (v == btnTimePicker) {
+
+            // Get Current Time
+            final Calendar c = Calendar.getInstance();
+            mHour = c.get(Calendar.HOUR_OF_DAY);
+            mMinute = c.get(Calendar.MINUTE);
+
+            // Launch Time Picker Dialog
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                    new TimePickerDialog.OnTimeSetListener() {
+
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay,
+                                              int minute) {
+
+                            txtTime.setText(hourOfDay + ":" + minute);
+                        }
+                    }, mHour, mMinute, false);
+            timePickerDialog.show();
         }
     }
 
