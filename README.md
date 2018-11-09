@@ -3,19 +3,24 @@
 To do list de la To do list :
 
 
-A faire durant vacances (ou apres):
+A faire :
+
+- Priorité pour les taches (Alexis)
+
+- Savoir si tache fini ou non (Alexis)
 
 - Implémenter Sugar ORM (Dany)
 
 - Utilisateur (classes + bd) (Adrien)
-
-- Informations supplémentaires lors de création tâche (ex : deadline) (Alexis) 
 
 - Améliorer look UI
 
 - Avoir des sous-tâches pour une tâche
 
 
+Deja fait :
+
+- Informations supplémentaires lors de création tâche (ex : deadline) (Alexis) 
 
 
 

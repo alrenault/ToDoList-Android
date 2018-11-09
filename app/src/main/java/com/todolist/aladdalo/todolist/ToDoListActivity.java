@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,10 +46,16 @@ public class ToDoListActivity extends AppCompatActivity implements
     Button btnDatePicker, btnTimePicker;
     EditText txtDate, txtTime;
 
+    private boolean prio0Display = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_list);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
 
         mHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
@@ -98,6 +105,10 @@ public class ToDoListActivity extends AppCompatActivity implements
         updateUI();
     }
 
+    public void afficheParam(View view){
+        //TODO Affiche une page ou l'on peu modifier les params de la tache (premières lignes identique a deleteTask pour trouver la tache)
+    }
+
 
 
     @Override
@@ -114,11 +125,26 @@ public class ToDoListActivity extends AppCompatActivity implements
                 addnewtask();
                 return true;
 
+            case R.id.afficher_prio0:
+                diplayPrio0();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    public void diplayPrio0(){
+        if(prio0Display){
+            prio0Display = false;
+            //TODO afficher la liste des taches sans les taches terminees (prio0)
+        }
+        else{
+            prio0Display = true;
+            //TODO afficher la liste des taches avec les taches terminees (prio0)
+        }
+
+    }
     public void addnewtask(){
         final EditText taskEditText = new EditText(this);
         taskEditText.setHint(R.string.desc_tache);
