@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -25,33 +26,47 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.orm.SugarRecord;
 import com.todolist.aladdalo.todolist.db.TaskContract;
 import com.todolist.aladdalo.todolist.db.TaskDbHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class ToDoListActivity extends AppCompatActivity implements
         View.OnClickListener {
 
     private static final String TAG = "ToDoListActivity";
 
-    private TaskDbHelper mHelper;
+    //private TaskDbHelper mHelper;
     private ListView mTaskListView;
 
-    private ArrayAdapter<String> mAdapter;
+    private ArrayAdaptateur<TaskContract> mAdapter;
 
     Button btnDatePicker, btnTimePicker;
     EditText txtDate, txtTime;
+    private TaskContract task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_list);
 
-        mHelper = new TaskDbHelper(this);
+        //mHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
+
+        mTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String message = "You clicked on " + position
+                        + " id : " + ((TaskContract)(mAdapter.listeTask.get(position))).getId()
+                        + " name : " + ((TaskContract)(mAdapter.listeTask.get(position))).getTaskName();
+                Log.d( "TESSSSSSSSST", "onClick : " + message);
+            }
+        });
 
         updateUI();
     }
@@ -59,7 +74,7 @@ public class ToDoListActivity extends AppCompatActivity implements
     private void updateUI() {
         ArrayList<String> taskList = new ArrayList<>();
 
-        SQLiteDatabase db = mHelper.getReadableDatabase();
+        /*SQLiteDatabase db = mHelper.getReadableDatabase();
 
         Cursor cursor = db.query(TaskContract.TaskEntry.TABLE,
                 new String[]{TaskContract.TaskEntry._ID, TaskContract.TaskEntry.COL_TASK_TITLE},
@@ -68,33 +83,54 @@ public class ToDoListActivity extends AppCompatActivity implements
         while (cursor.moveToNext()) {
             int idx = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
             taskList.add(cursor.getString(idx));
+        }*/
+
+        List<TaskContract> tasks = TaskContract.listAll(TaskContract.class);
+        //List<TaskContract> tasks = SugarRecord.listAll(TaskContract.class);
+        for(TaskContract task : tasks){
+            //taskList.add(task.getTaskName());
+            System.out.println(task.getId() + " : " + task.getTaskName());
         }
 
         if (mAdapter == null) {
-            mAdapter = new ArrayAdapter<>(this,
+            mAdapter = new ArrayAdaptateur<>(this,
                     R.layout.item_todo, // what view to use for the items
                     R.id.task_title, // where to put the String of data
-                    taskList); // where to get all the data
+                    tasks); // where to get all the data
             mTaskListView.setAdapter(mAdapter); // set it as the adapter of the ListView instance
         } else {
             mAdapter.clear();
-            mAdapter.addAll(taskList);
+            mAdapter.addAll(tasks);
             mAdapter.notifyDataSetChanged();
         }
 
-        cursor.close();
-        db.close();
+        //cursor.close();
+        //db.close();
     }
 
     public void deleteTask(View view) {
         View parent = (View) view.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
-        String task = String.valueOf(taskTextView.getText());
-        SQLiteDatabase db = mHelper.getWritableDatabase();
+        /*TextView taskTextView = (TextView) parent.findViewById(R.id.id);
+        int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
+        task = TaskContract.findById(TaskContract.class, taskId);
+        task.delete();*/
+        String taskName = String.valueOf(taskTextView.getText());
+        List<TaskContract> tasks = TaskContract.find(TaskContract.class, "task_Name = ?", taskName);
+        for(TaskContract task : tasks){
+            task.delete();
+            //SugarRecord.delete(task);
+        }
+
+
+        //List<TaskContract> tasks = SugarRecord.find(TaskContract.class, "task_Name = ?", taskName);
+
+
+        /*SQLiteDatabase db = mHelper.getWritableDatabase();
         db.delete(TaskContract.TaskEntry.TABLE,
                 TaskContract.TaskEntry.COL_TASK_TITLE + " = ?",
                 new String[]{task});
-        db.close();
+        db.close();*/
         updateUI();
     }
 
@@ -189,15 +225,19 @@ public class ToDoListActivity extends AppCompatActivity implements
                             }
 
                             //met le string de la tache dans BDD
-                            String task = String.valueOf(taskEditText.getText());
-                            SQLiteDatabase db = mHelper.getWritableDatabase();
+                            String taskName = String.valueOf(taskEditText.getText());
+                            TaskContract task = new TaskContract(taskName);
+                            task.save();
+                            //SugarRecord.save(task);
+
+                            /*SQLiteDatabase db = mHelper.getWritableDatabase();
                             ContentValues values = new ContentValues();
                             values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
                             db.insertWithOnConflict(TaskContract.TaskEntry.TABLE,
                                     null,
                                     values,
                                     SQLiteDatabase.CONFLICT_REPLACE);
-                            db.close();
+                            db.close();*/
                             updateUI();
                         }
 
