@@ -177,27 +177,30 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(txtDate.getText().toString().equals("")){ //si pas de date (peut importe si heure)
-                            //TODO : mettre uniquement le string de la tache dans BDD
-                        }
-                        else{
-                            if(txtTime.getText().toString().equals("")){ // si date mais pas heure
-                                txtDate.setText("00:00");
+                        if(taskEditText.getText().toString() != ""){
+                            if(txtDate.getText().toString().equals("")){ //si pas de date (peut importe si heure)
+                                //TODO : mettre uniquement le string de la tache dans BDD
                             }
-                            //TODO : mettre le string de la tache + heure + date dans BDD
+                            else{
+                                if(txtTime.getText().toString().equals("")){ // si date mais pas heure
+                                    txtDate.setText("00:00");
+                                }
+                                //TODO : mettre le string de la tache + heure + date dans BDD
+                            }
+
+                            //met le string de la tache dans BDD
+                            String task = String.valueOf(taskEditText.getText());
+                            SQLiteDatabase db = mHelper.getWritableDatabase();
+                            ContentValues values = new ContentValues();
+                            values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
+                            db.insertWithOnConflict(TaskContract.TaskEntry.TABLE,
+                                    null,
+                                    values,
+                                    SQLiteDatabase.CONFLICT_REPLACE);
+                            db.close();
+                            updateUI();
                         }
 
-                        //met le string de la tache dans BDD
-                        String task = String.valueOf(taskEditText.getText());
-                        SQLiteDatabase db = mHelper.getWritableDatabase();
-                        ContentValues values = new ContentValues();
-                        values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
-                        db.insertWithOnConflict(TaskContract.TaskEntry.TABLE,
-                                null,
-                                values,
-                                SQLiteDatabase.CONFLICT_REPLACE);
-                        db.close();
-                        updateUI();
 
                     }
                 })
