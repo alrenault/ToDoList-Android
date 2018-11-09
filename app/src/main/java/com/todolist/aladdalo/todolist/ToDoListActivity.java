@@ -121,31 +121,34 @@ public class ToDoListActivity extends AppCompatActivity implements
 
     public void addnewtask(){
         final EditText taskEditText = new EditText(this);
-        taskEditText.setHint("Description tâche"); //mettre dans res
+        taskEditText.setHint(R.string.desc_tache);
 
-
-
-        btnDatePicker= new Button(this);
-        btnDatePicker.setText("Choisir date"); //mettre dans res
-
-        btnTimePicker= new Button(this);
-        btnTimePicker.setText("Choisir heure"); //mettre dans res
-
+        //EditText pour la date
         txtDate= new EditText(this);
         txtDate.setWidth(200);
-        txtDate.setHint("DD/MM/YYY"); //mettre dans res
+        txtDate.setHint(R.string.format_date);
         txtDate.setText("");
 
+        //Bouton affichant le date picker
+        btnDatePicker= new Button(this);
+        btnDatePicker.setText(R.string.choix_date);
+
+        //EditText pour l'heure
         txtTime=new EditText(this);
         txtTime.setWidth(200);
-        txtTime.setHint("HH:MM"); //mettre dans res
+        txtTime.setHint(R.string.format_heure);
         txtTime.setText("");
 
+        //Bouton affichant le time picker
+        btnTimePicker= new Button(this);
+        btnTimePicker.setText(R.string.choix_heure);
 
+        //listener des boutons
         btnDatePicker.setOnClickListener(this);
         btnTimePicker.setOnClickListener(this);
 
 
+        //Layout pour organiser l'AlerteDialog
         final LinearLayout linearLayout = new LinearLayout(this);
         final LinearLayout date = new LinearLayout(this);
         final LinearLayout time = new LinearLayout(this);
@@ -163,27 +166,28 @@ public class ToDoListActivity extends AppCompatActivity implements
         linearLayout.addView(time);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        //TextView textView = (TextView)findViewById(R.id.text_view);
         ViewGroup.LayoutParams params = taskEditText.getLayoutParams();
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         taskEditText.setLayoutParams(params);
 
+        //-----------------------------------------------------
 
+        //Creation du AlertDialog
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Ajouter une nouvelle tache")
-                .setMessage("Que voulez vous faire ensuite ?")
+                .setTitle(R.string.ajout_tache)
+                .setMessage(R.string.faire_ensuite)
                 .setView(linearLayout)
-                .setPositiveButton("Ajouter", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(taskEditText.getText().toString() != ""){
+                        if(!taskEditText.getText().toString().equals("")){//si intitule de tache
                             if(txtDate.getText().toString().equals("")){ //si pas de date (peut importe si heure)
                                 //TODO : mettre uniquement le string de la tache dans BDD
                             }
                             else{
                                 if(txtTime.getText().toString().equals("")){ // si date mais pas heure
-                                    txtDate.setText("00:00");
+                                    txtDate.setText(R.string.heure_defaut);
                                 }
                                 //TODO : mettre le string de la tache + heure + date dans BDD
                             }
@@ -204,7 +208,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                     }
                 })
-                .setNegativeButton("Annuler", null)
+                .setNegativeButton(R.string.annuler, null)
                 .create();
 
 
@@ -218,13 +222,13 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         if (v == btnDatePicker) {
 
-            // Get Current Date
+            //Recupere la date actuelle
             final Calendar c = Calendar.getInstance();
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
 
-
+            //Lance le Date Picker Dialog
             DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                     new DatePickerDialog.OnDateSetListener() {
 
@@ -232,7 +236,9 @@ public class ToDoListActivity extends AppCompatActivity implements
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
 
-                            txtDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            //txtDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            txtDate.setText(String.format(getResources().getString(R.string.date),dayOfMonth,(monthOfYear + 1),year));
+
 
                         }
                     }, mYear, mMonth, mDay);
@@ -240,12 +246,12 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
         if (v == btnTimePicker) {
 
-            // Get Current Time
+            //Recupere l'heure actuelle
             final Calendar c = Calendar.getInstance();
             mHour = c.get(Calendar.HOUR_OF_DAY);
             mMinute = c.get(Calendar.MINUTE);
 
-            // Launch Time Picker Dialog
+            // Lance le Time Picker Dialog
             TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                     new TimePickerDialog.OnTimeSetListener() {
 
@@ -253,7 +259,9 @@ public class ToDoListActivity extends AppCompatActivity implements
                         public void onTimeSet(TimePicker view, int hourOfDay,
                                               int minute) {
 
-                            txtTime.setText(hourOfDay + ":" + minute);
+                            //txtTime.setText(hourOfDay + ":" + minute);
+                            txtDate.setText(String.format(getResources().getString(R.string.heure),hourOfDay,minute));
+
                         }
                     }, mHour, mMinute, false);
             timePickerDialog.show();
