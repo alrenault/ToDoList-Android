@@ -6,6 +6,8 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.TabItem;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,15 +38,16 @@ import java.util.Date;
 public class ToDoListActivity extends AppCompatActivity implements
         View.OnClickListener {
 
-    private static final String TAG = "ToDoListActivity";
+   // private static final String TAG = "ToDoListActivity";
 
     private TaskDbHelper mHelper;
+
     private ListView mTaskListView;
 
     private ArrayAdapter<String> mAdapter;
 
-    Button btnDatePicker, btnTimePicker;
-    EditText txtDate, txtTime;
+    private Button btnDatePicker, btnTimePicker;
+    private EditText txtDate, txtTime;
 
     private boolean prio0Display = false;
 
@@ -52,6 +55,7 @@ public class ToDoListActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_list);
+
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -61,6 +65,9 @@ public class ToDoListActivity extends AppCompatActivity implements
         mTaskListView = (ListView) findViewById(R.id.list_todo);
 
         updateUI();
+
+
+
     }
 
     private void updateUI() {
@@ -137,6 +144,7 @@ public class ToDoListActivity extends AppCompatActivity implements
     public void diplayPrio0(){
         if(prio0Display){
             prio0Display = false;
+            updateUI();
             //TODO afficher la liste des taches sans les taches terminees (prio0)
         }
         else{
@@ -292,6 +300,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                     }, mHour, mMinute, false);
             timePickerDialog.show();
         }
+
     }
 
 }

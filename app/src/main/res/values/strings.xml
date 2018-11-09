@@ -20,5 +20,6 @@
     <string name="date">%1$d/%2$d/%3$d</string>
     <string name="heure">%1$d:%2$d</string>
 
-    <string name="afficher_tache_fini">Afficher/masquer les taches terminées</string>
+    <string name="afficher_tache_fini">Afficher/masquer tâches terminées</string>
+    <string name="afficher_tache_en_cours">Tâches en cours</string>
 </resources>

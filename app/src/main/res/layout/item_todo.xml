@@ -20,6 +20,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
             android:background="@android:drawable/ic_menu_edit"
+            android:backgroundTint="@color/colorPrimary"
             android:onClick="afficheParam" />
 
         <TextView
@@ -43,6 +44,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="20dp"
             android:background="@android:drawable/ic_menu_delete"
+            android:backgroundTint="@color/delete"
             android:onClick="deleteTask" />
 
     </RelativeLayout>
