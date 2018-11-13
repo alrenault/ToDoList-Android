@@ -17,6 +17,8 @@ A faire :
 
 - Avoir des sous-tâches pour une tâche
 
+-gérer les deadlines des tâches et proposer un système de rappel / d’alerte(Loïs)
+
 
 Deja fait :
 
