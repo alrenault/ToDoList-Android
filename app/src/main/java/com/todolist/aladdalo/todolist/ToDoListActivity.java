@@ -6,21 +6,17 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -33,7 +29,6 @@ import com.todolist.aladdalo.todolist.db.TaskDbHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class ToDoListActivity extends AppCompatActivity implements
         View.OnClickListener {
@@ -49,7 +44,7 @@ public class ToDoListActivity extends AppCompatActivity implements
     private Button btnDatePicker, btnTimePicker;
     private EditText txtDate, txtTime;
 
-    private boolean prio0Display = false;
+    private TabLayout tabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +58,32 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         mHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
+
+        tabs = (TabLayout) findViewById(R.id.tabs);
+
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                                          @Override
+                                          public void onTabSelected(TabLayout.Tab tab) {
+                                              switch (tab.getPosition()) {
+                                                  case 0: updateUI();
+                                                  break;
+                                                  case 1: updateUIPrio0();
+                                                  break;
+                                                  
+
+                                              }
+                                          }
+
+                                          @Override
+                                          public void onTabUnselected(TabLayout.Tab tab) {
+
+                                          }
+
+                                          @Override
+                                          public void onTabReselected(TabLayout.Tab tab) {
+
+                                          }
+                                      });
 
         updateUI();
 
@@ -100,6 +121,10 @@ public class ToDoListActivity extends AppCompatActivity implements
         db.close();
     }
 
+    public void updateUIPrio0(){
+
+    }
+
     public void deleteTask(View view) {
         View parent = (View) view.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
@@ -132,27 +157,16 @@ public class ToDoListActivity extends AppCompatActivity implements
                 addnewtask();
                 return true;
 
-            case R.id.afficher_prio0:
-                diplayPrio0();
-                return true;
+            /*case R.id.afficher_prio0:
+                updateUIPrio0();
+                return true;*/
 
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void diplayPrio0(){
-        if(prio0Display){
-            prio0Display = false;
-            updateUI();
-            //TODO afficher la liste des taches sans les taches terminees (prio0)
-        }
-        else{
-            prio0Display = true;
-            //TODO afficher la liste des taches avec les taches terminees (prio0)
-        }
 
-    }
     public void addnewtask(){
         final EditText taskEditText = new EditText(this);
         taskEditText.setHint(R.string.desc_tache);
