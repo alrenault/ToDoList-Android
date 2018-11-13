@@ -69,7 +69,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                                                   break;
                                                   case 1: updateUIPrio0();
                                                   break;
-                                                  
+
 
                                               }
                                           }
