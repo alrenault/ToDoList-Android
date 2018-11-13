@@ -5,7 +5,15 @@
     <item
          android:id="@+id/action_add_task"
          android:icon="@drawable/ic_add_box_black_24dp"
-         android:title="Add Task"
-         app:showAsAction="always" />
+         android:title="@string/ajout_tache"
+         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/afficher_prio0"
+        android:orderInCategory="300"
+        android:title="@string/afficher_tache_fini"
+        android:icon="@drawable/ic_add_box_black_24dp"
+        app:showAsAction="never"/>
 </menu>
+
 

@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">ToDoList</string>
+
+    <!--Definition format-->
+    <string name="format_date">DD/MM/YYYY</string>
+    <string name="format_heure">HH:MM</string>
+    <string name="heure_defaut">00:00</string>
+    <string name="texte_defaut">ToDoList</string>
+
+    <string name="confirmer">Confirmer</string>
+    <string name="annuler">Annuler</string>
+    <string name="ajouter">Ajouter</string>
+
+    <!--Creation tache-->
+    <string name="ajout_tache">Ajouter une nouvelle tache</string>
+    <string name="faire_ensuite">Que voulez vous faire ensuite ?</string>
+    <string name="desc_tache">"Description tâche"</string>
+    <string name="choix_date">"Choisir date"</string>
+    <string name="choix_heure">Choisir heure</string>
+    <string name="date">%1$d/%2$d/%3$d</string>
+    <string name="heure">%1$d:%2$d</string>
+
+    <string name="afficher_tache_fini">Afficher/masquer tâches terminées</string>
+    <string name="afficher_tache_en_cours">Tâches en cours</string>
 </resources>
