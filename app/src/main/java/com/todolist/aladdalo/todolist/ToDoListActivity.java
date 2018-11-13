@@ -2,10 +2,7 @@ package com.todolist.aladdalo.todolist;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,10 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -26,13 +20,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.orm.SugarRecord;
 import com.todolist.aladdalo.todolist.db.TaskContract;
-import com.todolist.aladdalo.todolist.db.TaskDbHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class ToDoListActivity extends AppCompatActivity implements
@@ -43,7 +34,7 @@ public class ToDoListActivity extends AppCompatActivity implements
     //private TaskDbHelper mHelper;
     private ListView mTaskListView;
 
-    private ArrayAdaptateur<TaskContract> mAdapter;
+    private TaskAdapter mAdapter;
 
     Button btnDatePicker, btnTimePicker;
     EditText txtDate, txtTime;
@@ -57,7 +48,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         //mHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
 
-        mTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*mTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -66,7 +57,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                         + " name : " + ((TaskContract)(mAdapter.listeTask.get(position))).getTaskName();
                 Log.d( "TESSSSSSSSST", "onClick : " + message);
             }
-        });
+        });*/
 
         updateUI();
     }
@@ -93,7 +84,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
 
         if (mAdapter == null) {
-            mAdapter = new ArrayAdaptateur<>(this,
+            mAdapter = new TaskAdapter(this,
                     R.layout.item_todo, // what view to use for the items
                     R.id.task_title, // where to put the String of data
                     tasks); // where to get all the data
@@ -110,17 +101,18 @@ public class ToDoListActivity extends AppCompatActivity implements
 
     public void deleteTask(View view) {
         View parent = (View) view.getParent();
-        TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
-        /*TextView taskTextView = (TextView) parent.findViewById(R.id.id);
+        //TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
+        TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
+        System.out.println("--------------id : " + taskId);
         task = TaskContract.findById(TaskContract.class, taskId);
-        task.delete();*/
-        String taskName = String.valueOf(taskTextView.getText());
+        task.delete();
+        /*String taskName = String.valueOf(taskTextView.getText());
         List<TaskContract> tasks = TaskContract.find(TaskContract.class, "task_Name = ?", taskName);
         for(TaskContract task : tasks){
             task.delete();
             //SugarRecord.delete(task);
-        }
+        }*/
 
 
         //List<TaskContract> tasks = SugarRecord.find(TaskContract.class, "task_Name = ?", taskName);

@@ -17,6 +17,14 @@
             android:text="Hello"
             android:textSize="20sp"/>
 
+        <TextView
+            android:id="@+id/task_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:visibility="invisible"/>
+
+
         <Button
             android:id="@+id/task_delete"
             android:onClick="deleteTask"
