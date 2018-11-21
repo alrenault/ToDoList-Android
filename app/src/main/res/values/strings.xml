@@ -19,6 +19,11 @@
     <string name="choix_heure">Choisir heure</string>
     <string name="date">%1$d/%2$d/%3$d</string>
     <string name="heure">%1$d:%2$d</string>
+    <string name="txtPriorite">Priorité : </string>
+    <string name="prioFaible">Faible</string>
+    <string name="prioMoyenne">Moyenne</string>
+    <string name="prioForte">Forte</string>
+
 
     <string name="afficher_tache_fini">Tâches terminées</string>
     <string name="afficher_tache_en_cours">Tâches en cours</string>

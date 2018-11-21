@@ -12,4 +12,7 @@ public enum Priorite {
         this.prio = t;
     }
 
+    public int getPrio() {
+        return prio;
+    }
 }
