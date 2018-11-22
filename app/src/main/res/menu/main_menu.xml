@@ -8,12 +8,19 @@
          android:title="@string/ajout_tache"
          app:showAsAction="ifRoom" />
 
-   <!-- <item
-        android:id="@+id/afficher_prio0"
+    <item
+        android:id="@+id/trier_date"
         android:orderInCategory="300"
-        android:title="@string/afficher_tache_fini"
+        android:title="@string/trier_date"
         android:icon="@drawable/ic_add_box_black_24dp"
-        app:showAsAction="never"/> -->
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/trier_prio"
+        android:orderInCategory="300"
+        android:title="@string/trier_prio"
+        android:icon="@drawable/ic_add_box_black_24dp"
+        app:showAsAction="never"/>
 </menu>
 
 

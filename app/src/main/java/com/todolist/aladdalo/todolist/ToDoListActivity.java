@@ -21,8 +21,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.orm.query.Condition;
+import com.orm.query.Select;
 import com.todolist.aladdalo.todolist.db.Task;
 
+import java.security.spec.EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -46,13 +49,17 @@ public class ToDoListActivity extends AppCompatActivity implements
     DatePickerDialog.OnDateSetListener datePicker;
     final Calendar c = Calendar.getInstance();
 
-    private int mYear, mMonth, mDay, mHour, mMinute;
+    private int mYear=0, mMonth=0, mDay=0, mHour=0, mMinute=0;
+
+    /**true pour trier par date, false par priorité*/
+    private boolean orderBy = true;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_to_do_list);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
 
@@ -69,9 +76,9 @@ public class ToDoListActivity extends AppCompatActivity implements
                                           @Override
                                           public void onTabSelected(TabLayout.Tab tab) {
                                               switch (tab.getPosition()) {
-                                                  case 0: updateUI();
+                                                  case 0: updateUI(true);
                                                   break;
-                                                  case 1: updateUIPrio0();
+                                                  case 1: updateUI(false);
                                                   break;
 
 
@@ -86,17 +93,45 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                                           }
                                       });
-        updateUI();
+        refreshList();
     }
 
-    private void updateUI() {
+    private void updateUI(boolean enCours) {
 
-        List<Task> tasks = Task.listAll(Task.class);
+        //List<Task> tasks = Task.listAll(Task.class);
+        List<Task> tasks;
+
+
+
+        if(enCours){/*affiche les taches en cours*/
+            if(orderBy){
+                tasks = Select.from(Task.class)
+                        .where(Condition.prop("priority").notEq(Priorite.Fini))
+                        .orderBy("date")
+                        .list();
+            }
+            else{
+                tasks = Select.from(Task.class)
+                        .where(Condition.prop("priority").notEq(Priorite.Fini))
+                        .orderBy("priority desc")
+                        .list();
+            }
+
+        }
+        else{/*affiche les taches terminées*/
+            tasks = Select.from(Task.class)
+                    .where(Condition.prop("priority").eq(Priorite.Fini))
+                    .orderBy("date")
+                    .list();
+        }
+
+
         //List<Task> tasks = SugarRecord.listAll(Task.class);
        /* for(Task task : tasks){
             //taskList.add(task.getTaskName());
             System.out.println(task.getId() + " : " + task.getTaskName() + ", date : " + task.getDate());
         }*/
+
 
         if (mAdapter == null) {
             mAdapter = new TaskAdapter(this,
@@ -110,12 +145,15 @@ public class ToDoListActivity extends AppCompatActivity implements
             mAdapter.notifyDataSetChanged();
         }
 
-        //cursor.close();
-        //db.close();
     }
 
-    public void updateUIPrio0(){
-
+    public void refreshList(){
+        if(tabs.getTabAt(0).isSelected()){
+            updateUI(true);
+        }
+        else{
+            updateUI(false);
+        }
     }
 
     public void deleteTask(View view) {
@@ -127,7 +165,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         task = Task.findById(Task.class, taskId);
         task.delete();
 
-        updateUI();
+        refreshList();
     }
 
     public void afficheParam(View view){
@@ -148,6 +186,20 @@ public class ToDoListActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.action_add_task:
                 addnewtask();
+                return true;
+            case R.id.trier_date:
+                if(!orderBy){
+                    orderBy = true;
+                    refreshList();
+                }
+
+                return true;
+
+            case R.id.trier_prio:
+                if(orderBy){
+                    orderBy = false;
+                    refreshList();
+                }
                 return true;
 
             /*case R.id.afficher_prio0:
@@ -206,7 +258,6 @@ public class ToDoListActivity extends AppCompatActivity implements
         /*Les RadioButton du RadioGroup*/
         final RadioButton faible = new RadioButton(this);
         faible.setText(R.string.prioFaible);
-        //faible.setChecked(true);
         final RadioButton moyenne = new RadioButton(this);
         moyenne.setText(R.string.prioMoyenne);
         final RadioButton forte = new RadioButton(this);
@@ -265,43 +316,33 @@ public class ToDoListActivity extends AppCompatActivity implements
                         if(!taskEditText.getText().toString().equals("")){//si intitule de
                             Task task;
                             int date;
-                            int hour;
+                            int time;
                             String taskName = String.valueOf(taskEditText.getText());
 
                             if(txtDate.getText().toString().equals("")){ //si pas de date (peut importe si heure)
                                 task = new Task(taskName);
                             }
                             else{
-                                if(txtTime.getText().toString().equals("")){ // si date mais pas heure
-                                    mHour = 0;
-                                    mMinute = 0;
-                                    date = mYear*10000 + mMonth * 100 + mDay;
-                                    task = new Task(taskName, date);
-
-                                }
-                                else{
-                                    hour = 1*10000 + mHour*100 + mMinute;
-                                    date = mYear*10000 + mMonth * 100 + mDay;
-                                    task = new Task(taskName, date, hour);
-
-                                }
+                                if(mDay != 0)
+                                    mMonth++;//car commence à 0
+                                date = mYear*10000 + mMonth * 100 + mDay ;
+                                time = 10000 + mHour*100 + mMinute;
+                                task = new Task(taskName, date, time);
                                 //TODO : mettre le string de la tache + heure + date dans BDD
                             }
 
                             if(faible.isChecked()){
                                 task.setPriority(Priorite.Faible);
                             }
-                            else{
-                                if(moyenne.isChecked()){
-                                    task.setPriority(Priorite.Moyenne);
-                                }
-                                else {
-                                    task.setPriority(Priorite.Forte);
-                                }
+                            if(moyenne.isChecked()){
+                                task.setPriority(Priorite.Moyenne);
+                            }
+                            if(forte.isChecked()) {
+                                task.setPriority(Priorite.Forte);
                             }
 
                             task.save();
-                            updateUI();
+                            refreshList();
                         }
 
 

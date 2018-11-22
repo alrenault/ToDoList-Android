@@ -39,7 +39,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         // Populate the data into the template view using the data object
         tvId.setText(String.valueOf(task.getId()));
         tvTitle.setText(task.getTaskName());
-        tvDeadLine.setText(task.getTimeString()+"  "+task.getDateString());
+        tvDeadLine.setText(task.getTimeString()+" "+task.getDateString());
 
         // Return the completed view to render on screen
         return convertView;

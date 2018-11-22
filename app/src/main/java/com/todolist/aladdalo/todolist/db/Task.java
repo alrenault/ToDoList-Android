@@ -12,9 +12,9 @@ public class Task extends SugarRecord{
 
     private int date;
 
-    private  int time;
+    private int time;
 
-    private Priorite priority = Priorite.Fini;
+    private int priority = 0;
 
     public Task(){
 
@@ -24,15 +24,6 @@ public class Task extends SugarRecord{
 
         this.taskName = taskName;
         this.date = 0;
-        this.time = 0;
-    }
-
-
-    public Task(String taskName, int date){
-
-        this.taskName = taskName;
-        this.date = date;
-        this.time = 0;
     }
 
 
@@ -43,12 +34,11 @@ public class Task extends SugarRecord{
         this.time = time;
     }
 
-
     public String getTaskName() {
         return taskName;
     }
 
-    public int getDate() {
+    public long getDate() {
         return date;
     }
 
@@ -62,20 +52,21 @@ public class Task extends SugarRecord{
         return date.substring(6,8)+"/"+date.substring(4,6)+"/"+date.substring(0,4);
     }
 
-
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
     public String getTimeString(){
         String time = String.valueOf(this.time);
+
         if(time.length() == 1){
             return "";
         }
+
         return time.substring(1,3)+":"+time.substring(3,5);
     }
 
-    public Priorite getPriority() {
+    public int getPriority() {
         return priority;
     }
 
@@ -87,17 +78,13 @@ public class Task extends SugarRecord{
         this.date = date;
     }
 
-    public void setTime(int time) {
-        this.time = time;
-    }
-
     public void setPriority(Priorite priority) {
-        this.priority = priority;
+        this.priority = priority.getPrio();
     }
 
     @Override
     public String toString() {
-        return taskName + " " + getDateString() + " " + getTimeString();
+        return taskName + " " + getDateString();
     }
 
         /*public static final String DB_NAME = "com.todolist.aladdalo.todolist.db";
