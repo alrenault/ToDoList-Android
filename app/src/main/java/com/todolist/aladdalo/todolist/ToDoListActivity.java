@@ -324,13 +324,13 @@ public class ToDoListActivity extends AppCompatActivity implements
                             }
 
                             if(faible.isChecked()){
-                                task.setPriority(Priorite.Fini);
+                                task.setPriority(Priorite.Faible);
                             }
                             if(moyenne.isChecked()){
-                                task.setPriority(Priorite.Fini);
+                                task.setPriority(Priorite.Moyenne);
                             }
                             if(forte.isChecked()) {
-                                task.setPriority(Priorite.Fini);
+                                task.setPriority(Priorite.Forte);
                             }
 
                             task.save();
