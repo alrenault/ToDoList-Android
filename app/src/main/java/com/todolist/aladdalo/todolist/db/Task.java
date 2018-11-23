@@ -74,6 +74,10 @@ public class Task extends SugarRecord{
         this.taskName = taskName;
     }
 
+    public void setTime(int time) {
+        this.time = time;
+    }
+
     public void setDate(int date) {
         this.date = date;
     }
