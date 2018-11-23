@@ -10,6 +10,7 @@
     <string name="confirmer">Confirmer</string>
     <string name="annuler">Annuler</string>
     <string name="ajouter">Ajouter</string>
+    <string name="modifier">Modifier</string>
 
     <!--Creation tache-->
     <string name="ajout_tache">Ajouter une nouvelle tache</string>
