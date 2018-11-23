@@ -62,7 +62,7 @@ public class Task extends SugarRecord{
     public String getTimeString(){
         String time = String.valueOf(this.time);
 
-        if(time.length() != 4){
+        if(time.length() != 5){
             return "";
         }
 
