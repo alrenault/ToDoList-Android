@@ -14,7 +14,7 @@ public class Task extends SugarRecord{
 
     private int time;
 
-    private int priority = 0;
+    private int priority;
 
     public Task(){
 
@@ -23,7 +23,9 @@ public class Task extends SugarRecord{
     public Task(String taskName){
 
         this.taskName = taskName;
-        this.date = 0;
+        this.date = 100000000;
+        this.time = 0;
+        this.priority = 0;
     }
 
 
@@ -32,6 +34,7 @@ public class Task extends SugarRecord{
         this.taskName = taskName;
         this.date = date;
         this.time = time;
+        this.priority = 0;
     }
 
     public String getTaskName() {
@@ -45,7 +48,7 @@ public class Task extends SugarRecord{
     public String getDateString(){
         String date = String.valueOf(this.date);
 
-        if(date.length() == 1){
+        if(date.length() != 8){
             return "";
         }
 
@@ -59,7 +62,7 @@ public class Task extends SugarRecord{
     public String getTimeString(){
         String time = String.valueOf(this.time);
 
-        if(time.length() == 1){
+        if(time.length() != 4){
             return "";
         }
 

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.todolist.aladdalo.todolist.db.Task;
@@ -39,7 +40,36 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         // Populate the data into the template view using the data object
         tvId.setText(String.valueOf(task.getId()));
         tvTitle.setText(task.getTaskName());
-        tvDeadLine.setText(task.getTimeString()+" "+task.getDateString());
+        tvDeadLine.setText(task.getDateString()+"\n"+task.getTimeString());
+
+        ImageView vignette1 = convertView.findViewById(R.id.imgPrio1);
+        ImageView vignette2 = convertView.findViewById(R.id.imgPrio2);
+        ImageView vignette3 = convertView.findViewById(R.id.imgPrio3);
+
+        switch (task.getPriority()){
+            case 0 :
+                vignette1.setVisibility(View.INVISIBLE);
+                vignette2.setVisibility(View.INVISIBLE);
+                vignette3.setVisibility(View.INVISIBLE);
+                break;
+
+            case 1:
+                vignette1.setVisibility(View.VISIBLE);
+                vignette2.setVisibility(View.INVISIBLE);
+                vignette3.setVisibility(View.INVISIBLE);
+                break;
+            case 2 :
+                vignette1.setVisibility(View.INVISIBLE);
+                vignette2.setVisibility(View.VISIBLE);
+                vignette3.setVisibility(View.INVISIBLE);
+                break;
+            case 3:
+                vignette1.setVisibility(View.INVISIBLE);
+                vignette2.setVisibility(View.INVISIBLE);
+                vignette3.setVisibility(View.VISIBLE);
+        }
+
+
 
         // Return the completed view to render on screen
         return convertView;

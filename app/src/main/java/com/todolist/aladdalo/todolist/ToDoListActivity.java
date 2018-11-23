@@ -33,7 +33,7 @@ import java.util.List;
 public class ToDoListActivity extends AppCompatActivity implements
         View.OnClickListener {
 
-   // private static final String TAG = "ToDoListActivity";
+    // private static final String TAG = "ToDoListActivity";
 
 
     //private TaskDbHelper mHelper;
@@ -52,7 +52,7 @@ public class ToDoListActivity extends AppCompatActivity implements
     private int mYear=0, mMonth=0, mDay=0, mHour=0, mMinute=0;
 
     /**true pour trier par date, false par priorité*/
-    private boolean orderBy = true;
+    private boolean enCours = true;
 
 
 
@@ -73,30 +73,30 @@ public class ToDoListActivity extends AppCompatActivity implements
         tabs = (TabLayout) findViewById(R.id.tabs);
 
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                                          @Override
-                                          public void onTabSelected(TabLayout.Tab tab) {
-                                              switch (tab.getPosition()) {
-                                                  case 0: updateUI(true);
-                                                  break;
-                                                  case 1: updateUI(false);
-                                                  break;
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0: updateUI(true);
+                        break;
+                    case 1: updateUI(false);
+                        break;
 
 
-                                              }
-                                          }
-                                          @Override
-                                          public void onTabUnselected(TabLayout.Tab tab) {
+                }
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-                                          }
-                                          @Override
-                                          public void onTabReselected(TabLayout.Tab tab) {
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
 
-                                          }
-                                      });
+            }
+        });
         refreshList();
     }
 
-    private void updateUI(boolean enCours) {
+    private void updateUI(boolean orderBy) {
 
         //List<Task> tasks = Task.listAll(Task.class);
         List<Task> tasks;
@@ -105,24 +105,29 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         if(enCours){/*affiche les taches en cours*/
             if(orderBy){
+
                 tasks = Select.from(Task.class)
-                        .where(Condition.prop("priority").notEq(Priorite.Fini))
+                        .where(Condition.prop("priority").notEq(0))
                         .orderBy("date")
                         .list();
+                System.out.println("PREMIER CAS");
             }
             else{
                 tasks = Select.from(Task.class)
-                        .where(Condition.prop("priority").notEq(Priorite.Fini))
+                        .where(Condition.prop("priority").notEq(0))
                         .orderBy("priority desc")
                         .list();
+                System.out.println("DEUXIEME CAS");
             }
 
         }
         else{/*affiche les taches terminées*/
             tasks = Select.from(Task.class)
-                    .where(Condition.prop("priority").eq(Priorite.Fini))
+                    .where(Condition.prop("priority").eq(0))
                     .orderBy("date")
                     .list();
+            System.out.println("TROISIEME CAS");
+
         }
 
 
@@ -187,24 +192,11 @@ public class ToDoListActivity extends AppCompatActivity implements
             case R.id.action_add_task:
                 addnewtask();
                 return true;
-            case R.id.trier_date:
-                if(!orderBy){
-                    orderBy = true;
-                    refreshList();
-                }
+            case R.id.afficher_cacher_prio0:
+                enCours = !enCours;
+                refreshList();
 
                 return true;
-
-            case R.id.trier_prio:
-                if(orderBy){
-                    orderBy = false;
-                    refreshList();
-                }
-                return true;
-
-            /*case R.id.afficher_prio0:
-                updateUIPrio0();
-                return true;*/
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -332,13 +324,13 @@ public class ToDoListActivity extends AppCompatActivity implements
                             }
 
                             if(faible.isChecked()){
-                                task.setPriority(Priorite.Faible);
+                                task.setPriority(Priorite.Fini);
                             }
                             if(moyenne.isChecked()){
-                                task.setPriority(Priorite.Moyenne);
+                                task.setPriority(Priorite.Fini);
                             }
                             if(forte.isChecked()) {
-                                task.setPriority(Priorite.Forte);
+                                task.setPriority(Priorite.Fini);
                             }
 
                             task.save();

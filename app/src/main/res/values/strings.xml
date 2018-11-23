@@ -25,7 +25,7 @@
     <string name="prioForte">Forte</string>
 
 
-    <string name="afficher_tache_fini">Tâches terminées</string>
+    <string name="afficher_cacher_tache_fini">Afficher/Cacher les tâches terminées</string>
     <string name="afficher_tache_en_cours">Tâches en cours</string>
 
     <string name="trier_date">Trier par deadline</string>

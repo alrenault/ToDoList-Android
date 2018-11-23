@@ -39,14 +39,14 @@
             android:id="@+id/tabItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/afficher_tache_en_cours"
+            android:text="@string/trier_date"
             />
 
         <android.support.design.widget.TabItem
             android:id="@+id/tabItem2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/afficher_tache_fini" />
+            android:text="@string/trier_prio" />
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
 
