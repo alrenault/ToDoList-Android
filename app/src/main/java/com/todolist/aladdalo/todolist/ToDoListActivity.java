@@ -3,11 +3,13 @@ package com.todolist.aladdalo.todolist;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +25,6 @@ import android.widget.TimePicker;
 
 import com.todolist.aladdalo.todolist.db.Task;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -47,6 +48,9 @@ public class ToDoListActivity extends AppCompatActivity implements
     final Calendar c = Calendar.getInstance();
 
     private int mYear, mMonth, mDay, mHour, mMinute;
+
+    //To manage notif and alarm
+    private Intent intent;
 
 
 
@@ -87,6 +91,9 @@ public class ToDoListActivity extends AppCompatActivity implements
                                           }
                                       });
         updateUI();
+
+
+
     }
 
     private void updateUI() {
@@ -284,7 +291,11 @@ public class ToDoListActivity extends AppCompatActivity implements
                                     date = mYear*10000 + mMonth * 100 + mDay;
                                     task = new Task(taskName, date, hour);
 
+                                    new ToDoAlarm(ToDoListActivity.this.getApplicationContext(),taskName,date,hour);//Start alarm
+
                                 }
+
+                                
                                 //TODO : mettre le string de la tache + heure + date dans BDD
                             }
 
@@ -299,6 +310,9 @@ public class ToDoListActivity extends AppCompatActivity implements
                                     task.setPriority(Priorite.Forte);
                                 }
                             }
+
+
+
 
                             task.save();
                             updateUI();
