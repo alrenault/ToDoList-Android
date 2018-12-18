@@ -8,6 +8,12 @@
          android:title="@string/ajout_tache"
          app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_authenticate"
+        android:icon="@drawable/ic_add_box_black_24dp"
+        android:title="@string/authenticate"
+        app:showAsAction="ifRoom" />
+
    <!-- <item
         android:id="@+id/afficher_prio0"
         android:orderInCategory="300"

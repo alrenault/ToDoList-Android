@@ -3,6 +3,7 @@ package com.todolist.aladdalo.todolist;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.todolist.aladdalo.todolist.db.AccountLauncher;
+import com.todolist.aladdalo.todolist.db.AuthenticatorService;
 import com.todolist.aladdalo.todolist.db.Task;
 
 import java.util.ArrayList;
@@ -87,6 +90,9 @@ public class ToDoListActivity extends AppCompatActivity implements
                                           }
                                       });
         updateUI();
+
+        /*Intent intent = new Intent(this, AuthenticatorService.class);
+        startService(intent);*/
     }
 
     private void updateUI() {
@@ -148,6 +154,10 @@ public class ToDoListActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.action_add_task:
                 addnewtask();
+                return true;
+
+            case R.id.action_authenticate:
+                AccountLauncher.authenticate(this);
                 return true;
 
             /*case R.id.afficher_prio0:
