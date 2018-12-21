@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:tabTextColor="@color/background"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"

@@ -52,7 +52,7 @@ public class Task extends SugarRecord{
             return "";
         }
 
-        return date.substring(6,8)+"/"+date.substring(4,6)+"/"+date.substring(0,4);
+        return date.substring(6,8)+"/"+date.substring(4,6)+"/"+date.substring(2,4);
     }
 
     public long getTime() {
