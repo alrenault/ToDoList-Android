@@ -25,8 +25,6 @@ import com.orm.query.Condition;
 import com.orm.query.Select;
 import com.todolist.aladdalo.todolist.db.Task;
 
-import java.security.spec.EncodedKeySpec;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -145,7 +143,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         if (mAdapter == null) {
             mAdapter = new TaskAdapter(this,
-                    R.layout.item_todo, // what view to use for the items
+                    R.layout.item_task, // what view to use for the items
                     R.id.task_title, // where to put the String of data
                     tasks); // where to get all the data
             mTaskListView.setAdapter(mAdapter); // set it as the adapter of the ListView instance
@@ -192,7 +190,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         //Creation du AlertDialog
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.ajout_tache)
+                .setTitle(R.string.modif_tache)
                 .setMessage(R.string.faire_ensuite)
                 .setView(linearLayout)
                 .setPositiveButton(R.string.modifier, new DialogInterface.OnClickListener() {

@@ -14,6 +14,7 @@
 
     <!--Creation tache-->
     <string name="ajout_tache">Ajouter une nouvelle tache</string>
+    <string name="modif_tache">Modifier une tache</string>
     <string name="faire_ensuite">Que voulez vous faire ensuite ?</string>
     <string name="desc_tache">"Description tâche"</string>
     <string name="choix_date">"Choisir date"</string>
