@@ -40,7 +40,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         // Populate the data into the template view using the data object
         tvId.setText(String.valueOf(task.getId()));
         tvTitle.setText(task.getTaskName());
-        tvDeadLine.setText(task.getDateString()+"\n"+task.getTimeString());
+        tvDeadLine.setText(task.getDateString()+"\n  "+task.getTimeString());
 
         ImageView vignette1 = convertView.findViewById(R.id.imgPrio1);
         ImageView vignette2 = convertView.findViewById(R.id.imgPrio2);
