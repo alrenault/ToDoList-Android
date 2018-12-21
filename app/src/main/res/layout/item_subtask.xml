@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ToDoListActivity"
+    android:orientation="vertical">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -50,32 +52,32 @@
             android:backgroundTint="@color/colorPrimary"
             android:onClick="afficheParam" />
 
-            <TextView
-                android:id="@+id/deadline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="@dimen/margin_top_txt"
-                android:layout_marginBottom="@dimen/margin_bottom_txt"
-                android:layout_marginStart="@dimen/margin_start_deadline"
-                android:layout_marginEnd="@dimen/margin_end_deadline"
-                android:text="@string/texte_defaut"
-                android:textSize="@dimen/txt_size_deadline" />
+        <TextView
+            android:id="@+id/deadline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/margin_top_txt"
+            android:layout_marginBottom="@dimen/margin_bottom_txt"
+            android:layout_marginStart="@dimen/margin_start_deadline"
+            android:layout_marginEnd="@dimen/margin_end_deadline"
+            android:text="@string/texte_defaut"
+            android:textSize="@dimen/txt_size_deadline" />
 
 
-            <TextView
-                android:id="@+id/task_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="@dimen/margin_top_txt"
-                android:layout_marginBottom="@dimen/margin_bottom_txt"
-                android:layout_marginStart="@dimen/margin_start_task"
-                android:layout_marginEnd="@dimen/margin_end_task"
-                android:text="@string/texte_defaut"
-                android:textSize="@dimen/txt_size_task" />
+        <TextView
+            android:id="@+id/task_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/margin_top_txt"
+            android:layout_marginBottom="@dimen/margin_bottom_txt"
+            android:layout_marginStart="@dimen/margin_start_task"
+            android:layout_marginEnd="@dimen/margin_end_task"
+            android:text="@string/texte_defaut"
+            android:textSize="@dimen/txt_size_task" />
 
 
 
@@ -106,5 +108,4 @@
 
     </RelativeLayout>
 
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

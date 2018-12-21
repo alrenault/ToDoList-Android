@@ -69,6 +69,8 @@ public class ToDoListActivity extends AppCompatActivity implements
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        ListView mTaskListView2 = (ListView) findViewById(R.id.list_subtasks);
+
 
         //mHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
