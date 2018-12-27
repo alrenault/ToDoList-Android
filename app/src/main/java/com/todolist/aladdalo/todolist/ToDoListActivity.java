@@ -69,9 +69,6 @@ public class ToDoListActivity extends AppCompatActivity implements
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        ListView mTaskListView2 = (ListView) findViewById(R.id.list_subtasks);
-
-
         //mHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
 
@@ -166,14 +163,27 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
     }
 
-    public void deleteTask(View view) {
-        View parent = (View) view.getParent();
+    public void deleteTask(Task task) {
+       // View parent = (View) view.getParent();
         //TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
+        //TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
+        //int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
+        //System.out.println("--------------id : " + taskId);
+       // task = Task.findById(Task.class, taskId);
+        task.delete();
+
+        refreshList();
+    }
+
+    public void finishTask(View view){
+        View parent = (View) view.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
         System.out.println("--------------id : " + taskId);
         task = Task.findById(Task.class, taskId);
-        task.delete();
+        task.setPriority(Priorite.Fini);
+        System.out.println("--------------PRIORITE : " + task.getPriority());
+        task.save();
 
         refreshList();
     }
@@ -195,6 +205,14 @@ public class ToDoListActivity extends AppCompatActivity implements
                 .setTitle(R.string.modif_tache)
                 .setMessage(R.string.faire_ensuite)
                 .setView(linearLayout)
+                .setNeutralButton("Supprimer", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteTask(task);
+                    }
+                })
+
                 .setPositiveButton(R.string.modifier, new DialogInterface.OnClickListener() {
 
                     @Override

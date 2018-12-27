@@ -101,11 +101,6 @@
             android:backgroundTint="@color/delete"
             android:onClick="deleteTask" />
 
-        <ListView
-            android:id="@+id/list_subtasks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
     </RelativeLayout>
 
 </LinearLayout>

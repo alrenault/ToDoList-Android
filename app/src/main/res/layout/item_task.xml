@@ -95,9 +95,8 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/margin_end_delete"
-            android:background="@android:drawable/ic_menu_delete"
-            android:backgroundTint="@color/delete"
-            android:onClick="deleteTask" />
+            android:background="@drawable/checkmark_green"
+            android:onClick="finishTask" />
 
         <ListView
             android:id="@+id/list_subtasks"

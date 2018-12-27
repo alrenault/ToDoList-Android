@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="image_size_delete">30dip</dimen>
-    <dimen name="margin_end_delete">15dp</dimen>
+    <dimen name="margin_end_delete">13dp</dimen>
 
     <dimen name="image_size_prio">20dip</dimen>
     <dimen name="margin_start_prio">15dip</dimen>
