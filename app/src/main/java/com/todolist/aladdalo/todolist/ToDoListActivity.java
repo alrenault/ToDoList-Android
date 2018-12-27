@@ -24,6 +24,7 @@ import android.widget.TimePicker;
 
 import com.todolist.aladdalo.todolist.db.AccountLauncher;
 import com.todolist.aladdalo.todolist.db.AuthenticatorService;
+import com.todolist.aladdalo.todolist.db.OnlineDatabase;
 import com.todolist.aladdalo.todolist.db.Task;
 
 import java.util.ArrayList;
@@ -157,7 +158,9 @@ public class ToDoListActivity extends AppCompatActivity implements
                 return true;
 
             case R.id.action_authenticate:
-                AccountLauncher.authenticate(this);
+                //AccountLauncher.authenticate(this);
+                OnlineDatabase o = new OnlineDatabase(this);
+                o.getInfos("email.lll@gmail.com","azerty");
                 return true;
 
             /*case R.id.afficher_prio0:
