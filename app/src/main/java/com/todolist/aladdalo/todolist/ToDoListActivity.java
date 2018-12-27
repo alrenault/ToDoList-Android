@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +55,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
     LinearLayout linearLayout;
     EditText taskEditText;
+    EditText progressEditText;
     RadioButton faible;
     RadioButton moyenne;
     RadioButton forte;
@@ -194,7 +196,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
         task = Task.findById(Task.class, taskId);
-        createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority());
+        createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority(),task.getProgress());
 
         /*---------------------------------------
         Crée l'AlertDialog pour l'édition de tâche
@@ -217,6 +219,10 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        int progress = 0;
+                        if(!progressEditText.getText().toString().equals("")){
+                            progress = Integer.parseInt(progressEditText.getText().toString())%100;
+                        }
                         if(!taskEditText.getText().toString().equals("")){
                             int date;
                             int time;
@@ -233,7 +239,6 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 task.setTaskName(taskName);
                                 task.setDate(date);
                                 task.setTime(time);
-                                //TODO : mettre le string de la tache + heure + date dans BDD
                             }
 
                             if(faible.isChecked()){
@@ -246,6 +251,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 task.setPriority(Priorite.Forte);
                             }
 
+                            task.setProgress(progress);
                             task.save();
                             refreshList();
                         }
@@ -286,7 +292,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
     }
 
-    private void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault){
+    private void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault,int progress){
         /*---------------------------------------
         Crée le layout pour la création de tâche
         ----------------------------------------*/
@@ -347,6 +353,16 @@ public class ToDoListActivity extends AppCompatActivity implements
                 break;
             default : priority.check(faible.getId());
         }
+        //----------------------------
+
+        //Progression
+        final TextView textProgress = new TextView(this);
+        textProgress.setText(R.string.desc_progress);
+        textProgress.setPadding(0,10,0,0);
+        final EditText progressEditText = new EditText(this);
+        progressEditText.setHint(R.string.progress_hint);
+        progressEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        progressEditText.setText(String.valueOf(progress));
 
 
         //Layout pour organiser l'AlerteDialog
@@ -365,6 +381,8 @@ public class ToDoListActivity extends AppCompatActivity implements
         linearLayout.addView(time);
         linearLayout.addView(textPriority);
         linearLayout.addView(priority);
+        linearLayout.addView(textProgress);
+        linearLayout.addView(progressEditText);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         /*Définir la bonne taille pour le champ taskEditText*/
@@ -378,6 +396,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         this.linearLayout = linearLayout;
         this.taskEditText = taskEditText;
+        this.progressEditText = progressEditText;
         this.faible = faible;
         this.moyenne = moyenne;
         this.forte = forte;
@@ -386,7 +405,7 @@ public class ToDoListActivity extends AppCompatActivity implements
     /**Créé et gère l'AlertDialog lors de la création de tâche**/
     public void addnewtask(){
 
-        createTaskLayout("","","", 1);
+        createTaskLayout("","","", 1,0);
 
         /*---------------------------------------
         Crée l'AlertDialog pour la création de tâche
@@ -401,6 +420,10 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        int progress = 0;
+                        if(!progressEditText.getText().toString().equals("")){
+                            progress = Integer.parseInt(progressEditText.getText().toString())%100;
+                        }
                         if(!taskEditText.getText().toString().equals("")){//si intitule de
                             Task task;
                             int date;
@@ -408,14 +431,14 @@ public class ToDoListActivity extends AppCompatActivity implements
                             String taskName = String.valueOf(taskEditText.getText());
 
                             if(txtDate.getText().toString().equals("")){ //si pas de date (peut importe si heure)
-                                task = new Task(taskName);
+                                task = new Task(taskName,progress);
                             }
                             else{
                                 //if(mDay != 0)
                                    // mMonth++;//car commence à 0
                                 date = mYear*10000 + mMonth * 100 + mDay ;
                                 time = 10000 + mHour*100 + mMinute;
-                                task = new Task(taskName, date, time);
+                                task = new Task(taskName, date, time,progress);
                                 //TODO : mettre le string de la tache + heure + date dans BDD
                             }
 

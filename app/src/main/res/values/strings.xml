@@ -25,6 +25,8 @@
     <string name="prioFaible">Faible</string>
     <string name="prioMoyenne">Moyenne</string>
     <string name="prioForte">Forte</string>
+    <string name="desc_progress">Progrès de la tâche : </string>
+    <string name="progress_hint">0-100%</string>
 
 
     <string name="afficher_cacher_tache_fini">Afficher/Cacher les tâches terminées</string>

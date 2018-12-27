@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.todolist.aladdalo.todolist.db.Task;
@@ -68,6 +70,12 @@ public class TaskAdapter extends ArrayAdapter<Task> {
                 vignette2.setVisibility(View.INVISIBLE);
                 vignette3.setVisibility(View.VISIBLE);
         }
+
+        ProgressBar progress = convertView.findViewById(R.id.progress);
+        progress.setProgress(task.getProgress());
+
+        TextView progressPercent = convertView.findViewById(R.id.progressPercent);
+        progressPercent.setText(task.getProgress()+"%");
 
 
 
