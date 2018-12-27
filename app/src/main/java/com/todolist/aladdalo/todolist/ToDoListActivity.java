@@ -304,7 +304,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         //EditText pour la date
         txtDate= new EditText(this);
-        txtDate.setWidth(200);
+        txtDate.setWidth(400);
         txtDate.setHint(R.string.format_date);
         txtDate.setText(dateDefault);
         txtDate.setFocusable(false);
@@ -312,7 +312,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         //EditText pour l'heure
         txtTime=new EditText(this);
-        txtTime.setWidth(200);
+        txtTime.setWidth(400);
         txtTime.setHint(R.string.format_heure);
         txtTime.setText(timeDefault);
         txtTime.setFocusable(false);
