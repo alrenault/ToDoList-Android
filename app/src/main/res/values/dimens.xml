@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="image_size_finish">40dip</dimen>
+    <dimen name="margin_end_finish">20dp</dimen>
+
+    <dimen name="image_size_prio">25dip</dimen>
+    <dimen name="margin_start_prio">20dip</dimen>
+
+    <dimen name="image_size_edit">30dip</dimen>
+    <dimen name="margin_start_edit">50dip</dimen>
+
+    <dimen name="margin_start_task">90dip</dimen>
+    <dimen name="margin_end_task">200dip</dimen>
+
+    <dimen name="margin_start_deadline">70dip</dimen>
+    <dimen name="margin_end_deadline">80dp</dimen>
+
+    <dimen name="txt_size_task">20dip</dimen>
+    <dimen name="txt_size_deadline">15dip</dimen>
+
+    <dimen name="margin_top_txt">10dip</dimen>
+    <dimen name="margin_bottom_txt">10dip</dimen>
+
+</resources>
