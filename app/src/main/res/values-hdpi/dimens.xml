@@ -15,8 +15,8 @@
     <dimen name="margin_start_deadline">70dip</dimen>
     <dimen name="margin_end_deadline">45dp</dimen>
 
-    <dimen name="txt_size_task">13dip</dimen>
-    <dimen name="txt_size_deadline">10dip</dimen>
+    <dimen name="txt_size_task">13sp</dimen>
+    <dimen name="txt_size_deadline">10sp</dimen>
 
     <dimen name="margin_top_txt">10dip</dimen>
     <dimen name="margin_bottom_txt">10dip</dimen>
