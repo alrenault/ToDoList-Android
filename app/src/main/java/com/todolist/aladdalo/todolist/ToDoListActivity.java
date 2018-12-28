@@ -3,6 +3,7 @@ package com.todolist.aladdalo.todolist;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,8 +23,13 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.todolist.aladdalo.todolist.db.AccountLauncher;
+import com.todolist.aladdalo.todolist.db.AuthenticatorService;
+import com.todolist.aladdalo.todolist.db.OnlineDatabase;
+
 import com.orm.query.Condition;
 import com.orm.query.Select;
+
 import com.todolist.aladdalo.todolist.db.Task;
 
 import java.util.Calendar;
@@ -284,8 +290,18 @@ public class ToDoListActivity extends AppCompatActivity implements
             case R.id.afficher_cacher_prio0:
                 enCours = !enCours;
                 refreshList();
-
                 return true;
+
+
+            case R.id.action_authenticate:
+                //AccountLauncher.authenticate(this);
+                OnlineDatabase o = new OnlineDatabase(this);
+                o.getInfos("email.lll@gmail.com","azerty");
+                return true;
+
+            /*case R.id.afficher_prio0:
+                updateUIPrio0();
+                return true;*/
 
             default:
                 return super.onOptionsItemSelected(item);
