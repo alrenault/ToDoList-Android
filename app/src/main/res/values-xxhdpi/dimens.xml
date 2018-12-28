@@ -21,6 +21,7 @@
     <dimen name="margin_top_txt">10dip</dimen>
     <dimen name="margin_bottom_txt">5dip</dimen>
 
+    <dimen name="progress_bar_size">12dip</dimen>
 
 
 </resources>

@@ -10,9 +10,6 @@ A faire :
 
 - Améliorer look UI / responsivité (Alexis)
 
-- Avoir des "étapes" (comme sous-tache) pour une tâche en guise d'avancement 
-- statut d'avancement des tâches
-
 - gérer les deadlines des tâches et proposer un système de rappel / d’alerte(Loïs)
 
 - partager la tâche avec d’autres applications/utilisateurs
@@ -30,6 +27,8 @@ Deja fait :
 - Edition d'une tâche (Dany)
 - Tri des tâches (Alexis)
 - Savoir si tache fini ou non (Alexis)
+(- Avoir des "étapes" (comme sous-tache) pour une tâche en guise d'avancement ) (pas fait)
+- statut d'avancement des tâches (Alexis)
 
 
 

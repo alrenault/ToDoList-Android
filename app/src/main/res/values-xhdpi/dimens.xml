@@ -10,15 +10,17 @@
     <dimen name="margin_start_edit">43dip</dimen>
 
     <dimen name="margin_start_task">70dip</dimen>
-    <dimen name="margin_end_task">90dip</dimen>
+    <dimen name="margin_end_task">100dip</dimen>
 
     <dimen name="margin_start_deadline">70dip</dimen>
     <dimen name="margin_end_deadline">45dp</dimen>
 
     <dimen name="txt_size_task">13dip</dimen>
-    <dimen name="txt_size_deadline">10dip</dimen>
+    <dimen name="txt_size_deadline">11dip</dimen>
 
     <dimen name="margin_top_txt">10dip</dimen>
     <dimen name="margin_bottom_txt">10dip</dimen>
+
+    <dimen name="progress_bar_size">12dip</dimen>
 
 </resources>

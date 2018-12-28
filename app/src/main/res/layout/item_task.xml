@@ -88,8 +88,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_bottom_txt"
-                    android:minHeight="12dip"
-                    android:maxHeight="12dip"
+                    android:minHeight="@dimen/progress_bar_size"
+                    android:maxHeight="@dimen/progress_bar_size"
                     android:progress="0"/>
 
                 <TextView
