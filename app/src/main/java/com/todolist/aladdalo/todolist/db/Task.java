@@ -16,25 +16,29 @@ public class Task extends SugarRecord{
 
     private int priority;
 
+    private int progress;
+
     public Task(){
 
     }
 
-    public Task(String taskName){
+    public Task(String taskName, int progress){
 
         this.taskName = taskName;
         this.date = 100000000;
         this.time = 0;
         this.priority = 0;
+        this.progress = progress;
     }
 
 
-    public Task(String taskName, int date, int time){
+    public Task(String taskName, int date, int time, int progress){
 
         this.taskName = taskName;
         this.date = date;
         this.time = time;
         this.priority = 0;
+        this.progress = progress;
     }
 
     public String getTaskName() {
@@ -52,7 +56,7 @@ public class Task extends SugarRecord{
             return "";
         }
 
-        return date.substring(6,8)+"/"+date.substring(4,6)+"/"+date.substring(0,4);
+        return date.substring(6,8)+"/"+date.substring(4,6)+"/"+date.substring(2,4);
     }
 
     public long getTime() {
@@ -87,6 +91,14 @@ public class Task extends SugarRecord{
 
     public void setPriority(Priorite priority) {
         this.priority = priority.getPrio();
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
+
+    public int getProgress() {
+        return progress;
     }
 
     @Override

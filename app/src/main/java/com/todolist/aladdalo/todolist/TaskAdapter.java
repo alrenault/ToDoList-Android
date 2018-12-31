@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.todolist.aladdalo.todolist.db.Task;
@@ -29,7 +31,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_todo, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_task, parent, false);
         }
 
         // Lookup view for data population
@@ -40,7 +42,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         // Populate the data into the template view using the data object
         tvId.setText(String.valueOf(task.getId()));
         tvTitle.setText(task.getTaskName());
-        tvDeadLine.setText(task.getDateString()+"\n"+task.getTimeString());
+        tvDeadLine.setText(task.getDateString()+"\n  "+task.getTimeString());
 
         ImageView vignette1 = convertView.findViewById(R.id.imgPrio1);
         ImageView vignette2 = convertView.findViewById(R.id.imgPrio2);
@@ -68,6 +70,12 @@ public class TaskAdapter extends ArrayAdapter<Task> {
                 vignette2.setVisibility(View.INVISIBLE);
                 vignette3.setVisibility(View.VISIBLE);
         }
+
+        ProgressBar progress = convertView.findViewById(R.id.progress);
+        progress.setProgress(task.getProgress());
+
+        TextView progressPercent = convertView.findViewById(R.id.progressPercent);
+        progressPercent.setText(task.getProgress()+"%");
 
 
 
