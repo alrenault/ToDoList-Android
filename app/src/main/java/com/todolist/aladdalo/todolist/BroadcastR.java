@@ -34,12 +34,10 @@ public class BroadcastR extends BroadcastReceiver {
         String taskDate=intent.getStringExtra(IDTaskDate);
 
 
-        new ToDoNotif(context, taskName,taskDate);
+        new ToDoNotif(1,context, taskName,taskDate);
 
 
-        Log.d("Todo_"+this.toString(), "Vibrate");
-        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(1000);
+
 
 
     }

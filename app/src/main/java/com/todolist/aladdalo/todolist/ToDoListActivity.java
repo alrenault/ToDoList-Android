@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -61,6 +62,10 @@ public class ToDoListActivity extends AppCompatActivity implements
     RadioButton faible;
     RadioButton moyenne;
     RadioButton forte;
+    CheckBox alarmeCheck;
+
+    //pour que les alarmes et notif soient liées a un seul intent pour simplifier
+    Intent intent;
 
 
     @Override
@@ -101,6 +106,8 @@ public class ToDoListActivity extends AppCompatActivity implements
             }
         });
         refreshList();
+
+        intent=new Intent();
     }
 
     private void updateUI(boolean orderBy) {
@@ -186,7 +193,9 @@ public class ToDoListActivity extends AppCompatActivity implements
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
         task = Task.findById(Task.class, taskId);
-        createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority());
+        //Log.d("Todo_"+this.toString(),"aff:"+taskId+":"+task.getTaskName());
+
+        createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority(),task.getAlarme());
 
         /*---------------------------------------
         Crée l'AlertDialog pour l'édition de tâche
@@ -211,7 +220,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                             }
                             else{
                                 //if(mDay != 0)
-                                    //mMonth++;//car commence à 0
+                                //mMonth++;//car commence à 0
                                 date = mYear*10000 + mMonth * 100 + mDay ;
                                 time = 10000 + mHour*100 + mMinute;
                                 task.setTaskName(taskName);
@@ -270,7 +279,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
     }
 
-    private void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault){
+    private void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault,boolean alarme){
         /*---------------------------------------
         Crée le layout pour la création de tâche
         ----------------------------------------*/
@@ -333,6 +342,14 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
 
 
+        /*Checkbox pour activer ou non l'alarme*/
+        final TextView textAlarme=new TextView(this);
+        textAlarme.setText("Alarme active:");
+
+        final CheckBox alarmeCheck = new CheckBox(this);
+        alarmeCheck.setChecked(alarme);
+
+
         //Layout pour organiser l'AlerteDialog
         final LinearLayout linearLayout = new LinearLayout(this);
         final LinearLayout date = new LinearLayout(this);
@@ -349,6 +366,8 @@ public class ToDoListActivity extends AppCompatActivity implements
         linearLayout.addView(time);
         linearLayout.addView(textPriority);
         linearLayout.addView(priority);
+        linearLayout.addView(textAlarme);
+        linearLayout.addView(alarmeCheck);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         /*Définir la bonne taille pour le champ taskEditText*/
@@ -365,12 +384,13 @@ public class ToDoListActivity extends AppCompatActivity implements
         this.faible = faible;
         this.moyenne = moyenne;
         this.forte = forte;
+        this.alarmeCheck=alarmeCheck;
     }
 
     /**Créé et gère l'AlertDialog lors de la création de tâche**/
     public void addnewtask(){
 
-        createTaskLayout("","","", 1);
+        createTaskLayout("","","", 1,false);
 
         /*---------------------------------------
         Crée l'AlertDialog pour la création de tâche
@@ -389,18 +409,27 @@ public class ToDoListActivity extends AppCompatActivity implements
                             Task task;
                             int date;
                             int time;
+                            boolean alarmeBool;
                             String taskName = String.valueOf(taskEditText.getText());
 
                             if(txtDate.getText().toString().equals("")){ //si pas de date (peut importe si heure)
-                                task = new Task(taskName);
+                                //task = new Task(taskName);
+
+                                alarmeBool=false;
+
+                                task = new Task(taskName,alarmeBool);
                             }
                             else{
                                 //if(mDay != 0)
-                                   // mMonth++;//car commence à 0
+                                // mMonth++;//car commence à 0
                                 date = mYear*10000 + mMonth * 100 + mDay ;
                                 time = 10000 + mHour*100 + mMinute;
-                                task = new Task(taskName, date, time);
-                                    new ToDoAlarm(ToDoListActivity.this.getApplicationContext(),taskName,date,time);//Start alarm
+                                alarmeBool=alarmeCheck.isChecked();
+
+                                //task = new Task(taskName, date, time);
+                                task = new Task(taskName, date, time, alarmeBool);
+                                Log.d("Todo_" + this.toString(), "alarm:" + alarmeCheck.isChecked());
+
                                 //TODO : mettre le string de la tache + heure + date dans BDD
                             }
 
@@ -417,8 +446,18 @@ public class ToDoListActivity extends AppCompatActivity implements
 
 
 
+
+
+
                             task.save();
+
                             refreshList();
+
+                            if(task.getAlarme()) {
+                                new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
+
+                                //Log.d("Todo_" + this.toString(), "get:" + task.getId().intValue() + ":" + task.getTaskName());
+                            }
                         }
 
 

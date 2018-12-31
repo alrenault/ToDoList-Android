@@ -16,6 +16,8 @@ public class Task extends SugarRecord{
 
     private int priority;
 
+    private boolean alarme;
+
     public Task(){
 
     }
@@ -28,6 +30,15 @@ public class Task extends SugarRecord{
         this.priority = 0;
     }
 
+    public Task(String taskName,boolean alarme){
+
+        this.taskName = taskName;
+        this.date = 100000000;
+        this.time = 0;
+        this.priority = 0;
+        this.alarme=false;
+    }
+
 
     public Task(String taskName, int date, int time){
 
@@ -35,6 +46,15 @@ public class Task extends SugarRecord{
         this.date = date;
         this.time = time;
         this.priority = 0;
+    }
+
+    public Task(String taskName, int date, int time,boolean alarme){
+
+        this.taskName = taskName;
+        this.date = date;
+        this.time = time;
+        this.priority = 0;
+        this.alarme=alarme;
     }
 
     public String getTaskName() {
@@ -73,6 +93,10 @@ public class Task extends SugarRecord{
         return priority;
     }
 
+    public boolean getAlarme() {
+        return alarme;
+    }
+
     public void setTaskName(String taskName) {
         this.taskName = taskName;
     }
@@ -88,6 +112,8 @@ public class Task extends SugarRecord{
     public void setPriority(Priorite priority) {
         this.priority = priority.getPrio();
     }
+
+    public void setAlarme(boolean alarme) {this.alarme=alarme;}
 
     @Override
     public String toString() {
