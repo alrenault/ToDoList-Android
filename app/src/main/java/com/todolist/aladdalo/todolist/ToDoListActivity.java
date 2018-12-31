@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,12 +25,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.todolist.aladdalo.todolist.db.AccountLauncher;
+import com.todolist.aladdalo.todolist.db.AuthenticatorService;
+import com.todolist.aladdalo.todolist.db.OnlineDatabase;
+
 import com.orm.query.Condition;
 import com.orm.query.Select;
+
 import com.todolist.aladdalo.todolist.db.Task;
 
-import java.security.spec.EncodedKeySpec;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -59,6 +63,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
     LinearLayout linearLayout;
     EditText taskEditText;
+    EditText progressEditText;
     RadioButton faible;
     RadioButton moyenne;
     RadioButton forte;
@@ -77,7 +82,6 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-
 
         //mHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
@@ -154,7 +158,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         if (mAdapter == null) {
             mAdapter = new TaskAdapter(this,
-                    R.layout.item_todo, // what view to use for the items
+                    R.layout.item_task, // what view to use for the items
                     R.id.task_title, // where to put the String of data
                     tasks); // where to get all the data
             mTaskListView.setAdapter(mAdapter); // set it as the adapter of the ListView instance
@@ -175,14 +179,27 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
     }
 
-    public void deleteTask(View view) {
-        View parent = (View) view.getParent();
+    public void deleteTask(Task task) {
+       // View parent = (View) view.getParent();
         //TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
+        //TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
+        //int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
+        //System.out.println("--------------id : " + taskId);
+       // task = Task.findById(Task.class, taskId);
+        task.delete();
+
+        refreshList();
+    }
+
+    public void finishTask(View view){
+        View parent = (View) view.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
         System.out.println("--------------id : " + taskId);
         task = Task.findById(Task.class, taskId);
-        task.delete();
+        task.setPriority(Priorite.Fini);
+        System.out.println("--------------PRIORITE : " + task.getPriority());
+        task.save();
 
         refreshList();
     }
@@ -194,6 +211,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
         task = Task.findById(Task.class, taskId);
         //Log.d("Todo_"+this.toString(),"aff:"+taskId+":"+task.getTaskName());
+        createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority(),task.getProgress());
 
         createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority(),task.getAlarme());
 
@@ -203,13 +221,25 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         //Creation du AlertDialog
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.ajout_tache)
+                .setTitle(R.string.modif_tache)
                 .setMessage(R.string.faire_ensuite)
                 .setView(linearLayout)
+                .setNeutralButton("Supprimer", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteTask(task);
+                    }
+                })
+
                 .setPositiveButton(R.string.modifier, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        int progress = 0;
+                        if(!progressEditText.getText().toString().equals("")){
+                            progress = Integer.parseInt(progressEditText.getText().toString())%100;
+                        }
                         if(!taskEditText.getText().toString().equals("")){
                             int date;
                             int time;
@@ -226,7 +256,6 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 task.setTaskName(taskName);
                                 task.setDate(date);
                                 task.setTime(time);
-                                //TODO : mettre le string de la tache + heure + date dans BDD
                             }
 
                             if(faible.isChecked()){
@@ -239,6 +268,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 task.setPriority(Priorite.Forte);
                             }
 
+                            task.setProgress(progress);
                             task.save();
                             refreshList();
                         }
@@ -271,14 +301,25 @@ public class ToDoListActivity extends AppCompatActivity implements
             case R.id.afficher_cacher_prio0:
                 enCours = !enCours;
                 refreshList();
-
                 return true;
+
+
+            case R.id.action_authenticate:
+                //AccountLauncher.authenticate(this);
+                OnlineDatabase o = new OnlineDatabase(this);
+                o.getInfos("email.lll@gmail.com","azerty");
+                return true;
+
+            /*case R.id.afficher_prio0:
+                updateUIPrio0();
+                return true;*/
 
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    private void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault,int progress){
     private void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault,boolean alarme){
         /*---------------------------------------
         Crée le layout pour la création de tâche
@@ -291,7 +332,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         //EditText pour la date
         txtDate= new EditText(this);
-        txtDate.setWidth(200);
+        txtDate.setWidth(400);
         txtDate.setHint(R.string.format_date);
         txtDate.setText(dateDefault);
         txtDate.setFocusable(false);
@@ -299,7 +340,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         //EditText pour l'heure
         txtTime=new EditText(this);
-        txtTime.setWidth(200);
+        txtTime.setWidth(400);
         txtTime.setHint(R.string.format_heure);
         txtTime.setText(timeDefault);
         txtTime.setFocusable(false);
@@ -340,7 +381,16 @@ public class ToDoListActivity extends AppCompatActivity implements
                 break;
             default : priority.check(faible.getId());
         }
+        //----------------------------
 
+        //Progression
+        final TextView textProgress = new TextView(this);
+        textProgress.setText(R.string.desc_progress);
+        textProgress.setPadding(0,10,0,0);
+        final EditText progressEditText = new EditText(this);
+        progressEditText.setHint(R.string.progress_hint);
+        progressEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        progressEditText.setText(String.valueOf(progress));
 
         /*Checkbox pour activer ou non l'alarme*/
         final TextView textAlarme=new TextView(this);
@@ -366,6 +416,8 @@ public class ToDoListActivity extends AppCompatActivity implements
         linearLayout.addView(time);
         linearLayout.addView(textPriority);
         linearLayout.addView(priority);
+        linearLayout.addView(textProgress);
+        linearLayout.addView(progressEditText);
         linearLayout.addView(textAlarme);
         linearLayout.addView(alarmeCheck);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -381,6 +433,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         this.linearLayout = linearLayout;
         this.taskEditText = taskEditText;
+        this.progressEditText = progressEditText;
         this.faible = faible;
         this.moyenne = moyenne;
         this.forte = forte;
@@ -390,6 +443,7 @@ public class ToDoListActivity extends AppCompatActivity implements
     /**Créé et gère l'AlertDialog lors de la création de tâche**/
     public void addnewtask(){
 
+        createTaskLayout("","","", 1,0);
         createTaskLayout("","","", 1,false);
 
         /*---------------------------------------
@@ -405,6 +459,10 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        int progress = 0;
+                        if(!progressEditText.getText().toString().equals("")){
+                            progress = Integer.parseInt(progressEditText.getText().toString())%100;
+                        }
                         if(!taskEditText.getText().toString().equals("")){//si intitule de
                             Task task;
                             int date;
@@ -418,6 +476,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 alarmeBool=false;
 
                                 task = new Task(taskName,alarmeBool);
+                                task = new Task(taskName,progress);
                             }
                             else{
                                 //if(mDay != 0)
@@ -430,6 +489,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 task = new Task(taskName, date, time, alarmeBool);
                                 Log.d("Todo_" + this.toString(), "alarm:" + alarmeCheck.isChecked());
 
+                                task = new Task(taskName, date, time,progress);
                                 //TODO : mettre le string de la tache + heure + date dans BDD
                             }
 

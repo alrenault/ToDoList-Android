@@ -14,6 +14,7 @@
 
     <!--Creation tache-->
     <string name="ajout_tache">Ajouter une nouvelle tache</string>
+    <string name="modif_tache">Modifier une tache</string>
     <string name="faire_ensuite">Que voulez vous faire ensuite ?</string>
     <string name="desc_tache">"Description tâche"</string>
     <string name="choix_date">"Choisir date"</string>
@@ -24,11 +25,16 @@
     <string name="prioFaible">Faible</string>
     <string name="prioMoyenne">Moyenne</string>
     <string name="prioForte">Forte</string>
+    <string name="desc_progress">Progrès de la tâche : </string>
+    <string name="progress_hint">0-100%</string>
 
 
     <string name="afficher_cacher_tache_fini">Afficher/Cacher les tâches terminées</string>
     <string name="afficher_tache_en_cours">Tâches en cours</string>
-
+    <string name="acc_name">typeTest</string>
+    <string name="acc_authority">\"authTest\"</string>
+    <string name="authenticator_label">labelTest</string>
+    <string name="authenticate">s\'authentifier</string>
     <string name="trier_date">Trier par deadline</string>
     <string name="trier_prio">Trier par ordre de priorité</string>
 </resources>
