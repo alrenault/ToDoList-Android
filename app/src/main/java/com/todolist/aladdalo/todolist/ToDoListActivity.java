@@ -152,8 +152,6 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         }
 
-        }
-
         //List<Task> tasks = SugarRecord.listAll(Task.class);
        /* for(Task task : tasks){
             //taskList.add(task.getTaskName());
