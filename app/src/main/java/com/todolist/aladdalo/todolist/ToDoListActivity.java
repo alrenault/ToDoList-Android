@@ -211,9 +211,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
         task = Task.findById(Task.class, taskId);
         //Log.d("Todo_"+this.toString(),"aff:"+taskId+":"+task.getTaskName());
-        createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority(),task.getProgress());
-
-        createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority(),task.getAlarme());
+        createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority(),task.getProgress(), task.getAlarme());
 
         /*---------------------------------------
         Crée l'AlertDialog pour l'édition de tâche
@@ -319,8 +317,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
     }
 
-    private void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault,int progress){
-    private void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault,boolean alarme){
+    private void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault,int progress, boolean alarme){
         /*---------------------------------------
         Crée le layout pour la création de tâche
         ----------------------------------------*/
@@ -443,9 +440,7 @@ public class ToDoListActivity extends AppCompatActivity implements
     /**Créé et gère l'AlertDialog lors de la création de tâche**/
     public void addnewtask(){
 
-        createTaskLayout("","","", 1,0);
-        createTaskLayout("","","", 1,false);
-
+        createTaskLayout("","","", 1,0, false);
         /*---------------------------------------
         Crée l'AlertDialog pour la création de tâche
         ----------------------------------------*/
@@ -475,8 +470,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                                 alarmeBool=false;
 
-                                task = new Task(taskName,alarmeBool);
-                                task = new Task(taskName,progress);
+                                task = new Task(taskName,progress, alarmeBool);
                             }
                             else{
                                 //if(mDay != 0)
@@ -486,10 +480,9 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 alarmeBool=alarmeCheck.isChecked();
 
                                 //task = new Task(taskName, date, time);
-                                task = new Task(taskName, date, time, alarmeBool);
+                                task = new Task(taskName, date, time, progress, alarmeBool);
                                 Log.d("Todo_" + this.toString(), "alarm:" + alarmeCheck.isChecked());
 
-                                task = new Task(taskName, date, time,progress);
                                 //TODO : mettre le string de la tache + heure + date dans BDD
                             }
 

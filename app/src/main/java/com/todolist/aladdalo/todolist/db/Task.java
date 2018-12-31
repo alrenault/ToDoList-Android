@@ -24,32 +24,24 @@ public class Task extends SugarRecord{
 
     }
 
-    public Task(String taskName, int progress){
+    public Task(String taskName, int progress, boolean alarme){
 
         this.taskName = taskName;
         this.date = 100000000;
         this.time = 0;
         this.priority = 0;
         this.progress = progress;
+        this.alarme=alarme;
     }
 
-    public Task(String taskName,boolean alarme){
 
-    public Task(String taskName, int date, int time, int progress){
+    public Task(String taskName, int date, int time, int progress, boolean alarme){
 
         this.taskName = taskName;
         this.date = date;
         this.time = time;
         this.priority = 0;
         this.progress = progress;
-    }
-
-    public Task(String taskName, int date, int time,boolean alarme){
-
-        this.taskName = taskName;
-        this.date = date;
-        this.time = time;
-        this.priority = 0;
         this.alarme=alarme;
     }
 
