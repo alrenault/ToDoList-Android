@@ -1,6 +1,6 @@
 package com.todolist.aladdalo.todolist;
 
-public enum Priorite {
+public enum Priorite{
     Fini(0),
     Faible(1),
     Moyenne(2),
