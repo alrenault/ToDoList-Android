@@ -2,14 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.todolist.aladdalo.todolist" android:installLocation="internalOnly">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" android:maxSdkVersion="22"/>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-
-    <uses-permission android:name="android.permission.VIBRATE" />
-
 
     <application
         android:name="com.orm.SugarApp"
@@ -48,6 +48,15 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator"/>
         </service>
+
+
+        <receiver android:name=".BroadcastR" >
+            <intent-filter>
+                <action android:name="com.todolist.aladdalo.todolist.intent.action.ALARM" >
+                </action>
+            </intent-filter>
+
+        </receiver>
 
     </application>
 

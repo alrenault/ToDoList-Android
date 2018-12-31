@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.RingtoneManager;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,8 +22,16 @@ public class ToDoNotif {
 
 
 
-    public ToDoNotif(Context context, String taskName, String taskDate){
-
+    public ToDoNotif(int state,Context context, String taskName, String taskDate){
+        String stateStr="";
+        String commentStr="";
+        if(state==0){
+            stateStr="Alarm Start:";
+            commentStr="Let's go";
+        }else if(state==1){
+            stateStr="Alarm dring:";
+            commentStr="You did it";
+        }
 
         //Notification
         Intent notificationIntent = new Intent(context, ToDoListActivity.class);
@@ -35,18 +45,25 @@ public class ToDoNotif {
                 .setWhen(System.currentTimeMillis())
                 .setTicker("NotifToDoTask")
                 .setSmallIcon(R.drawable.ic_add_box_black_24dp)
-                .setContentTitle("ToDo Alarm:"+taskDate)
+                .setContentTitle(stateStr+taskDate)
                 .setContentText(taskName+":\n"
-                                +"You did it")
+                        +commentStr)
                 .setContentIntent(contentIntent);
 
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(NOTIFICATION_SERVICE);
 
+        if(state==1){
+            Log.d("Todo_"+this.toString(),"ToDo Alarm:finish");
+            builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
 
-        notificationManager.notify(ID_NOTIFICATION, builder.build());
+        }else if(state==0){
+            Log.d("Todo_"+this.toString(),"ToDo Alarm:start");
+            builder.setDefaults(Notification.DEFAULT_SOUND);
+            Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(500);
+        }
 
-        Log.d("Todo_"+this.toString(),"ToDo Alarm:"+taskDate);
-        Log.d("Todo_"+this.toString(),taskName+":"+"You did it");
+        notificationManager.notify((int)System.currentTimeMillis(), builder.build());
     }
 }
