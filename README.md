@@ -5,24 +5,30 @@ To do list de la To do list :
 
 A faire :
 
-- Priorité pour les taches (Alexis)
-
-- Savoir si tache fini ou non (Alexis)
-
-- Implémenter Sugar ORM (Dany)
-
 - Utilisateur (classes + bd) (Adrien)
+- travailler à plusieurs sur une tâche et assigner des sous tâches aux participants
 
-- Améliorer look UI
-
-- Avoir des sous-tâches pour une tâche
+- Améliorer look UI / responsivité (Alexis)
 
 - gérer les deadlines des tâches et proposer un système de rappel / d’alerte(Loïs)
+
+- partager la tâche avec d’autres applications/utilisateurs
+
+- afficher un widget sur l’écran d'accueil affichant une sélection de tâches
+
+- exposer les données de l’application par un content provider
 
 
 Deja fait :
 
 - Informations supplémentaires lors de création tâche (ex : deadline) (Alexis) 
+- Priorité pour les taches (Alexis)
+- Implémenter Sugar ORM (Dany)
+- Edition d'une tâche (Dany)
+- Tri des tâches (Alexis)
+- Savoir si tache fini ou non (Alexis)
+(- Avoir des "étapes" (comme sous-tache) pour une tâche en guise d'avancement ) (pas fait)
+- statut d'avancement des tâches (Alexis)
 
 
 
