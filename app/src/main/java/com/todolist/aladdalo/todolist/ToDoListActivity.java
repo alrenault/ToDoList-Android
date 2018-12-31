@@ -152,8 +152,6 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         }
 
-        }
-
         //List<Task> tasks = SugarRecord.listAll(Task.class);
        /* for(Task task : tasks){
             //taskList.add(task.getTaskName());
@@ -162,7 +160,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         if (mAdapter == null) {
             mAdapter = new TaskAdapter(this,
-                    R.layout.item_todo, // what view to use for the items
+                    R.layout.item_task, // what view to use for the items
                     R.id.task_title, // where to put the String of data
                     tasks); // where to get all the data
             mTaskListView.setAdapter(mAdapter); // set it as the adapter of the ListView instance
