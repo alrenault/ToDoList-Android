@@ -25,10 +25,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.todolist.aladdalo.todolist.db.AccountLauncher;
-import com.todolist.aladdalo.todolist.db.AuthenticatorService;
 import com.todolist.aladdalo.todolist.db.OnlineDatabase;
 
 import com.orm.query.Condition;
@@ -36,7 +32,6 @@ import com.orm.query.Select;
 
 import com.todolist.aladdalo.todolist.db.Task;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -84,8 +79,8 @@ public class ToDoListActivity extends AppCompatActivity implements
         mTaskListView = (ListView) findViewById(R.id.list_todo);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        //myToolbar.setNavigationIcon(R.drawable.icon);
         setSupportActionBar(myToolbar);
-
 
         //mHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
@@ -96,12 +91,12 @@ public class ToDoListActivity extends AppCompatActivity implements
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
-                    case 0: updateUI(true);
+                    case 0:
+                        updateUI(true);
                         break;
-                    case 1: updateUI(false);
+                    case 1:
+                        updateUI(false);
                         break;
-
-
                 }
             }
             @Override
@@ -306,7 +301,9 @@ public class ToDoListActivity extends AppCompatActivity implements
             case R.id.action_authenticate:
                 //AccountLauncher.authenticate(this);
                 OnlineDatabase o = new OnlineDatabase(this);
-                o.test();
+                //o.test();
+                //this.linearLayout = AccountLayout.createAccountLayout(this, "aaa.ttt@gmail.com","aaa");
+                AccountLayout.addnewaccount(this, "aaa.ttt@gmail.com","aaa");
                 /*o.readTasks(new OnlineDatabase.OnGetDataListener(){
                     @Override
                     public void onStart() {
