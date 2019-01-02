@@ -3,11 +3,11 @@
     <dimen name="image_size_finish">30dip</dimen>
     <dimen name="margin_end_finish">13dp</dimen>
 
-    <dimen name="image_size_prio">20dip</dimen>
+    <dimen name="image_size_prio">15dip</dimen>
     <dimen name="margin_start_prio">15dip</dimen>
 
-    <dimen name="image_size_edit">20dip</dimen>
-    <dimen name="margin_start_edit">43dip</dimen>
+    <dimen name="image_size_edit">25dip</dimen>
+    <dimen name="margin_start_edit">37dip</dimen>
 
     <dimen name="margin_start_task">70dip</dimen>
     <dimen name="margin_end_task">100dip</dimen>

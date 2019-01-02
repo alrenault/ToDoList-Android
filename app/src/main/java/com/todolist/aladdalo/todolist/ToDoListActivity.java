@@ -41,8 +41,13 @@ import com.orm.query.Select;
 
 import com.todolist.aladdalo.todolist.db.Task;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ToDoListActivity extends AppCompatActivity implements
         View.OnClickListener {
@@ -94,8 +99,8 @@ public class ToDoListActivity extends AppCompatActivity implements
         mTaskListView = (ListView) findViewById(R.id.list_todo);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        //myToolbar.setNavigationIcon(R.drawable.icon);
         setSupportActionBar(myToolbar);
+
 
         //mHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
@@ -106,12 +111,12 @@ public class ToDoListActivity extends AppCompatActivity implements
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
-                    case 0:
-                        updateUI(true);
+                    case 0: updateUI(true);
                         break;
-                    case 1:
-                        updateUI(false);
+                    case 1: updateUI(false);
                         break;
+
+
                 }
             }
             @Override
@@ -191,16 +196,21 @@ public class ToDoListActivity extends AppCompatActivity implements
     }
 
     public void deleteTask(Task task) {
-       // View parent = (View) view.getParent();
-        //TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
-        //TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
-        //int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
-        //System.out.println("--------------id : " + taskId);
-       // task = Task.findById(Task.class, taskId);
         task.delete();
 
         refreshList();
     }
+
+    /*public void deleteTask(View view) {
+         View parent = (View) view.getParent();
+        TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
+        int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
+        System.out.println("--------------id : " + taskId);
+         task = Task.findById(Task.class, taskId);
+        task.delete();
+
+        refreshList();
+    }*/
 
     public void finishTask(View view){
         View parent = (View) view.getParent();
@@ -209,6 +219,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         System.out.println("--------------id : " + taskId);
         task = Task.findById(Task.class, taskId);
         task.setPriority(Priorite.Fini);
+        task.setProgress(100);
         System.out.println("--------------PRIORITE : " + task.getPriority());
         task.save();
 
@@ -216,7 +227,6 @@ public class ToDoListActivity extends AppCompatActivity implements
     }
 
     public void afficheParam(View view){
-        //TODO Affiche une page ou l'on peu modifier les params de la tache (premières lignes identique a deleteTask pour trouver la tache)
         View parent = (View) view.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
@@ -426,10 +436,15 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         /*Checkbox pour activer ou non l'alarme*/
         final TextView textAlarme=new TextView(this);
-        textAlarme.setText("Alarme active:");
+        textAlarme.setText(R.string.alarme);
+        textAlarme.setPadding(120,10,0,0);
 
         final CheckBox alarmeCheck = new CheckBox(this);
         alarmeCheck.setChecked(alarme);
+
+        LinearLayout.LayoutParams layoutParamsCheck = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParamsCheck.setMargins(120,0,0,0);
 
 
         //Layout pour organiser l'AlerteDialog
@@ -443,15 +458,31 @@ public class ToDoListActivity extends AppCompatActivity implements
         time.setOrientation(LinearLayout.HORIZONTAL);
         time.addView(txtTime);
 
+        final LinearLayout progressLayout = new LinearLayout(this);
+        final LinearLayout alarmeLayout = new LinearLayout(this);
+        final LinearLayout progressAlarm = new LinearLayout(this);
+
+        progressLayout.addView(textProgress);
+        progressLayout.addView(progressEditText);
+        progressLayout.setOrientation(LinearLayout.VERTICAL);
+        alarmeLayout.addView(textAlarme);
+        alarmeLayout.addView(alarmeCheck,layoutParamsCheck);
+        alarmeLayout.setOrientation(LinearLayout.VERTICAL);
+
+        progressAlarm.setOrientation(LinearLayout.HORIZONTAL);
+        progressAlarm.addView(progressLayout);
+        progressAlarm.addView(alarmeLayout);
+
         linearLayout.addView(taskEditText);
         linearLayout.addView(date);
         linearLayout.addView(time);
         linearLayout.addView(textPriority);
         linearLayout.addView(priority);
-        linearLayout.addView(textProgress);
-        linearLayout.addView(progressEditText);
-        linearLayout.addView(textAlarme);
-        linearLayout.addView(alarmeCheck);
+        linearLayout.addView(progressAlarm);
+//        linearLayout.addView(textProgress);
+//        linearLayout.addView(progressEditText);
+//        linearLayout.addView(textAlarme);
+//        linearLayout.addView(alarmeCheck);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         /*Définir la bonne taille pour le champ taskEditText*/
@@ -475,7 +506,13 @@ public class ToDoListActivity extends AppCompatActivity implements
     /**Créé et gère l'AlertDialog lors de la création de tâche**/
     public void addnewtask(){
 
-        createTaskLayout("","","", 1,0, false);
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm",Locale.FRANCE);
+        Date date = new Date();
+
+        String currentDate = format.format(date).substring(0,10);
+        String currentHour = format.format(date).substring(11,16);
+
+        createTaskLayout("",currentDate,currentHour, 1,0, false);
         /*---------------------------------------
         Crée l'AlertDialog pour la création de tâche
         ----------------------------------------*/
