@@ -1,6 +1,7 @@
 package com.todolist.aladdalo.todolist;
 
 import android.accounts.Account;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -10,6 +11,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.ActionMenuItemView;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.text.InputType;
@@ -29,8 +33,7 @@ import android.widget.TimePicker;
 
 import com.orm.SchemaGenerator;
 import com.orm.SugarContext;
-import com.orm.SugarDb;
-import com.todolist.aladdalo.todolist.db.AccountLauncher;
+import com.orm.SugarDb;;
 import com.todolist.aladdalo.todolist.db.OnlineDatabase;
 
 import com.orm.query.Condition;
@@ -318,8 +321,8 @@ public class ToDoListActivity extends AppCompatActivity implements
                 final String username = "adrien.test@gmail.com";
                 final String mdp = "123aaaaa";
                 AccountLayout.addnewaccount(this, username,mdp);
-                List<com.todolist.aladdalo.todolist.db.Account> accountRecupered = Select.from(com.todolist.aladdalo.todolist.db.Account.class).list();
-                Log.v("aaa", "accountRecupered = "+accountRecupered);
+                //List<com.todolist.aladdalo.todolist.db.Account> accountRecupered = Select.from(com.todolist.aladdalo.todolist.db.Account.class).list();
+                //Log.v("aaa", "accountRecupered = "+accountRecupered);
 
                 /*o.readTasks(new OnlineDatabase.OnGetDataListener(){
                     @Override
@@ -599,5 +602,20 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
 
     }
+
+    @SuppressLint("RestrictedApi")
+    public void refreshIcon(com.todolist.aladdalo.todolist.db.Account account) {
+        ActionMenuItemView item = findViewById(R.id.action_authenticate);
+        MenuItemImpl mii = item.getItemData();
+
+        if(account.isActive()){
+            account.setActive(false);
+            mii.setIcon(R.drawable.icon);
+        }else{
+            account.setActive(true);
+            mii.setIcon(R.drawable.icon2);
+        }
+    }
+
 
 }

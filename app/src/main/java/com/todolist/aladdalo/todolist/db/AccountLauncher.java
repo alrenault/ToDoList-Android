@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.orm.query.Condition;
 import com.orm.query.Select;
+import com.todolist.aladdalo.todolist.ToDoListActivity;
 
 import java.util.List;
 
@@ -29,8 +30,6 @@ public class AccountLauncher{
         }
         return false;
     }
-
-    public static Task[] getTasksByAccount(){return null;}
 
     public static void authenticate(Context context, String accountName, String password, OnGetDataListener listener){
         final String ACCOUNT_TYPE = "ccc";
@@ -59,6 +58,27 @@ public class AccountLauncher{
 
         new RegisterAsync(am, accountName, accountType, password, null, null, listener, context).execute();
     };
+
+    public static com.todolist.aladdalo.todolist.db.Account getCurrentAccount(Context context) {
+        List<com.todolist.aladdalo.todolist.db.Account> accountRecupered = Select.from(com.todolist.aladdalo.todolist.db.Account.class).list();
+        for(com.todolist.aladdalo.todolist.db.Account i : accountRecupered){
+            if(i.isActive()){
+                return i;
+            }
+        }
+
+        return null;
+    }
+
+    public static void disableAllAccount(ToDoListActivity context){
+        List<com.todolist.aladdalo.todolist.db.Account> accountRecupered = Select.from(com.todolist.aladdalo.todolist.db.Account.class).list();
+        for(com.todolist.aladdalo.todolist.db.Account i : accountRecupered){
+            if(i.isActive()){
+                i.setActive(false);
+            }
+        }
+        //context.refreshIcon(accountRecupered.get(0));
+    }
 
     /**
      * Interface pour la recuperation de donnees depuis firebase

@@ -63,7 +63,7 @@ public class AccountLayout {
 
 
     /**Créé et gère l'AlertDialog lors de la création de tâche**/
-    public static void addnewaccount(final Context context, String username, String mdp){
+    public static void addnewaccount(final ToDoListActivity context, String username, String mdp){
 
         final LinearLayout linearLayout = createAccountLayout(context, username, mdp);
         /*---------------------------------------
@@ -83,36 +83,42 @@ public class AccountLayout {
                         EditText usernameLayout = (EditText) linearLayout.getChildAt(0);
                         EditText mdpLayout = (EditText) linearLayout.getChildAt(0);
 
-                        if(!usernameLayout.getText().toString().equals("") && !mdpLayout.getText().toString().equals("")){//si intitule des 2 edit text est non-vide
-                            String username = String.valueOf(usernameLayout.getText());
-                            String mdp = String.valueOf(usernameLayout.getText());
+                        if(!usernameLayout.getText().toString().equals("") && !mdpLayout.getText().toString().equals("")) {//si intitule des 2 edit text est non-vide
+                            Account currentAccount = AccountLauncher.getCurrentAccount(context);
+                            if (currentAccount != null) {//desactive le compte courant si deja authentifie
+                                context.refreshIcon(currentAccount);
+                            } else {//authentification
+                                String username = String.valueOf(usernameLayout.getText());
+                                String mdp = String.valueOf(usernameLayout.getText());
 
-                            AccountLauncher.authenticate(context, username, mdp, new AccountLauncher.OnGetDataListener() {
-                                @Override
-                                public void onStart() {
-                                    Log.v("aaa", "Demarrage authentication");
-                                }
+                                AccountLauncher.authenticate(context, username, mdp, new AccountLauncher.OnGetDataListener() {
+                                    @Override
+                                    public void onStart() {
+                                        Log.v("aaa", "Demarrage authentication");
+                                    }
 
-                                @Override
-                                public void onFailed(Exception error) {
-                                    Log.v("aaa", "Erreur authentication : "+error.getMessage());
-                                }
+                                    @Override
+                                    public void onFailed(Exception error) {
+                                        Log.v("aaa", "Erreur authentication : "+error.getMessage());
+                                    }
 
-                                @Override
-                                public void onAddingDatabase(Account account) {
-                                    Log.v("aaa","compte cree avec succes en bdd -> "+account);
-                                }
+                                    @Override
+                                    public void onAddingDatabase(Account account) {
+                                        Log.v("aaa","compte cree avec succes en bdd -> "+account);
+                                        context.refreshIcon(account);
+                                    }
 
-                                @Override
-                                public void onAddingPhone(android.accounts.Account account) {
-                                    Log.v("aaa","compte cree avec succes sur tel -> "+account);
-                                }
+                                    @Override
+                                    public void onAddingPhone(android.accounts.Account account) {
+                                        Log.v("aaa","compte cree avec succes sur tel -> "+account);
+                                    }
 
-                                @Override
-                                public void onFailure() {
-                                    Log.v("aaa", "echec ajout");
-                                }
-                            });
+                                    @Override
+                                    public void onFailure() {
+                                        Log.v("aaa", "echec ajout");
+                                    }
+                                });
+                            }
                         }
                     }
                 })
