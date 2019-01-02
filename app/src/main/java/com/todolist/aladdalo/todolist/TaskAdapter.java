@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -76,6 +77,17 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
         TextView progressPercent = convertView.findViewById(R.id.progressPercent);
         progressPercent.setText(task.getProgress()+"%");
+
+        Button finish = convertView.findViewById(R.id.task_finish);
+
+        if(task.getPriority() == 0){
+            finish.setVisibility(View.INVISIBLE);
+            finish.setClickable(false);
+        }
+        else{
+            finish.setVisibility(View.VISIBLE);
+            finish.setClickable(true);
+        }
 
 
 
