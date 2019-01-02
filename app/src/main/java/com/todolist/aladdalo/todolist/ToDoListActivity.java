@@ -1,7 +1,9 @@
 package com.todolist.aladdalo.todolist;
 
+import android.accounts.Account;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -25,6 +27,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.orm.SchemaGenerator;
+import com.orm.SugarContext;
+import com.orm.SugarDb;
+import com.todolist.aladdalo.todolist.db.AccountLauncher;
 import com.todolist.aladdalo.todolist.db.OnlineDatabase;
 
 import com.orm.query.Condition;
@@ -75,6 +81,12 @@ public class ToDoListActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // create table if not exists
+        SugarContext.init(getApplicationContext());
+        SchemaGenerator schemaGenerator = new SchemaGenerator(this);
+        schemaGenerator.createDatabase(new SugarDb(this).getDB());
+
+        //vue
         setContentView(R.layout.activity_to_do_list);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
 
@@ -303,7 +315,12 @@ public class ToDoListActivity extends AppCompatActivity implements
                 OnlineDatabase o = new OnlineDatabase(this);
                 //o.test();
                 //this.linearLayout = AccountLayout.createAccountLayout(this, "aaa.ttt@gmail.com","aaa");
-                AccountLayout.addnewaccount(this, "aaa.ttt@gmail.com","aaa");
+                final String username = "adrien.test@gmail.com";
+                final String mdp = "123aaaaa";
+                AccountLayout.addnewaccount(this, username,mdp);
+                List<com.todolist.aladdalo.todolist.db.Account> accountRecupered = Select.from(com.todolist.aladdalo.todolist.db.Account.class).list();
+                Log.v("aaa", "accountRecupered = "+accountRecupered);
+
                 /*o.readTasks(new OnlineDatabase.OnGetDataListener(){
                     @Override
                     public void onStart() {

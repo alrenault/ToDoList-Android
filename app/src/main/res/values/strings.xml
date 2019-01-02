@@ -37,4 +37,5 @@
     <string name="authenticate">s\'authentifier</string>
     <string name="trier_date">Trier par deadline</string>
     <string name="trier_prio">Trier par ordre de priorité</string>
+    <string name="ajout_compte">ajouter un compte</string>
 </resources>
