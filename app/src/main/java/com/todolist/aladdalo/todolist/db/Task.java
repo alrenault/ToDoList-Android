@@ -49,7 +49,7 @@ public class Task extends SugarRecord{
         return taskName;
     }
 
-    public long getDate() {
+    public int getDate() {
         return date;
     }
 
@@ -63,7 +63,7 @@ public class Task extends SugarRecord{
         return date.substring(6,8)+"/"+date.substring(4,6)+"/"+date.substring(2,4);
     }
 
-    public long getTime() {
+    public int getTime() {
         return time;
     }
 
@@ -111,17 +111,18 @@ public class Task extends SugarRecord{
 
     public void setAlarme(boolean alarme) {this.alarme=alarme;}
 
+    public boolean isFinish(int time, int date){
+        if(this.date < date)
+            return true;
+        if(this.date == date && this.time < time)
+            return true;
+
+        return false;
+    }
+
     @Override
     public String toString() {
         return taskName + " " + getDateString();
     }
 
-        /*public static final String DB_NAME = "com.todolist.aladdalo.todolist.db";
-    public static final int DB_VERSION = 1;
-
-    public class TaskEntry implements BaseColumns {
-        public static final String TABLE = "tasks";
-
-        public static final String COL_TASK_TITLE = "title";
-    }*/
 }
