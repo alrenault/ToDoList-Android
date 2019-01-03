@@ -52,10 +52,6 @@ import java.util.Locale;
 public class ToDoListActivity extends AppCompatActivity implements
         View.OnClickListener {
 
-    // private static final String TAG = "ToDoListActivity";
-
-
-    //private TaskDbHelper mHelper;
     private ListView mTaskListView;
 
     private TaskAdapter mAdapter;
@@ -110,10 +106,6 @@ public class ToDoListActivity extends AppCompatActivity implements
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-
-        //mHelper = new TaskDbHelper(this);
-        mTaskListView = (ListView) findViewById(R.id.list_todo);
-
         tabs = (TabLayout) findViewById(R.id.tabs);
 
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -144,7 +136,6 @@ public class ToDoListActivity extends AppCompatActivity implements
 
     private void updateUI(boolean orderBy) {
 
-        //List<Task> tasks = Task.listAll(Task.class);
         List<Task> tasks;
 
 
@@ -176,11 +167,6 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         }
 
-        //List<Task> tasks = SugarRecord.listAll(Task.class);
-       /* for(Task task : tasks){
-            //taskList.add(task.getTaskName());
-            System.out.println(task.getId() + " : " + task.getTaskName() + ", date : " + task.getDate());
-        }*/
 
         if (mAdapter == null) {
             mAdapter = new TaskAdapter(this,
@@ -499,10 +485,6 @@ public class ToDoListActivity extends AppCompatActivity implements
         linearLayout.addView(textPriority);
         linearLayout.addView(priority);
         linearLayout.addView(progressAlarm);
-//        linearLayout.addView(textProgress);
-//        linearLayout.addView(progressEditText);
-//        linearLayout.addView(textAlarme);
-//        linearLayout.addView(alarmeCheck);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         /*Définir la bonne taille pour le champ taskEditText*/
@@ -558,15 +540,12 @@ public class ToDoListActivity extends AppCompatActivity implements
                             String taskName = String.valueOf(taskEditText.getText());
 
                             if(txtDate.getText().toString().equals("")){ //si pas de date (peut importe si heure)
-                                //task = new Task(taskName);
 
                                 alarmeBool=false;
 
                                 task = new Task(taskName,progress, alarmeBool);
                             }
                             else{
-                                //if(mDay != 0)
-                                // mMonth++;//car commence à 0
                                 date = mYear*10000 + mMonth * 100 + mDay ;
                                 time = 10000 + mHour*100 + mMinute;
                                 alarmeBool=alarmeCheck.isChecked();
@@ -575,7 +554,6 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 task = new Task(taskName, date, time, progress, alarmeBool);
                                 Log.d("Todo_" + this.toString(), "alarm:" + alarmeCheck.isChecked());
 
-                                //TODO : mettre le string de la tache + heure + date dans BDD
                             }
 
                             if(faible.isChecked()){
@@ -601,7 +579,6 @@ public class ToDoListActivity extends AppCompatActivity implements
                             if(task.getAlarme()) {
                                 new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
 
-                                //Log.d("Todo_" + this.toString(), "get:" + task.getId().intValue() + ":" + task.getTaskName());
                             }
                         }
 

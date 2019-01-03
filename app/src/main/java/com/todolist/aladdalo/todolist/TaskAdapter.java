@@ -97,9 +97,6 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm",Locale.FRANCE);
         Date date = new Date();
 
-//        String currentDate = format.format(date).substring(0,10);
-//        String currentHour = format.format(date).substring(11,16);
-
         int currentDate = Integer.valueOf(format.format(date).substring(6,10))*10000 + Integer.valueOf(format.format(date).substring(3,5)) * 100 + Integer.valueOf(format.format(date).substring(0,2)) ;
         int currentTime = 10000 + Integer.valueOf(format.format(date).substring(11,13))*100 + Integer.valueOf(format.format(date).substring(14,16));
 
