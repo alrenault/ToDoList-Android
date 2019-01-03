@@ -103,13 +103,13 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         int currentDate = Integer.valueOf(format.format(date).substring(6,10))*10000 + Integer.valueOf(format.format(date).substring(3,5)) * 100 + Integer.valueOf(format.format(date).substring(0,2)) ;
         int currentTime = 10000 + Integer.valueOf(format.format(date).substring(11,13))*100 + Integer.valueOf(format.format(date).substring(14,16));
 
-        if(task.isFinish(currentTime,currentDate) && task.getDate() != 0){
+        if(task.getPriority() != 0 && task.isFinish(currentTime,currentDate) && task.getDate() != 0){
             tvDeadLine.setTextColor(getContext().getResources().getColor(R.color.delete));
         }
         else{
             tvDeadLine.setTextColor(getContext().getResources().getColor(R.color.browser_actions_title_color));
         }
-        
+
 
         // Return the completed view to render on screen
         return convertView;
