@@ -89,6 +89,15 @@ public class ToDoListActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm",Locale.FRANCE);
+        Date dateReset = new Date();
+
+        mYear = Integer.valueOf(format.format(dateReset).substring(6,10));
+        mMonth = Integer.valueOf(format.format(dateReset).substring(3,5));
+        mDay = Integer.valueOf(format.format(dateReset).substring(0,2));
+        mHour = Integer.valueOf(format.format(dateReset).substring(11,13));
+        mMinute = Integer.valueOf(format.format(dateReset).substring(14,16));
+
         // create table if not exists
         SugarContext.init(getApplicationContext());
         SchemaGenerator schemaGenerator = new SchemaGenerator(this);
@@ -268,13 +277,24 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 task.setTaskName(taskName);
                             }
                             else{
-                                //if(mDay != 0)
-                                //mMonth++;//car commence à 0
                                 date = mYear*10000 + mMonth * 100 + mDay ;
                                 time = 10000 + mHour*100 + mMinute;
                                 task.setTaskName(taskName);
                                 task.setDate(date);
                                 task.setTime(time);
+
+
+                                //Pour reset les vars
+                                DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm",Locale.FRANCE);
+                                Date dateReset = new Date();
+
+                                mYear = Integer.valueOf(format.format(dateReset).substring(6,10));
+                                mMonth = Integer.valueOf(format.format(dateReset).substring(3,5));
+                                mDay = Integer.valueOf(format.format(dateReset).substring(0,2));
+                                mHour = Integer.valueOf(format.format(dateReset).substring(11,13));
+                                mMinute = Integer.valueOf(format.format(dateReset).substring(14,16));
+
+
                             }
 
                             if(faible.isChecked()){
