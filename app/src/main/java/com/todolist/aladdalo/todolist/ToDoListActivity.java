@@ -330,7 +330,8 @@ public class ToDoListActivity extends AppCompatActivity implements
                 //this.linearLayout = AccountLayout.createAccountLayout(this, "aaa.ttt@gmail.com","aaa");
                 final String username = "adrien.test@gmail.com";
                 final String mdp = "123aaaaa";
-                AccountLayout.addnewaccount(this, username,mdp);
+                //AccountLayout.addnewaccount(this, username,mdp);
+                o.fetchTasks();
                 //List<com.todolist.aladdalo.todolist.db.Account> accountRecupered = Select.from(com.todolist.aladdalo.todolist.db.Account.class).list();
                 //Log.v("aaa", "accountRecupered = "+accountRecupered);
 

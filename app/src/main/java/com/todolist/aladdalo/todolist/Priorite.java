@@ -1,10 +1,13 @@
 package com.todolist.aladdalo.todolist;
 
+import com.google.gson.annotations.SerializedName;
+
 public enum Priorite{
-    Fini(0),
-    Faible(1),
-    Moyenne(2),
-    Forte(3);
+    @SerializedName("0") Fini(0),
+    @SerializedName("1") Faible(1),
+    @SerializedName("2") Moyenne(2),
+    @SerializedName("3") Forte(3);
+
 
     private int prio;
 

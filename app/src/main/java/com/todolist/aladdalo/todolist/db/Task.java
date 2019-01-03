@@ -7,6 +7,8 @@ import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
 import com.todolist.aladdalo.todolist.Priorite;
 
+import java.util.Objects;
+
 public class Task extends SugarRecord{
     private String taskName;
 
@@ -41,6 +43,16 @@ public class Task extends SugarRecord{
         this.date = date;
         this.time = time;
         this.priority = 0;
+        this.progress = progress;
+        this.alarme=alarme;
+    }
+
+    public Task(String taskName, int date, int time, int progress, boolean alarme, int priority){
+
+        this.taskName = taskName;
+        this.date = date;
+        this.time = time;
+        this.priority = priority;
         this.progress = progress;
         this.alarme=alarme;
     }
@@ -116,7 +128,25 @@ public class Task extends SugarRecord{
         return taskName + " " + getDateString();
     }
 
-        /*public static final String DB_NAME = "com.todolist.aladdalo.todolist.db";
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return getDate() == task.getDate() &&
+                getTime() == task.getTime() &&
+                getPriority() == task.getPriority() &&
+                getAlarme() == task.getAlarme() &&
+                getProgress() == task.getProgress() &&
+                Objects.equals(getTaskName(), task.getTaskName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTaskName(), getDate(), getTime(), getPriority(), getAlarme(), getProgress());
+    }
+
+    /*public static final String DB_NAME = "com.todolist.aladdalo.todolist.db";
     public static final int DB_VERSION = 1;
 
     public class TaskEntry implements BaseColumns {
