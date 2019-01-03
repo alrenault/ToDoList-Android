@@ -385,6 +385,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         final EditText taskEditText = new EditText(this);
         taskEditText.setHint(R.string.desc_tache);
         taskEditText.setText(taskDefault);
+        taskEditText.setMaxHeight(200);
 
         //EditText pour la date
         txtDate= new EditText(this);

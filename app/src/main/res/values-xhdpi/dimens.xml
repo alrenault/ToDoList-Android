@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="image_size_finish">30dip</dimen>
-    <dimen name="margin_end_finish">15dp</dimen>
+    <dimen name="margin_end_finish">12dp</dimen>
 
     <dimen name="image_size_prio">15dip</dimen>
     <dimen name="margin_start_prio">15dip</dimen>
