@@ -263,8 +263,17 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 task.setTaskName(taskName);
                             }
                             else{
-                                date = mYear*10000 + mMonth * 100 + mDay ;
-                                time = 10000 + mHour*100 + mMinute;
+                                String[] strDate = txtDate.getText().toString().split("/");
+                                String[] strTime = txtTime.getText().toString().split(":");
+                                String year;
+
+                                if(strDate[2].length() != 4)
+                                    year = "20"+strDate[2];
+                                else
+                                    year = strDate[2];
+
+                                date = Integer.valueOf(year)*10000 + Integer.valueOf(strDate[1]) * 100 + Integer.valueOf(strDate[0]) ;
+                                time = 10000 + Integer.valueOf(strTime[0])*100 + Integer.valueOf(strTime[1]);
                                 task.setTaskName(taskName);
                                 task.setDate(date);
                                 task.setTime(time);
@@ -549,6 +558,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 date = mYear*10000 + mMonth * 100 + mDay ;
                                 time = 10000 + mHour*100 + mMinute;
                                 alarmeBool=alarmeCheck.isChecked();
+
 
                                 //task = new Task(taskName, date, time);
                                 task = new Task(taskName, date, time, progress, alarmeBool);

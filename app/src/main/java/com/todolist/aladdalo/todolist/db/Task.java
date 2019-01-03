@@ -124,5 +124,5 @@ public class Task extends SugarRecord{
     public String toString() {
         return taskName + " " + getDateString();
     }
-    
+
 }
