@@ -27,6 +27,7 @@
     <string name="prioForte">Forte</string>
     <string name="desc_progress">Progrès de la tâche : </string>
     <string name="progress_hint">0-100%</string>
+    <string name="alarme">Alarme active:</string>
 
 
     <string name="afficher_cacher_tache_fini">Afficher/Cacher les tâches terminées</string>
@@ -37,4 +38,5 @@
     <string name="authenticate">s\'authentifier</string>
     <string name="trier_date">Trier par deadline</string>
     <string name="trier_prio">Trier par ordre de priorité</string>
+    <string name="ajout_compte">Ajouter un compte</string>
 </resources>

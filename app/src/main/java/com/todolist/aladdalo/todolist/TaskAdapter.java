@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -14,7 +15,11 @@ import android.widget.TextView;
 
 import com.todolist.aladdalo.todolist.db.Task;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
 
@@ -43,6 +48,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         tvId.setText(String.valueOf(task.getId()));
         tvTitle.setText(task.getTaskName());
         tvDeadLine.setText(task.getDateString()+"\n  "+task.getTimeString());
+
 
         ImageView vignette1 = convertView.findViewById(R.id.imgPrio1);
         ImageView vignette2 = convertView.findViewById(R.id.imgPrio2);
@@ -77,6 +83,29 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         TextView progressPercent = convertView.findViewById(R.id.progressPercent);
         progressPercent.setText(task.getProgress()+"%");
 
+        Button finish = convertView.findViewById(R.id.task_finish);
+
+        if(task.getPriority() == 0){
+            finish.setVisibility(View.INVISIBLE);
+            finish.setClickable(false);
+        }
+        else{
+            finish.setVisibility(View.VISIBLE);
+            finish.setClickable(true);
+        }
+
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm",Locale.FRANCE);
+        Date date = new Date();
+
+        int currentDate = Integer.valueOf(format.format(date).substring(6,10))*10000 + Integer.valueOf(format.format(date).substring(3,5)) * 100 + Integer.valueOf(format.format(date).substring(0,2)) ;
+        int currentTime = 10000 + Integer.valueOf(format.format(date).substring(11,13))*100 + Integer.valueOf(format.format(date).substring(14,16));
+
+        if(task.getPriority() != 0 && task.isFinish(currentTime,currentDate) && task.getDate() != 0){
+            tvDeadLine.setTextColor(getContext().getResources().getColor(R.color.delete));
+        }
+        else{
+            tvDeadLine.setTextColor(getContext().getResources().getColor(R.color.browser_actions_title_color));
+        }
 
 
         // Return the completed view to render on screen

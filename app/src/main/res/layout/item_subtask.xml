@@ -15,56 +15,6 @@
         tools:layout_editor_absoluteY="0dip"
         tools:ignore="MissingConstraints">
 
-        <ImageView
-            android:id="@+id/imgPrio1"
-            android:layout_width="@dimen/image_size_prio"
-            android:layout_height="@dimen/image_size_prio"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/margin_start_prio"
-            android:src="@drawable/vignette_prio1"
-            />
-
-        <ImageView
-            android:id="@+id/imgPrio2"
-            android:layout_width="@dimen/image_size_prio"
-            android:layout_height="@dimen/image_size_prio"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/margin_start_prio"
-            android:src="@drawable/vignette_prio2"
-            />
-
-        <ImageView
-            android:id="@+id/imgPrio3"
-            android:layout_width="@dimen/image_size_prio"
-            android:layout_height="@dimen/image_size_prio"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/margin_start_prio"
-            android:src="@drawable/vignette_prio3"
-            />
-
-        <Button
-            android:id="@+id/task_param"
-            android:layout_width="@dimen/image_size_edit"
-            android:layout_height="@dimen/image_size_edit"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/margin_start_edit"
-            android:background="@android:drawable/ic_menu_edit"
-            android:backgroundTint="@color/colorPrimary"
-            android:onClick="afficheParam" />
-
-        <TextView
-            android:id="@+id/deadline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/margin_top_txt"
-            android:layout_marginBottom="@dimen/margin_bottom_txt"
-            android:layout_marginStart="@dimen/margin_start_deadline"
-            android:layout_marginEnd="@dimen/margin_end_deadline"
-            android:text="@string/texte_defaut"
-            android:textSize="@dimen/txt_size_deadline" />
-
 
         <TextView
             android:id="@+id/task_title"
@@ -78,9 +28,6 @@
             android:layout_marginEnd="@dimen/margin_end_task"
             android:text="@string/texte_defaut"
             android:textSize="@dimen/txt_size_task" />
-
-
-
 
 
         <TextView

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -15,7 +16,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.orm.query.Select;
 import com.todolist.aladdalo.todolist.ToDoListActivity;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Classe qui permet l'interaction avec la base de donnee distante firebase.
@@ -195,6 +201,66 @@ public class OnlineDatabase{
      * */
     public void readTasks(OnGetDataListener listener){
         readData("Tasks", listener);
+    }
+
+    /**
+     * Fait la MAJ des tâches en recuperant les taches de la bdd distante qui ne sont pas presentes
+     * dans la bdd locale.
+     * */
+    public void fetchTasks(){
+        readTasks(new OnGetDataListener() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                Log.v("aaa", "recupere taches avec succes -> fetch");
+                List<com.todolist.aladdalo.todolist.db.Task> tasksLocal = Select.from(com.todolist.aladdalo.todolist.db.Task.class)
+                        .list();
+                List<com.todolist.aladdalo.todolist.db.Task> tasksDistant = new ArrayList<com.todolist.aladdalo.todolist.db.Task>();
+                Log.v("aaa","dataSnapshoot : "+data);
+                try {
+
+                    for (DataSnapshot userSnapshot : data.getChildren()) {
+                        String texte = ""+userSnapshot.toString();
+                        String[] infos = texte.split("\\{");
+                        //Scanner sc = new Scanner(infos[2]);
+                        String[] datas = infos[2].split("=");
+                        int time = Integer.parseInt(datas[1].split(",")[0]);
+                        int progress = Integer.parseInt(datas[2].split(",")[0]);
+                        //int id = Integer.parseInt(datas[3].split(",")[0]);
+                        boolean alarme = Boolean.parseBoolean(datas[4].split(",")[0]);
+                        int date = Integer.parseInt(datas[5].split(",")[0]);
+                        //String timeString = datas[6].split(",")[0];
+                        int priority = Integer.parseInt(datas[7].split(",")[0]);
+                        String taskName = datas[8].split(",")[0];
+                        //String dateString = datas[9].split(",")[0];
+
+                        //com.todolist.aladdalo.todolist.db.Task r = userSnapshot.getValue(com.todolist.aladdalo.todolist.db.Task.class);
+                        tasksDistant.add(new com.todolist.aladdalo.todolist.db.Task(taskName, date, time, progress, alarme, priority));
+                        //tasksDistant.add(userSnapshot.getValue(com.todolist.aladdalo.todolist.db.Task.class));
+                    }
+                }catch(Exception e){
+                    Log.v("aaa","erreur  : "+e.getMessage());
+                    e.printStackTrace();
+                }
+                //List<com.todolist.aladdalo.todolist.db.Task> tasksDistant = bullet.
+                Log.v("aaa","for taskDistant : "+tasksDistant);
+                for(com.todolist.aladdalo.todolist.db.Task i : tasksDistant){
+                    if(!tasksLocal.contains(i)){
+                        i.save();
+                    }
+                }
+                act.refreshList();
+            }
+
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**

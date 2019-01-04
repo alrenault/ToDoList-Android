@@ -7,6 +7,8 @@ import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
 import com.todolist.aladdalo.todolist.Priorite;
 
+import java.util.Objects;
+
 public class Task extends SugarRecord{
     private String taskName;
 
@@ -45,11 +47,21 @@ public class Task extends SugarRecord{
         this.alarme=alarme;
     }
 
+    public Task(String taskName, int date, int time, int progress, boolean alarme, int priority){
+
+        this.taskName = taskName;
+        this.date = date;
+        this.time = time;
+        this.priority = priority;
+        this.progress = progress;
+        this.alarme=alarme;
+    }
+
     public String getTaskName() {
         return taskName;
     }
 
-    public long getDate() {
+    public int getDate() {
         return date;
     }
 
@@ -63,7 +75,7 @@ public class Task extends SugarRecord{
         return date.substring(6,8)+"/"+date.substring(4,6)+"/"+date.substring(2,4);
     }
 
-    public long getTime() {
+    public int getTime() {
         return time;
     }
 
@@ -111,9 +123,36 @@ public class Task extends SugarRecord{
 
     public void setAlarme(boolean alarme) {this.alarme=alarme;}
 
+    public boolean isFinish(int time, int date){
+        if(this.date < date)
+            return true;
+        if(this.date == date && this.time < time)
+            return true;
+
+        return false;
+    }
+
     @Override
     public String toString() {
         return taskName + " " + getDateString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return getDate() == task.getDate() &&
+                getTime() == task.getTime() &&
+                getPriority() == task.getPriority() &&
+                getAlarme() == task.getAlarme() &&
+                getProgress() == task.getProgress() &&
+                Objects.equals(getTaskName(), task.getTaskName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTaskName(), getDate(), getTime(), getPriority(), getAlarme(), getProgress());
     }
 
         /*public static final String DB_NAME = "com.todolist.aladdalo.todolist.db";
