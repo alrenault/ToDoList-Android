@@ -75,6 +75,9 @@ public class ToDoListActivity extends AppCompatActivity implements
     //pour que les alarmes et notif soient liées a un seul intent pour simplifier
     Intent intent;
 
+    //to manage alarm for a task
+    ToDoAlarm tDA;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +119,13 @@ public class ToDoListActivity extends AppCompatActivity implements
         refreshList();
 
         intent=new Intent();
+
+        tDA=new ToDoAlarm();
+
+        tDA.restoreAlarm(intent,ToDoListActivity.this.getApplicationContext());
+
+
+
     }
 
     private void updateUI(boolean orderBy) {
@@ -211,7 +221,9 @@ public class ToDoListActivity extends AppCompatActivity implements
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
         task = Task.findById(Task.class, taskId);
-        //Log.d("Todo_"+this.toString(),"aff:"+taskId+":"+task.getTaskName());
+
+        Log.d("Todo_"+this.toString(),"aff:"+taskId+":"+task.getTaskName()+"|"+task.getAlarme());
+
         createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority(),task.getProgress(), task.getAlarme());
 
         /*---------------------------------------
@@ -240,6 +252,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                             progress = Integer.parseInt(progressEditText.getText().toString())%100;
                         }
                         if(!taskEditText.getText().toString().equals("")){
+
                             int date;
                             int time;
                             String taskName = String.valueOf(taskEditText.getText());
@@ -248,13 +261,20 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 task.setTaskName(taskName);
                             }
                             else{
+
                                 //if(mDay != 0)
                                 //mMonth++;//car commence à 0
                                 date = mYear*10000 + mMonth * 100 + mDay ;
+
                                 time = 10000 + mHour*100 + mMinute;
+                                //Log.d("Todo_"+this.toString(),"dtaeFull:"+time);
                                 task.setTaskName(taskName);
-                                task.setDate(date);
-                                task.setTime(time);
+                                if(date!=0) {//because if i don't modify date after restart date is 0 see after merge
+                                    task.setDate(date);
+                                }
+                                if(time!=10000) { //because if i don't modify date after restart date is 0 see after merge
+                                    task.setTime(time);
+                                }
                             }
 
                             if(faible.isChecked()){
@@ -267,9 +287,37 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 task.setPriority(Priorite.Forte);
                             }
 
+                            if(alarmeCheck.isChecked() && !task.getAlarme()) {
+
+                                task.setAlarme(true);
+                                Log.d("Todo_"+this.toString(),"ajouterAlarme");
+                                tDA.addAlarm(1,ToDoListActivity.this.getApplicationContext(),task.getId().intValue(),task.getTaskName(),intent,(int)task.getDate(),(int)task.getTime());
+                                //new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
+
+
+                            }else if(!alarmeCheck.isChecked() && task.getAlarme()){
+                                task.setAlarme(false);
+                                Log.d("Todo_"+this.toString(),"retirer alarme");
+                                tDA.removeAlarm(ToDoListActivity.this.getApplicationContext(),task.getTaskName(),intent,task.getId().intValue());
+                                //new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
+
+
+                            }else if(alarmeCheck.isChecked() && task.getAlarme()){
+                                Log.d("Todo_"+this.toString(),"Modify retirer alarme");
+                                tDA.removeAlarm(ToDoListActivity.this.getApplicationContext(),task.getTaskName(),intent,task.getId().intValue());
+                                Log.d("Todo_"+this.toString(),"Modify ajouterAlarme");
+                                tDA.addAlarm(1,ToDoListActivity.this.getApplicationContext(),task.getId().intValue(),task.getTaskName(),intent,(int)task.getDate(),(int)task.getTime());
+
+                            }
+                            else{
+                                Log.d("Todo_"+this.toString(),"don't modify alarm");
+                            }
+
                             task.setProgress(progress);
                             task.save();
                             refreshList();
+
+
                         }
 
 
@@ -525,7 +573,9 @@ public class ToDoListActivity extends AppCompatActivity implements
                             refreshList();
 
                             if(task.getAlarme()) {
-                                new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
+                                tDA.addAlarm(1,ToDoListActivity.this.getApplicationContext(),task.getId().intValue(),task.getTaskName(),intent,(int)task.getDate(),(int)task.getTime());
+                                //new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
+
 
                                 //Log.d("Todo_" + this.toString(), "get:" + task.getId().intValue() + ":" + task.getTaskName());
                             }

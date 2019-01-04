@@ -12,6 +12,7 @@ public class BroadcastR extends BroadcastReceiver {
     private static final String actionAlarm="com.todolist.aladdalo.todolist.intent.action.ALARM";
     private static final String IDTaskName = "TaskName";
     private static final String IDTaskDate = "TaskDate";
+    private static final String IDTask = "IDTask";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -32,9 +33,10 @@ public class BroadcastR extends BroadcastReceiver {
 
         String taskName=intent.getStringExtra(IDTaskName);
         String taskDate=intent.getStringExtra(IDTaskDate);
+        int taskID=intent.getIntExtra(IDTask,0);
 
 
-        new ToDoNotif(1,context, taskName,taskDate);
+        new ToDoNotif(1,context, taskName,taskDate,taskID);
 
 
 
