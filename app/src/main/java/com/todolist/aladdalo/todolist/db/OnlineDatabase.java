@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,10 +31,13 @@ import java.util.Scanner;
  * @version 1.0
  * */
 public class OnlineDatabase{
-    //id projet firebase : todolist-cf1df
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private final ToDoListActivity act;
 
+    /**
+     * Constructeur qui prend en parametre le contexte de l'application
+     * @param act le contexte de l'application
+     * */
     public OnlineDatabase(ToDoListActivity act){
         this.act = act;
     }
@@ -71,11 +75,9 @@ public class OnlineDatabase{
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if (task.isSuccessful()) {
-                // Sign in success, update UI with the signed-in user's information
                 Log.v("aaa", "createUserWithEmail:success");
                 listener.onSuccess();
             } else {
-                // If sign in fails, display a message to the user.
                 Log.v("aaa", "createUserWithEmail:failure");
                 listener.onFailed(task.getException());
             }
@@ -97,12 +99,8 @@ public class OnlineDatabase{
         @Override
         public void onComplete(@NonNull com.google.android.gms.tasks.Task<AuthResult> task) {
             if (task.isSuccessful()) {
-                // Sign in success, update UI with the signed-in user's information
-                //Log.v("aaa", "signInWithEmail:success");
                 listener.onSuccess();
             } else {
-                // If sign in fails, display a message to the user.
-                //Log.v("aaa", "signInWithEmail:failure", task.getException());
                 listener.onFailed(task.getException());
             }
         }
@@ -166,23 +164,19 @@ public class OnlineDatabase{
         DatabaseReference myRef = database.getReference(ref);
 
         myRef.setValue(value);
-        //Log.v("aaa", "write "+value+" in "+ref);
     }
 
     /**
      * Lit une donnee en bdd
      * @param ref la reference en bdd
+     * @param listener le callback pour executer du code a la reception des infos de firebase
      * @return T val la valeur stockee en bdd
      * */
     public void readData(String ref, OnGetDataListener listener){
-        //Log.v("aaa","readdata");
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference(ref);
 
         myRef.addValueEventListener(new ReadListener<List<com.todolist.aladdalo.todolist.db.Task>>(listener));
-
-        //Log.v("aaa","return de readdata");
     }
 
 
@@ -264,125 +258,18 @@ public class OnlineDatabase{
     }
 
     /**
-     * Assuprimer : pour test
-     */
-    private void getInfos(Account currentAccount){
-        /*Log.v("aaa", "--writeData--");
-        writeData("coucou", "hello");
-        Log.v("aaa", "--readData--");
-        readData("hello", new OnGetDataListener() {
-            @Override
-            public void onStart() {
-                Log.v("aaa", "listener start");
-            }
-
-            @Override
-            public void onSuccess(DataSnapshot data) {
-                Log.v("aaa", "valeur retournee : "+data);
-                Log.v("aaa", "--writeTasks--");
-                writeTasks();
-                Log.v("aaa", "--readTasks--");
-                readTasks(new OnGetDataListener() {
-                    @Override
-                    public void onStart() {
-                        Log.v("aaa", "listener start");
-                    }
-
-                    @Override
-                    public void onSuccess(DataSnapshot data) {
-                        Log.v("aaa", "valeur retournee : "+data+" faire une maj des vues ici");
-
-                    }
-
-                    @Override
-                    public void onFailed(DatabaseError databaseError) {
-                        Log.v("aaa", "echec de la recuperation de valeur");
-                    }
-                });
-            }
-
-            @Override
-            public void onFailed(DatabaseError databaseError) {
-                Log.v("aaa", "echec de la recuperation de valeur : "+databaseError);
-            }
-        });*/
-        Log.v("aaa", "fetch tasks");
-        fetchTasks();
-        if (currentAccount != null) {//desactive le compte courant si deja authentifie
-            currentAccount.setActive(!currentAccount.isActive());
-            act.refreshIcon(currentAccount.isActive());
+     * Teste si un utilisateur courant est enregistré en ligne ou non.
+     * @return true si un utilisateur est loggé et false sinon
+     * */
+    public boolean isRegisteredOnline(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            return true;
+        } else {
+            // No user is signed in
+            return false;
         }
-    }
-
-    /**
-     * Assuprimer : pour test
-     */
-    public void test(final String email, final String password) {
-        Log.v("aaa", "--test--");
-        Log.v("aaa", "--signIn--");
-
-        signIn(email, password, new OnResponseListener() {
-            @Override
-            public void onStart() {
-                Log.v("aaa", "signIn listener start");
-            }
-
-            @Override
-            public void onSuccess() {
-                Log.v("aaa", "signIn ok");
-
-                Account currentAccount = AccountLauncher.getCurrentAccount();
-                getInfos(currentAccount);
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                Log.v("aaa", "signIn failed : " + e.getMessage());
-                Log.v("aaa", "--createUser--");
-                createUser(email, password, new OnResponseListener() {
-                    @Override
-                    public void onStart() {
-                        Log.v("aaa", "listener start");
-                    }
-
-                    @Override
-                    public void onSuccess() {
-                        Log.v("aaa", "utilisateur cree avec succes");
-                        AccountLauncher.authenticate(act, email, password, new AccountLauncher.OnGetDataListener() {
-                            @Override
-                            public void onStart() {
-
-                            }
-
-                            @Override
-                            public void onAddingDatabase(Account account) {
-                                getInfos(account);
-                            }
-
-                            @Override
-                            public void onAddingPhone(android.accounts.Account account) {
-
-                            }
-
-                            @Override
-                            public void onFailure() {
-
-                            }
-
-                            @Override
-                            public void onFailed(Exception error) {
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailed(Exception e) {
-                        Log.v("aaa", "echec de la creation : " + e.getMessage());
-                    }
-                });
-            }
-        });
     }
 
     @Override

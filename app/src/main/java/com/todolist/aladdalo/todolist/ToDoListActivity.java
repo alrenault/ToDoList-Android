@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.text.InputType;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +32,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.orm.SchemaGenerator;
 import com.orm.SugarContext;
 import com.orm.SugarDb;;
+import com.todolist.aladdalo.todolist.db.AccountLauncher;
 import com.todolist.aladdalo.todolist.db.OnlineDatabase;
 
 import com.orm.query.Condition;
@@ -358,16 +362,28 @@ public class ToDoListActivity extends AppCompatActivity implements
         dialog.show();
     }
 
-
-
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        if(AccountLauncher.isAuthenticated()) {
+            MenuItem saveTask = menu.findItem(R.id.action_sauvegarde_distant);
+            MenuItem receiveTask = menu.findItem(R.id.action_sauvegarde_distant);
+            saveTask.setVisible(false);
+            receiveTask.setVisible(false);
+        }
+
+        /*if (menu instanceof MenuBuilder) {
+            MenuBuilder builder = ((MenuBuilder) menu);
+            builder.setOptionalIconsVisible(true);
+        }*/
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        OnlineDatabase o= null;
 
         switch (item.getItemId()) {
             case R.id.action_add_task:
@@ -377,42 +393,22 @@ public class ToDoListActivity extends AppCompatActivity implements
                 enCours = !enCours;
                 refreshList();
                 return true;
-
-
-            case R.id.action_authenticate:
-                //AccountLauncher.authenticate(this);
-                OnlineDatabase o = new OnlineDatabase(this);
-                AccountLayout.addnewaccount(this, "utilisateurTest2.testComplet@gmail.com", "aaaaaa25");
-                //this.linearLayout = AccountLayout.createAccountLayout(this, "aaa.ttt@gmail.com","aaa");
-                final String username = "adrien.test@gmail.com";
-                final String mdp = "123aaaaa";
-                //AccountLayout.addnewaccount(this, username,mdp);
-                //o.fetchTasks();
-                //List<com.todolist.aladdalo.todolist.db.Account> accountRecupered = Select.from(com.todolist.aladdalo.todolist.db.Account.class).list();
-                //Log.v("aaa", "accountRecupered = "+accountRecupered);
-
-                /*o.readTasks(new OnlineDatabase.OnGetDataListener(){
-                    @Override
-                    public void onStart() {
-                        Log.v("aaa", "listener start");
-                    }
-
-                    @Override
-                    public void onSuccess(DataSnapshot data) {
-                        Log.v("aaa", "listener success : "+data);
-                    }
-
-                    @Override
-                    public void onFailed(DatabaseError databaseError) {
-                        Log.v("aaa", "listener failed : "+databaseError);
-                    }
-                });*/
+            case R.id.action_sauvegarde_distant:
+                o = new OnlineDatabase(this);
+                o.writeTasks();
                 return true;
-
-            /*case R.id.afficher_prio0:
-                updateUIPrio0();
-                return true;*/
-
+            case R.id.action_recup_distant:
+                o = new OnlineDatabase(this);
+                o.fetchTasks();
+                return true;
+            case R.id.action_clear_accounts:
+                AccountLauncher.clearAccounts(this);
+                return true;
+            case R.id.action_authenticate:
+                o = new OnlineDatabase(this);
+                //AccountLayout.addnewaccount(this, "utilisateurTest2.testComplet@gmail.com", "aaaaaa25");
+                AccountLayout.checkPhoneAccounts(this);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -698,10 +694,10 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         if(verite){
             //account.setActive(false);
-            mii.setIcon(R.drawable.icon);
+            mii.setIcon(R.drawable.icon2);
         }else{
             //account.setActive(true);
-            mii.setIcon(R.drawable.icon2);
+            mii.setIcon(R.drawable.icon);
         }
     }
 

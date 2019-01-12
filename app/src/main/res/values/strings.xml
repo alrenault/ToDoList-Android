@@ -30,7 +30,7 @@
     <string name="alarme">Alarme active:</string>
 
 
-    <string name="afficher_cacher_tache_fini">Afficher/Cacher les tâches terminées</string>
+    <string name="afficher_cacher_tache_fini"></string>
     <string name="afficher_tache_en_cours">Tâches en cours</string>
     <string name="acc_name">typeTest</string>
     <string name="acc_authority">\"authTest\"</string>
@@ -39,4 +39,7 @@
     <string name="trier_date">Trier par deadline</string>
     <string name="trier_prio">Trier par ordre de priorité</string>
     <string name="ajout_compte">Ajouter un compte</string>
+    <string name="sauvegarde_distant"></string>
+    <string name="recevoir_distant"></string>
+    <string name="effacer_comptes" />
 </resources>

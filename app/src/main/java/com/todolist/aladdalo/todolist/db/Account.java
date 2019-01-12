@@ -43,4 +43,8 @@ public class Account extends SugarRecord {
     public String toString() {
         return "Account : username = "+username+" mdp = "+mdp;
     }
+
+    public boolean same(Account accountExcept) {
+        return username.equals(accountExcept.getUsername()) && mdp.equals(accountExcept.getMdp());
+    }
 }
