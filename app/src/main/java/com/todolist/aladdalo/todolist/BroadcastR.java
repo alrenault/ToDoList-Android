@@ -7,6 +7,10 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * Gere des actions envoyees par un intent
+ * Lancer une alarme puis creer une notif de deadline
+ */
 public class BroadcastR extends BroadcastReceiver {
 
     private static final String actionAlarm="com.todolist.aladdalo.todolist.intent.action.ALARM";
@@ -28,6 +32,11 @@ public class BroadcastR extends BroadcastReceiver {
         }
     }
 
+    /**
+     * Permet d'envoyer une notif
+     * @param context
+     * @param intent
+     */
     public void alarmAndNotif(Context context,Intent intent){
         //Toast.makeText(context, "It's over!!!!", Toast.LENGTH_LONG).show();
 
@@ -37,10 +46,6 @@ public class BroadcastR extends BroadcastReceiver {
 
 
         new ToDoNotif(1,context, taskName,taskDate,taskID);
-
-
-
-
 
     }
 }
