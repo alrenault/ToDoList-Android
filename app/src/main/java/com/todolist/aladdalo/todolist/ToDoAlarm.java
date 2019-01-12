@@ -22,8 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 import static android.content.Context.ALARM_SERVICE;
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static java.lang.Integer.parseInt;
 
+/**
+* Classe pour gérer le système d'alerte à l'aide de sonneries ou notification
+* */
 public class ToDoAlarm {
 
     private static final String actionAlarm="com.todolist.aladdalo.todolist.intent.action.ALARM";
@@ -31,6 +35,9 @@ public class ToDoAlarm {
     private static final String IDTaskDate = "TaskDate";
     private static final String IDTask = "IDTask";
 
+    /**
+     * Constructeur
+     */
     public ToDoAlarm(){
 
         Log.d("Todo_"+this.toString(),"new ManageAlarm");
@@ -128,6 +135,13 @@ public class ToDoAlarm {
         return -1;
     }
 
+    /**
+     * retire une alarme
+     * @param context
+     * @param taskName nom de la tache
+     * @param intent
+     * @param idTask id de la tache
+     */
     public void removeAlarm(Context context,String taskName,Intent intent,int idTask) {
 
 
@@ -146,6 +160,12 @@ public class ToDoAlarm {
 
     }
 
+    /**
+     * retire toutes les alarmes
+     * @param context
+     * @param taskName nom de la tache
+     * @param intent
+     */
     public void removeAllAlarm(Context context,String taskName,Intent intent){
         /*PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)calendar.getTimeInMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
@@ -158,7 +178,17 @@ public class ToDoAlarm {
         sPf.commit();
     }
 
-    //si act= 0:mais pas la notif prévenant que l'alarme est bien activée 1:sinon
+
+    /**
+     * Ajoute une alarme a une tache
+     * @param act si act= 0:mais pas la notif prévenant que l'alarme est bien activée 1:sinon
+     * @param context
+     * @param idTask id de la tache
+     * @param taskName nom de la tache
+     * @param intent
+     * @param taskDate date de la deadline de la tache
+     * @param time heure et min de la deadline
+     */
     public void addAlarm(int act , Context context,int idTask,String taskName,Intent intent, int taskDate,int time){
         //Intent intent=new Intent();
 
@@ -179,7 +209,8 @@ public class ToDoAlarm {
         dateTime+=hour+":"+min;
         dateTime+=")";
         if(act==1){
-            new ToDoNotif(0,context, taskName,dateTime,idTask);
+            //new ToDoNotif(0,context, taskName,dateTime,idTask);
+            Toast.makeText(context, "Alarm activated", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -229,8 +260,11 @@ public class ToDoAlarm {
         sPf.commit();
     }
 
-
-    //Pour remettre les alarmes des taches qui avaient l'alarme "true" au moment ou l'on recrée un nouvelle intent
+    /**
+     * Pour remettre les alarmes des taches qui avaient l'alarme "true" au moment ou l'on recrée un nouvelle intent
+     * @param intent
+     * @param context
+     */
     public void restoreAlarm(Intent intent,Context context){
         List<Task> tasks;
         tasks = Select.from(Task.class)
