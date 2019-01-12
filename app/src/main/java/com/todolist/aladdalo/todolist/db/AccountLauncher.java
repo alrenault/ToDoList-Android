@@ -217,7 +217,7 @@ public class AccountLauncher{
      * */
     public static void unauthenticate(ToDoListActivity context) {
         context.refreshIcon(false);
-        clearDbAccountExcept(currentAccount2);
+        //clearDbAccountExcept(currentAccount2);
         currentAccount = null;
         currentAccount2 = null;
     }

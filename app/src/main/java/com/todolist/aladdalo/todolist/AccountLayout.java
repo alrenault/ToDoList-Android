@@ -269,7 +269,7 @@ public class AccountLayout {
                                     public void onExisting() {
                                         Log.v("aaa", "Existing already ");
                                     }
-                                });
+                                }).execute();
                             }
                             final OnlineDatabase o = new OnlineDatabase(context);
                             o.createUser(username, mdp, new OnlineDatabase.OnResponseListener() {
