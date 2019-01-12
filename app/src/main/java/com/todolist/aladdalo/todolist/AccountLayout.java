@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.todolist.aladdalo.todolist.db.Account;
 import com.todolist.aladdalo.todolist.db.AccountLauncher;
+import com.todolist.aladdalo.todolist.db.OnlineDatabase;
 import com.todolist.aladdalo.todolist.db.Task;
 
 public class AccountLayout {
@@ -84,14 +85,16 @@ public class AccountLayout {
                         EditText mdpLayout = (EditText) linearLayout.getChildAt(0);
 
                         if(!usernameLayout.getText().toString().equals("") && !mdpLayout.getText().toString().equals("")) {//si intitule des 2 edit text est non-vide
-                            Account currentAccount = AccountLauncher.getCurrentAccount(context);
+
+                            Account currentAccount = AccountLauncher.getCurrentAccount();
                             if (currentAccount != null) {//desactive le compte courant si deja authentifie
-                                context.refreshIcon(currentAccount);
+                                context.refreshIcon(!AccountLauncher.getCurrentAccount().isActive());
+
                             } else {//authentification
                                 String username = String.valueOf(usernameLayout.getText());
                                 String mdp = String.valueOf(usernameLayout.getText());
 
-                                AccountLauncher.authenticate(context, username, mdp, new AccountLauncher.OnGetDataListener() {
+                                /*AccountLauncher.authenticate(context, username, mdp, new AccountLauncher.OnGetDataListener() {
                                     @Override
                                     public void onStart() {
                                         Log.v("aaa", "Demarrage authentication");
@@ -105,7 +108,7 @@ public class AccountLayout {
                                     @Override
                                     public void onAddingDatabase(Account account) {
                                         Log.v("aaa","compte cree avec succes en bdd -> "+account);
-                                        context.refreshIcon(account);
+                                        context.refreshIcon(AccountLauncher.getCurrentAccount().isActive());
                                     }
 
                                     @Override
@@ -117,7 +120,9 @@ public class AccountLayout {
                                     public void onFailure() {
                                         Log.v("aaa", "echec ajout");
                                     }
-                                });
+                                });*/
+                                OnlineDatabase o = new OnlineDatabase(context);
+                                o.test(username, mdp);
                             }
                         }
                     }

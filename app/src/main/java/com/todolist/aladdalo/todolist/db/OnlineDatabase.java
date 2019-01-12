@@ -211,7 +211,7 @@ public class OnlineDatabase{
         readTasks(new OnGetDataListener() {
             @Override
             public void onStart() {
-
+                Log.v("aaa", "start fetchTasks");
             }
 
             @Override
@@ -258,7 +258,7 @@ public class OnlineDatabase{
 
             @Override
             public void onFailed(DatabaseError databaseError) {
-
+                Log.v("aaa", "fetch erreor : "+databaseError.getMessage());
             }
         });
     }
@@ -266,8 +266,8 @@ public class OnlineDatabase{
     /**
      * Assuprimer : pour test
      */
-    private void getInfos(){
-        Log.v("aaa", "--writeData--");
+    private void getInfos(Account currentAccount){
+        /*Log.v("aaa", "--writeData--");
         writeData("coucou", "hello");
         Log.v("aaa", "--readData--");
         readData("hello", new OnGetDataListener() {
@@ -291,6 +291,7 @@ public class OnlineDatabase{
                     @Override
                     public void onSuccess(DataSnapshot data) {
                         Log.v("aaa", "valeur retournee : "+data+" faire une maj des vues ici");
+
                     }
 
                     @Override
@@ -304,33 +305,41 @@ public class OnlineDatabase{
             public void onFailed(DatabaseError databaseError) {
                 Log.v("aaa", "echec de la recuperation de valeur : "+databaseError);
             }
-        });
+        });*/
+        Log.v("aaa", "fetch tasks");
+        fetchTasks();
+        if (currentAccount != null) {//desactive le compte courant si deja authentifie
+            currentAccount.setActive(!currentAccount.isActive());
+            act.refreshIcon(currentAccount.isActive());
+        }
     }
 
     /**
      * Assuprimer : pour test
      */
-    public void test() {
+    public void test(final String email, final String password) {
         Log.v("aaa", "--test--");
         Log.v("aaa", "--signIn--");
 
-        signIn("utilisateur.test@gmail.com", "aaaaaa", new OnResponseListener() {
+        signIn(email, password, new OnResponseListener() {
             @Override
             public void onStart() {
-                Log.v("aaa", "listener start");
+                Log.v("aaa", "signIn listener start");
             }
 
             @Override
             public void onSuccess() {
-                Log.v("aaa", "authentication ok");
-                getInfos();
+                Log.v("aaa", "signIn ok");
+
+                Account currentAccount = AccountLauncher.getCurrentAccount();
+                getInfos(currentAccount);
             }
 
             @Override
             public void onFailed(Exception e) {
-                Log.v("aaa", "authentication failed : " + e.getMessage());
+                Log.v("aaa", "signIn failed : " + e.getMessage());
                 Log.v("aaa", "--createUser--");
-                createUser("utilisateur.test@gmail.com", "aaaaaa", new OnResponseListener() {
+                createUser(email, password, new OnResponseListener() {
                     @Override
                     public void onStart() {
                         Log.v("aaa", "listener start");
@@ -339,7 +348,32 @@ public class OnlineDatabase{
                     @Override
                     public void onSuccess() {
                         Log.v("aaa", "utilisateur cree avec succes");
-                        getInfos();
+                        AccountLauncher.authenticate(act, email, password, new AccountLauncher.OnGetDataListener() {
+                            @Override
+                            public void onStart() {
+
+                            }
+
+                            @Override
+                            public void onAddingDatabase(Account account) {
+                                getInfos(account);
+                            }
+
+                            @Override
+                            public void onAddingPhone(android.accounts.Account account) {
+
+                            }
+
+                            @Override
+                            public void onFailure() {
+
+                            }
+
+                            @Override
+                            public void onFailed(Exception error) {
+
+                            }
+                        });
                     }
 
                     @Override

@@ -20,6 +20,9 @@ import java.util.List;
  * */
 public class AccountLauncher{
 
+    private static Account currentAccount;
+    private static com.todolist.aladdalo.todolist.db.Account currentAccount2;
+
     private AccountLauncher(){} //ininstanciable
 
     public static boolean isAccount(Account[] accounts, Account account){
@@ -31,44 +34,29 @@ public class AccountLauncher{
         return false;
     }
 
+
+    public static com.todolist.aladdalo.todolist.db.Account getCurrentAccount(){
+        return currentAccount2;
+    }
+
     public static void authenticate(Context context, String accountName, String password, OnGetDataListener listener){
         final String ACCOUNT_TYPE = "ccc";
-        Bundle userdata = new Bundle();
-        userdata.putString("SERVER", "extra");
+        //Bundle userdata = new Bundle();
+        //userdata.putString("SERVER", "extra");
 
-        Log.v("aaa", "authenticate");
-        /*AccountManager am = AccountManager.get(context);
-
-        final Account account = new Account("test",  ACCOUNT_TYPE);
-        Log.v("aaa", "authenticate");
-        am.addAccountExplicitly(account, "testPwd", userdata);
-        Log.v("aaa", "authenticate");*/
-
-        //AccountAuthenticator aa = new AccountAuthenticator(context);
-        //Log.v("aaa", "AccountAuthenticator = "+aa);
+        Log.v("aaa", "authenticateAccountLauncher");
 
         AccountManager am = AccountManager.get(context);
 
-        String authority = "testAuthority";
+        //String authority = "testAuthority";
         String accountType = ACCOUNT_TYPE;
 
         Account account = new Account(accountName, accountType);
 
         Log.v("aaa", "NomCompte = "+account.name+" TypeCompte : "+account.type+" "+account.describeContents());
 
-        new RegisterAsync(am, accountName, accountType, password, null, null, listener, context).execute();
+        new RegisterAsync(am, accountName, accountType, password, listener, context).execute();
     };
-
-    public static com.todolist.aladdalo.todolist.db.Account getCurrentAccount(Context context) {
-        List<com.todolist.aladdalo.todolist.db.Account> accountRecupered = Select.from(com.todolist.aladdalo.todolist.db.Account.class).list();
-        for(com.todolist.aladdalo.todolist.db.Account i : accountRecupered){
-            if(i.isActive()){
-                return i;
-            }
-        }
-
-        return null;
-    }
 
     public static void disableAllAccount(ToDoListActivity context){
         List<com.todolist.aladdalo.todolist.db.Account> accountRecupered = Select.from(com.todolist.aladdalo.todolist.db.Account.class).list();
@@ -100,11 +88,10 @@ public class AccountLauncher{
         private String password;
         private String[] requiredFeatures;
         private Bundle options;
-        private Account account;
         private OnGetDataListener listener;
         private Context context;
 
-        public RegisterAsync(AccountManager am, String accountName, String accountType, String password, String[] requiredFeatures, Bundle options, OnGetDataListener listener, Context context) {
+        public RegisterAsync(AccountManager am, String accountName, String accountType, String password, OnGetDataListener listener, Context context) {
             this.am = am;
             this.accountName = accountName;
             this.accountType = accountType;
@@ -118,7 +105,7 @@ public class AccountLauncher{
         @Override
         protected Object doInBackground(Object[] objects) {
             listener.onStart();
-            account = new Account(accountName, accountType);
+            currentAccount = new Account(accountName, accountType);
             return null;
         }
 
@@ -127,14 +114,14 @@ public class AccountLauncher{
             try{
                 Account[] accounts = am.getAccounts();
                 //am.addAccount("Base",null,null,null,null,null,null);
-                if (am.addAccountExplicitly(account, password, null)) {
-                    listener.onAddingPhone(account);
+                if (am.addAccountExplicitly(currentAccount, password, null)) {
+                    listener.onAddingPhone(currentAccount);
 
-                    com.todolist.aladdalo.todolist.db.Account accountCreated = new com.todolist.aladdalo.todolist.db.Account(accountName, password);
-                    accountCreated.save();
-                    listener.onAddingDatabase(accountCreated);
+                    currentAccount2 = new com.todolist.aladdalo.todolist.db.Account(accountName, password);
+                    currentAccount2.save();
+                    listener.onAddingDatabase(currentAccount2);
 
-                }else if(isAccount(accounts, account)){//compte déjà présent
+                }else if(isAccount(accounts, currentAccount)){//compte déjà présent
                     List<com.todolist.aladdalo.todolist.db.Account> accountRecupered = Select.from(com.todolist.aladdalo.todolist.db.Account.class)
                             .where(Condition.prop("username").eq(accountName))
                             .where(Condition.prop("mdp").eq(password))

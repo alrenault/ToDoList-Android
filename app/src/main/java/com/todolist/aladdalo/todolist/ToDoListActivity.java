@@ -326,12 +326,12 @@ public class ToDoListActivity extends AppCompatActivity implements
             case R.id.action_authenticate:
                 //AccountLauncher.authenticate(this);
                 OnlineDatabase o = new OnlineDatabase(this);
-                //o.test();
+                AccountLayout.addnewaccount(this, "utilisateurTest2.testComplet@gmail.com", "aaaaaa25");
                 //this.linearLayout = AccountLayout.createAccountLayout(this, "aaa.ttt@gmail.com","aaa");
                 final String username = "adrien.test@gmail.com";
                 final String mdp = "123aaaaa";
                 //AccountLayout.addnewaccount(this, username,mdp);
-                o.fetchTasks();
+                //o.fetchTasks();
                 //List<com.todolist.aladdalo.todolist.db.Account> accountRecupered = Select.from(com.todolist.aladdalo.todolist.db.Account.class).list();
                 //Log.v("aaa", "accountRecupered = "+accountRecupered);
 
@@ -642,15 +642,15 @@ public class ToDoListActivity extends AppCompatActivity implements
     }
 
     @SuppressLint("RestrictedApi")
-    public void refreshIcon(com.todolist.aladdalo.todolist.db.Account account) {
+    public void refreshIcon(boolean verite) {
         ActionMenuItemView item = findViewById(R.id.action_authenticate);
         MenuItemImpl mii = item.getItemData();
 
-        if(account.isActive()){
-            account.setActive(false);
+        if(verite){
+            //account.setActive(false);
             mii.setIcon(R.drawable.icon);
         }else{
-            account.setActive(true);
+            //account.setActive(true);
             mii.setIcon(R.drawable.icon2);
         }
     }
