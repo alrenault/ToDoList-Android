@@ -36,26 +36,26 @@
                 android:orderInCategory="300"
                 android:title="@string/afficher_tache_fini"
                 android:icon="@drawable/icon_hide"
-                app:showAsAction="ifRoom"/>
+                app:showAsAction="never"/>
 
             <item
                 android:id="@+id/action_sauvegarde_distant"
                 android:orderInCategory="300"
                 android:title="@string/sauvegarde_distant"
                 android:icon="@drawable/icon_save"
-                app:showAsAction="ifRoom" />
+                app:showAsAction="never" />
             <item
                 android:id="@+id/action_recup_distant"
                 android:orderInCategory="300"
                 android:title="@string/recevoir_distant"
                 android:icon="@drawable/icon_receive"
-                app:showAsAction="ifRoom"/>
+                app:showAsAction="never"/>
             <item
                 android:id="@+id/action_clear_accounts"
                 android:orderInCategory="300"
                 android:title="@string/effacer_comptes"
                 android:icon="@drawable/icon_clear_accounts"
-                app:showAsAction="ifRoom"/>
+                app:showAsAction="never"/>
       <!--  </menu>
     </item>-->
 
