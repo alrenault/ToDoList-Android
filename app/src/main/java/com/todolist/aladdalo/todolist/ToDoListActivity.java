@@ -31,6 +31,7 @@ import com.todolist.aladdalo.todolist.db.OnlineDatabase;
 import com.orm.query.Condition;
 import com.orm.query.Select;
 
+import com.todolist.aladdalo.todolist.db.SousTache;
 import com.todolist.aladdalo.todolist.db.Task;
 
 import java.lang.reflect.Field;
@@ -53,6 +54,18 @@ public class ToDoListActivity extends AppCompatActivity implements
 
     /**L'adaptateur pour utiliser la base de données interne*/
     private TaskAdapter mAdapter;
+
+
+    //0 si dans tache , else val de la sous tache choisie
+    private int idTorSTChoisi=0;
+
+    //1 go ST, 0 else
+    private int STaskTap=0;
+
+    //to identify tache
+    private int IDT=100;
+
+    private EditText txtDate, txtTime;
 
     /**Tableau d'onglet de l'application*/
     private TabLayout tabs;
@@ -103,6 +116,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         schemaGenerator.createDatabase(new SugarDb(this).getDB());
 
         //vue
+        setTitle("Tâches:");
         setContentView(R.layout.activity_to_do_list);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
 
@@ -137,9 +151,15 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         intent=new Intent();
 
+
+
         tDA=new ToDoAlarm();
 
         tDA.restoreAlarm(intent,ToDoListActivity.this.getApplicationContext());
+
+        STaskTap=0;
+
+        idTorSTChoisi=0;
 
 
     }
@@ -154,7 +174,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
 
 
-        if(enCours){/*affiche les taches en cours*/
+        if(enCours){ //affiche les taches en cours
             if(orderBy){
 
                 tasks = Select.from(Task.class)
@@ -170,7 +190,7 @@ public class ToDoListActivity extends AppCompatActivity implements
             }
 
         }
-        else {/*affiche les taches terminées*/
+        else {//affiche les taches terminées
             tasks = Select.from(Task.class)
                     .where(Condition.prop("priority").eq(0))
                     .orderBy("date")
@@ -179,7 +199,13 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
 
 
+
+
         if (mAdapter == null) {
+            for(Task t: tasks  ){
+                Log.d("Todo_"+this.toString(),"prio: "+t.getPriority() + " id: "+t.getTaskName());
+                //Log.d("Todo_"+this.toString(),"id "+sT.getId());
+            }
             mAdapter = new TaskAdapter(this,
                     R.layout.item_task, // what view to use for the items
                     R.id.task_title, // where to put the String of data
@@ -191,18 +217,40 @@ public class ToDoListActivity extends AppCompatActivity implements
                 public boolean onItemLongClick(AdapterView<?> arg0, View v,
                                                int index, long arg3) {
                     String str="Tâche envoyée:"+ ((Task)mTaskListView.getItemAtPosition(index)).getTaskName();
-                    //String str="Tâche envoyée:"+ Task.findById(Task.class,index+1).getTaskName();
-                    //Toast.makeText(getApplicationContext(), "partager:"+str, Toast.LENGTH_SHORT).show();
-
                     Intent ShareIntent = new Intent(Intent.ACTION_SEND);
                     ShareIntent.setType("text/plain");
                     ShareIntent.putExtra(Intent.EXTRA_TEXT, str);
                     startActivity(Intent.createChooser(ShareIntent, "Partager avec:"));
                     return true;
                 }
+
+
+            });
+
+            mTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                @Override
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                    try{
+
+                        STaskTap=1;
+
+                        Task task=((Task)mTaskListView.getItemAtPosition(position));
+                        long idTaskL=task.getId();
+                        int idTaskI=(int) idTaskL;
+
+                        idTorSTChoisi=idTaskI;
+
+                        refreshList();
+
+                    }catch (Exception e){
+                        Log.d("Todo_"+this.toString(),Log.getStackTraceString(e));
+                    }
+
+                }
             });
 
         } else {
+            Log.d("Todo_"+this.toString(),"ttttt");
             mAdapter.clear();
             mAdapter.addAll(tasks);
             mAdapter.notifyDataSetChanged();
@@ -215,10 +263,43 @@ public class ToDoListActivity extends AppCompatActivity implements
     public void refreshList(){
 
         if(tabs.getTabAt(0).isSelected()){
-            updateUI(true);
+            if(STaskTap==1){
+                STaskTap=0;
+                // Le premier paramètre est le nom de l'activité actuelle
+                // Le second est le nom de l'activité de destination
+                Intent secondeActivite = new Intent(this, ToDoSousTacheListActivity.class);
+
+                // On rajoute un extra
+                secondeActivite.putExtra("IDST", idTorSTChoisi);
+
+                // Puis on lance l'intent !
+                startActivity(secondeActivite);
+            }else{
+                updateUI(true);
+            }
+
+
+
+
         }
         else{
-            updateUI(false);
+            if(STaskTap==1){
+                STaskTap=0;
+                // Le premier paramètre est le nom de l'activité actuelle
+                // Le second est le nom de l'activité de destination
+                Intent secondeActivite = new Intent(this, ToDoSousTacheListActivity.class);
+
+                // On rajoute un extra
+                secondeActivite.putExtra("IDST", idTorSTChoisi);
+
+                // Puis on lance l'intent !
+                startActivity(secondeActivite);
+
+
+            }else{
+                updateUI(false);
+            }
+
         }
 
 
@@ -341,22 +422,22 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                                 task.setAlarme(true);
                                 Log.d("Todo_"+this.toString(),"ajouterAlarme");
-                                tDA.addAlarm(1,ToDoListActivity.this.getApplicationContext(),task.getId().intValue(),task.getTaskName(),intent,(int)task.getDate(),(int)task.getTime());
+                                tDA.addAlarm(1,ToDoListActivity.this.getApplicationContext(),IDT+task.getId().intValue(),task.getTaskName(),intent,(int)task.getDate(),(int)task.getTime());
                                 //new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
 
 
                             }else if(!addModTask.getAlarmeCheck().isChecked() && task.getAlarme()){
                                 task.setAlarme(false);
                                 Log.d("Todo_"+this.toString(),"retirer alarme");
-                                tDA.removeAlarm(ToDoListActivity.this.getApplicationContext(),task.getTaskName(),intent,task.getId().intValue());
+                                tDA.removeAlarm(ToDoListActivity.this.getApplicationContext(),task.getTaskName(),intent,IDT+task.getId().intValue());
                                 //new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
 
 
                             }else if(addModTask.getAlarmeCheck().isChecked() && task.getAlarme()){
                                 Log.d("Todo_"+this.toString(),"Modify retirer alarme");
-                                tDA.removeAlarm(ToDoListActivity.this.getApplicationContext(),task.getTaskName(),intent,task.getId().intValue());
+                                tDA.removeAlarm(ToDoListActivity.this.getApplicationContext(),task.getTaskName(),intent,IDT+task.getId().intValue());
                                 Log.d("Todo_"+this.toString(),"Modify ajouterAlarme");
-                                tDA.addAlarm(1,ToDoListActivity.this.getApplicationContext(),task.getId().intValue(),task.getTaskName(),intent,(int)task.getDate(),(int)task.getTime());
+                                tDA.addAlarm(1,ToDoListActivity.this.getApplicationContext(),IDT+task.getId().intValue(),task.getTaskName(),intent,(int)task.getDate(),(int)task.getTime());
 
                             }
                             else{
@@ -393,10 +474,6 @@ public class ToDoListActivity extends AppCompatActivity implements
             receiveTask.setVisible(false);
         }
 
-        /*if (menu instanceof MenuBuilder) {
-            MenuBuilder builder = ((MenuBuilder) menu);
-            builder.setOptionalIconsVisible(true);
-        }*/
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -507,7 +584,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                             refreshList();
 
                             if(task.getAlarme()) {
-                                tDA.addAlarm(1,ToDoListActivity.this.getApplicationContext(),task.getId().intValue(),task.getTaskName(),intent,(int)task.getDate(),(int)task.getTime());
+                                tDA.addAlarm(1,ToDoListActivity.this.getApplicationContext(),IDT+task.getId().intValue(),task.getTaskName(),intent,(int)task.getDate(),(int)task.getTime());
                                 //new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
 
                             }

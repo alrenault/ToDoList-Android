@@ -22,9 +22,12 @@ public class BroadcastR extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         if(intent.getAction().equals(actionAlarm)) {
-
-            alarmAndNotif(context,intent);
-
+            Log.d("Todo_","test");
+            try {
+                alarmAndNotif(context, intent);
+            }catch(Exception e){
+                Log.d("Todo_",Log.getStackTraceString(e));
+            }
 
         }else{
             Toast.makeText(context, "I don't know this action!!!!",

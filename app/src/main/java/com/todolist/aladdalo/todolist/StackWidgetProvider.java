@@ -1,15 +1,19 @@
 
 package com.todolist.aladdalo.todolist;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import java.util.Arrays;
 
 public class StackWidgetProvider extends AppWidgetProvider {
     public static final String TOAST_ACTION = "com.example.android.stackwidget.TOAST_ACTION";
@@ -46,6 +50,7 @@ public class StackWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // met à jour chaque widget avec le remote adapter
+        Log.i("ExampleWidget",  "Updating widgets " + Arrays.asList(appWidgetIds).size());
         for (int i = 0; i < appWidgetIds.length; ++i) {
 
             // creation de l'intent qui pointe le StackViewService qui va fournir le view de cette collection
@@ -67,6 +72,7 @@ public class StackWidgetProvider extends AppWidgetProvider {
                     PendingIntent.FLAG_UPDATE_CURRENT);
             rv.setPendingIntentTemplate(R.id.stack_view, toastPendingIntent);
 
+            //update le widget
             appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
