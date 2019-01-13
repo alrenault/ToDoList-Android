@@ -75,7 +75,7 @@ public class ToDoSousTacheListActivity extends AppCompatActivity implements
     private EditText txtDate, txtTime;
 
     private TabLayout tabs;
-    private Task sousTask;
+    private SousTache sousTask;
 
 
     DatePickerDialog.OnDateSetListener datePicker;
@@ -275,7 +275,7 @@ public class ToDoSousTacheListActivity extends AppCompatActivity implements
 
     }
 
-    public void deleteTask(Task task) {
+    public void deleteTask(SousTache task) {
         task.delete();
 
         refreshList();
@@ -287,7 +287,7 @@ public class ToDoSousTacheListActivity extends AppCompatActivity implements
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
         System.out.println("--------------id : " + taskId);
-        sousTask = Task.findById(Task.class, taskId);
+        sousTask = SousTache.findById(SousTache.class, taskId);
         sousTask.setPriority(Priorite.Fini);
         sousTask.setProgress(100);
         System.out.println("--------------PRIORITE : " + sousTask.getPriority());
@@ -300,7 +300,7 @@ public class ToDoSousTacheListActivity extends AppCompatActivity implements
         View parent = (View) view.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
-        sousTask = Task.findById(Task.class, taskId);
+        sousTask = SousTache.findById(SousTache.class, taskId);
 
         Log.d("Todo_"+this.toString(),"aff:"+taskId+":"+sousTask.getTaskName()+"|"+sousTask.getAlarme());
 

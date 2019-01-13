@@ -65,8 +65,6 @@ public class ToDoListActivity extends AppCompatActivity implements
     //to identify tache
     private int IDT=100;
 
-    private EditText txtDate, txtTime;
-
     /**Tableau d'onglet de l'application*/
     private TabLayout tabs;
 
