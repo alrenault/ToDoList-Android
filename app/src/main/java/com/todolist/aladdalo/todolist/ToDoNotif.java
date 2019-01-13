@@ -9,6 +9,7 @@ import android.media.RingtoneManager;
 import android.os.Vibrator;
 import android.util.Log;
 
+import com.todolist.aladdalo.todolist.db.SousTache;
 import com.todolist.aladdalo.todolist.db.Task;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -20,6 +21,8 @@ public class ToDoNotif {
 
 
     public int ID_NOTIFICATION = 0;
+
+    public int IDT=100;
 
 
     /**
@@ -84,14 +87,25 @@ public class ToDoNotif {
      * @param taskID
      */
     public void alarmdesactivated(int taskID){
+        Log.d("Todo_"+this.toString(),"chiffre:"+taskID);
+        if(taskID>IDT){
+            Task task = Task.findById(Task.class,taskID-IDT);
 
-        Task task = Task.findById(Task.class, taskID);
+
+            task.setAlarme(false);
+            task.save();
+
+            Log.d("Todo_"+this.toString(),taskID+":desacAlarme|"+task.getAlarme());
+        }else{
+            SousTache task = SousTache.findById(SousTache.class, taskID);
 
 
-        task.setAlarme(false);
-        task.save();
+            task.setAlarme(false);
+            task.save();
 
-        Log.d("Todo_"+this.toString(),taskID+":desacAlarme|"+task.getAlarme());
+            Log.d("Todo_"+this.toString(),taskID+":desacAlarme|"+task.getAlarme());
+        }
+
     }
 
 }

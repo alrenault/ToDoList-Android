@@ -32,6 +32,11 @@
 
         </activity>
 
+        <activity
+            android:name=".ToDoSousTacheListActivity"
+            android:label="TodoListSousTache" >
+        </activity>
+
         <receiver android:name=".BroadcastR" >
             <intent-filter>
                 <action android:name="com.todolist.aladdalo.todolist.intent.action.ALARM" >

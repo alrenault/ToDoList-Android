@@ -1,16 +1,17 @@
 package com.todolist.aladdalo.todolist.db;
 
-import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.orm.SugarRecord;
-import com.orm.dsl.Table;
-import com.orm.dsl.Unique;
 import com.todolist.aladdalo.todolist.Priorite;
 
 import java.util.Objects;
 
-public class Task extends SugarRecord{
+public class SousTache extends SugarRecord {
+
+
+    private int idtask;
+
     private String taskName;
 
     private int date;
@@ -23,11 +24,14 @@ public class Task extends SugarRecord{
 
     private int progress;
 
-    public Task(){
-        //Log.d("Todo_"+this.toString(),"CreaT");
+    public SousTache(){
+
     }
 
-    public Task(String taskName, int progress, boolean alarme){
+
+
+
+    public SousTache(String taskName, int progress, boolean alarme,int idtask){
 
         this.taskName = taskName;
         this.date = 100000000;
@@ -35,10 +39,11 @@ public class Task extends SugarRecord{
         this.priority = 0;
         this.progress = progress;
         this.alarme=alarme;
+        this.idtask=idtask;
     }
 
 
-    public Task(String taskName, int date, int time, int progress, boolean alarme){
+    public SousTache(String taskName, int date, int time, int progress, boolean alarme,int idtask){
 
         this.taskName = taskName;
         this.date = date;
@@ -46,9 +51,10 @@ public class Task extends SugarRecord{
         this.priority = 0;
         this.progress = progress;
         this.alarme=alarme;
+        this.idtask=idtask;
     }
 
-    public Task(String taskName, int date, int time, int progress, boolean alarme, int priority){
+    public SousTache(String taskName, int date, int time, int progress, boolean alarme, int priority,int idtask){
 
         this.taskName = taskName;
         this.date = date;
@@ -56,6 +62,7 @@ public class Task extends SugarRecord{
         this.priority = priority;
         this.progress = progress;
         this.alarme=alarme;
+        this.idtask=idtask;
     }
 
     public String getTaskName() {
@@ -142,7 +149,7 @@ public class Task extends SugarRecord{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
+        SousTache task = (SousTache) o;
         return getDate() == task.getDate() &&
                 getTime() == task.getTime() &&
                 getPriority() == task.getPriority() &&
@@ -151,9 +158,14 @@ public class Task extends SugarRecord{
                 Objects.equals(getTaskName(), task.getTaskName());
     }
 
+    public int getIdTask() {
+        return idtask;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(getTaskName(), getDate(), getTime(), getPriority(), getAlarme(), getProgress());
     }
-
 }
+
+

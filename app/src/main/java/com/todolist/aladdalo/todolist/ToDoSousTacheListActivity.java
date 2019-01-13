@@ -57,13 +57,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ToDoListActivity extends AppCompatActivity implements
+public class ToDoSousTacheListActivity extends AppCompatActivity implements
         View.OnClickListener {
 
     private ListView mTaskListView;
 
-    private TaskAdapter mAdapter;
 
+
+    private SousTaskAdapter mAdapterST;
 
     //0 si dans tache , else val de la sous tache choisie
     private int idTorSTChoisi=0;
@@ -71,13 +72,11 @@ public class ToDoListActivity extends AppCompatActivity implements
     //1 go ST, 0 else
     private int STaskTap=0;
 
-    //to identify tache
-    private int IDT=100;
-
     private EditText txtDate, txtTime;
 
     private TabLayout tabs;
-    private Task task;
+    private Task sousTask;
+
 
     DatePickerDialog.OnDateSetListener datePicker;
     final Calendar c = Calendar.getInstance();
@@ -104,9 +103,13 @@ public class ToDoListActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
 
-        Log.d("Todo_"+this.toString(),"Create");
+        Log.d("Todo_"+this.toString(),"SCreate");
+        idTorSTChoisi=getIntent().getIntExtra("IDST",idTorSTChoisi);
 
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm",Locale.FRANCE);
         Date dateReset = new Date();
@@ -123,7 +126,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         schemaGenerator.createDatabase(new SugarDb(this).getDB());
 
         //vue
-        setTitle("Tâches:");
+        setTitle(Task.findById(Task.class,idTorSTChoisi).getTaskName());
         setContentView(R.layout.activity_to_do_list);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
 
@@ -137,9 +140,9 @@ public class ToDoListActivity extends AppCompatActivity implements
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
-                    case 0: updateUI(true);
+                    case 0: updateUIST(true);
                         break;
-                    case 1: updateUI(false);
+                    case 1: updateUIST(false);
                         break;
 
 
@@ -158,46 +161,43 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         intent=new Intent();
 
-
-
         tDA=new ToDoAlarm();
 
-        tDA.restoreAlarm(intent,ToDoListActivity.this.getApplicationContext());
+        tDA.restoreAlarm(intent,ToDoSousTacheListActivity.this.getApplicationContext());
 
         STaskTap=0;
 
-        idTorSTChoisi=0;
 
 
     }
 
-    private void updateUI(boolean orderBy) {
 
-        List<Task> tasks;
+    private void updateUIST(boolean orderBy) {
+
+        List<SousTache> tasks;
 
 
-
-        if(enCours){ //affiche les taches en cours
+        if(enCours){/*affiche les taches en cours*/
             if(orderBy){
 
-                tasks = Select.from(Task.class)
-                        .where(Condition.prop("priority").notEq(0))
+                tasks = Select.from(SousTache.class)
+                        .where(Condition.prop("priority").notEq(0),Condition.prop("idtask").eq(idTorSTChoisi))
                         .orderBy("date")
                         .list();
                 System.out.println("PREMIER CAS");
             }
             else{
-                tasks = Select.from(Task.class)
-                        .where(Condition.prop("priority").notEq(0))
+                tasks = Select.from(SousTache.class)
+                        .where(Condition.prop("priority").notEq(0),Condition.prop("idtask").eq(idTorSTChoisi))
                         .orderBy("priority desc")
                         .list();
                 System.out.println("DEUXIEME CAS");
             }
 
         }
-        else {//affiche les taches terminées
-            tasks = Select.from(Task.class)
-                    .where(Condition.prop("priority").eq(0))
+        else {/*affiche les taches terminées*/
+            tasks = Select.from(SousTache.class)
+                    .where(Condition.prop("priority").eq(0),Condition.prop("idtask").eq(idTorSTChoisi))
                     .orderBy("date")
                     .list();
             System.out.println("TROISIEME CAS");
@@ -205,24 +205,18 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
 
 
-
-
-        if (mAdapter == null) {
-            for(Task t: tasks  ){
-                Log.d("Todo_"+this.toString(),"prio: "+t.getPriority() + " id: "+t.getTaskName());
-                //Log.d("Todo_"+this.toString(),"id "+sT.getId());
-            }
-            mAdapter = new TaskAdapter(this,
+        if (mAdapterST == null) {
+            mAdapterST = new SousTaskAdapter(this,
                     R.layout.item_task, // what view to use for the items
                     R.id.task_title, // where to put the String of data
                     tasks); // where to get all the data
-            mTaskListView.setAdapter(mAdapter); // set it as the adapter of the ListView instance
+            mTaskListView.setAdapter(mAdapterST); // set it as the adapter of the ListView instance
 
             mTaskListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
                 public boolean onItemLongClick(AdapterView<?> arg0, View v,
                                                int index, long arg3) {
-                    String str="Tâche envoyée:"+ ((Task)mTaskListView.getItemAtPosition(index)).getTaskName();
+                    String str="Tâche envoyée:"+ ((SousTache)mTaskListView.getItemAtPosition(index)).getTaskName();
                     Intent ShareIntent = new Intent(Intent.ACTION_SEND);
                     ShareIntent.setType("text/plain");
                     ShareIntent.putExtra(Intent.EXTRA_TEXT, str);
@@ -233,37 +227,14 @@ public class ToDoListActivity extends AppCompatActivity implements
 
             });
 
-            mTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-                @Override
-                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    try{
 
-                        STaskTap=1;
-
-                        Task task=((Task)mTaskListView.getItemAtPosition(position));
-                        long idTaskL=task.getId();
-                        int idTaskI=(int) idTaskL;
-
-                        idTorSTChoisi=idTaskI;
-
-                        refreshList();
-
-                    }catch (Exception e){
-                        Log.d("Todo_"+this.toString(),Log.getStackTraceString(e));
-                    }
-
-                }
-            });
 
         } else {
-            Log.d("Todo_"+this.toString(),"ttttt");
-            mAdapter.clear();
-            mAdapter.addAll(tasks);
-            mAdapter.notifyDataSetChanged();
+            mAdapterST.clear();
+            mAdapterST.addAll(tasks);
+            mAdapterST.notifyDataSetChanged();
         }
     }
-
-
 
     public void refreshList(){
 
@@ -272,37 +243,31 @@ public class ToDoListActivity extends AppCompatActivity implements
                 STaskTap=0;
                 // Le premier paramètre est le nom de l'activité actuelle
                 // Le second est le nom de l'activité de destination
-                Intent secondeActivite = new Intent(this, ToDoSousTacheListActivity.class);
+                Intent premiereActivite = new Intent(this, ToDoListActivity.class);
 
                 // On rajoute un extra
-                secondeActivite.putExtra("IDST", idTorSTChoisi);
 
                 // Puis on lance l'intent !
-                startActivity(secondeActivite);
+                startActivity(premiereActivite);
             }else{
-                updateUI(true);
+                updateUIST(true);
             }
-
-
-
-
         }
         else{
             if(STaskTap==1){
                 STaskTap=0;
                 // Le premier paramètre est le nom de l'activité actuelle
                 // Le second est le nom de l'activité de destination
-                Intent secondeActivite = new Intent(this, ToDoSousTacheListActivity.class);
+                Intent premiereActivite = new Intent(this, ToDoListActivity.class);
 
                 // On rajoute un extra
-                secondeActivite.putExtra("IDST", idTorSTChoisi);
 
                 // Puis on lance l'intent !
-                startActivity(secondeActivite);
+                startActivity(premiereActivite);
 
 
             }else{
-                updateUI(false);
+                updateUIST(false);
             }
 
         }
@@ -322,11 +287,11 @@ public class ToDoListActivity extends AppCompatActivity implements
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
         System.out.println("--------------id : " + taskId);
-        task = Task.findById(Task.class, taskId);
-        task.setPriority(Priorite.Fini);
-        task.setProgress(100);
-        System.out.println("--------------PRIORITE : " + task.getPriority());
-        task.save();
+        sousTask = Task.findById(Task.class, taskId);
+        sousTask.setPriority(Priorite.Fini);
+        sousTask.setProgress(100);
+        System.out.println("--------------PRIORITE : " + sousTask.getPriority());
+        sousTask.save();
 
         refreshList();
     }
@@ -335,11 +300,11 @@ public class ToDoListActivity extends AppCompatActivity implements
         View parent = (View) view.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
-        task = Task.findById(Task.class, taskId);
+        sousTask = Task.findById(Task.class, taskId);
 
-        Log.d("Todo_"+this.toString(),"aff:"+taskId+":"+task.getTaskName()+"|"+task.getAlarme());
+        Log.d("Todo_"+this.toString(),"aff:"+taskId+":"+sousTask.getTaskName()+"|"+sousTask.getAlarme());
 
-        createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority(),task.getProgress(), task.getAlarme());
+        createTaskLayout(sousTask.getTaskName(), sousTask.getDateString(), sousTask.getTimeString(), sousTask.getPriority(),sousTask.getProgress(), sousTask.getAlarme());
 
         /*---------------------------------------
         Crée l'AlertDialog pour l'édition de tâche
@@ -354,7 +319,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        deleteTask(task);
+                        deleteTask(sousTask);
                     }
                 })
                 .setPositiveButton(R.string.modifier, new DialogInterface.OnClickListener() {
@@ -372,7 +337,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                             String taskName = String.valueOf(taskEditText.getText());
 
                             if(txtDate.getText().toString().equals("")){ //si pas de date (peu importe si heure)
-                                task.setTaskName(taskName);
+                                sousTask.setTaskName(taskName);
                             }
                             else{
                                 String[] strDate = txtDate.getText().toString().split("/");
@@ -386,9 +351,9 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                                 date = Integer.valueOf(year)*10000 + Integer.valueOf(strDate[1]) * 100 + Integer.valueOf(strDate[0]) ;
                                 time = 10000 + Integer.valueOf(strTime[0])*100 + Integer.valueOf(strTime[1]);
-                                task.setTaskName(taskName);
-                                task.setDate(date);
-                                task.setTime(time);
+                                sousTask.setTaskName(taskName);
+                                sousTask.setDate(date);
+                                sousTask.setTime(time);
 
 
                                 //Pour reset les vars
@@ -405,43 +370,43 @@ public class ToDoListActivity extends AppCompatActivity implements
                             }
 
                             if(faible.isChecked()){
-                                task.setPriority(Priorite.Faible);
+                                sousTask.setPriority(Priorite.Faible);
                             }
                             if(moyenne.isChecked()){
-                                task.setPriority(Priorite.Moyenne);
+                                sousTask.setPriority(Priorite.Moyenne);
                             }
                             if(forte.isChecked()) {
-                                task.setPriority(Priorite.Forte);
+                                sousTask.setPriority(Priorite.Forte);
                             }
 
-                            if(alarmeCheck.isChecked() && !task.getAlarme()) {
+                            if(alarmeCheck.isChecked() && !sousTask.getAlarme()) {
 
-                                task.setAlarme(true);
+                                sousTask.setAlarme(true);
                                 Log.d("Todo_"+this.toString(),"ajouterAlarme");
-                                tDA.addAlarm(1,ToDoListActivity.this.getApplicationContext(),IDT+task.getId().intValue(),task.getTaskName(),intent,(int)task.getDate(),(int)task.getTime());
+                                tDA.addAlarm(1,ToDoSousTacheListActivity.this.getApplicationContext(),sousTask.getId().intValue(),sousTask.getTaskName(),intent,(int)sousTask.getDate(),(int)sousTask.getTime());
                                 //new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
 
 
-                            }else if(!alarmeCheck.isChecked() && task.getAlarme()){
-                                task.setAlarme(false);
+                            }else if(!alarmeCheck.isChecked() && sousTask.getAlarme()){
+                                sousTask.setAlarme(false);
                                 Log.d("Todo_"+this.toString(),"retirer alarme");
-                                tDA.removeAlarm(ToDoListActivity.this.getApplicationContext(),task.getTaskName(),intent,IDT+task.getId().intValue());
+                                tDA.removeAlarm(ToDoSousTacheListActivity.this.getApplicationContext(),sousTask.getTaskName(),intent,sousTask.getId().intValue());
                                 //new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
 
 
-                            }else if(alarmeCheck.isChecked() && task.getAlarme()){
+                            }else if(alarmeCheck.isChecked() && sousTask.getAlarme()){
                                 Log.d("Todo_"+this.toString(),"Modify retirer alarme");
-                                tDA.removeAlarm(ToDoListActivity.this.getApplicationContext(),task.getTaskName(),intent,IDT+task.getId().intValue());
+                                tDA.removeAlarm(ToDoSousTacheListActivity.this.getApplicationContext(),sousTask.getTaskName(),intent,sousTask.getId().intValue());
                                 Log.d("Todo_"+this.toString(),"Modify ajouterAlarme");
-                                tDA.addAlarm(1,ToDoListActivity.this.getApplicationContext(),IDT+task.getId().intValue(),task.getTaskName(),intent,(int)task.getDate(),(int)task.getTime());
+                                tDA.addAlarm(1,ToDoSousTacheListActivity.this.getApplicationContext(),sousTask.getId().intValue(),sousTask.getTaskName(),intent,(int)sousTask.getDate(),(int)sousTask.getTime());
 
                             }
                             else{
                                 Log.d("Todo_"+this.toString(),"don't modify alarm");
                             }
 
-                            task.setProgress(progress);
-                            task.save();
+                            sousTask.setProgress(progress);
+                            sousTask.save();
                             refreshList();
 
 
@@ -459,6 +424,39 @@ public class ToDoListActivity extends AppCompatActivity implements
         dialog.show();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        OnlineDatabase o= null;
+
+        switch (item.getItemId()) {
+            case R.id.action_add_task:
+                addnewtask();
+                return true;
+            case R.id.afficher_cacher_prio0:
+                enCours = !enCours;
+                refreshList();
+                return true;
+            case R.id.action_sauvegarde_distant:
+                //o = new OnlineDatabase(this);
+                //o.writeTasks();
+                return true;
+            case R.id.action_recup_distant:
+                //o = new OnlineDatabase(this);
+                //o.fetchTasks();
+                return true;
+            case R.id.action_clear_accounts:
+                //AccountLauncher.clearAccounts(this);
+                return true;
+            case R.id.action_authenticate:
+               // o = new OnlineDatabase(this);
+                //AccountLayout.addnewaccount(this, "utilisateurTest2.testComplet@gmail.com", "aaaaaa25");
+               // AccountLayout.checkPhoneAccounts(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -474,38 +472,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        OnlineDatabase o= null;
 
-        switch (item.getItemId()) {
-            case R.id.action_add_task:
-                addnewtask();
-                return true;
-            case R.id.afficher_cacher_prio0:
-                enCours = !enCours;
-                refreshList();
-                return true;
-            case R.id.action_sauvegarde_distant:
-                o = new OnlineDatabase(this);
-                o.writeTasks();
-                return true;
-            case R.id.action_recup_distant:
-                o = new OnlineDatabase(this);
-                o.fetchTasks();
-                return true;
-            case R.id.action_clear_accounts:
-                AccountLauncher.clearAccounts(this);
-                return true;
-            case R.id.action_authenticate:
-                o = new OnlineDatabase(this);
-                //AccountLayout.addnewaccount(this, "utilisateurTest2.testComplet@gmail.com", "aaaaaa25");
-                AccountLayout.checkPhoneAccounts(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     private void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault,int progress, boolean alarme){
         /*---------------------------------------
@@ -674,7 +641,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                             progress = Integer.parseInt(progressEditText.getText().toString())%100;
                         }
                         if(!taskEditText.getText().toString().equals("")){//si intitule de
-                            Task task;
+                            SousTache sousTask;
                             int date;
                             int time;
                             boolean alarmeBool;
@@ -684,7 +651,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                                 alarmeBool=false;
 
-                                task = new Task(taskName,progress, alarmeBool);
+                                sousTask = new SousTache(taskName,progress, alarmeBool,idTorSTChoisi);
                             }
                             else{
                                 date = mYear*10000 + mMonth * 100 + mDay ;
@@ -693,19 +660,19 @@ public class ToDoListActivity extends AppCompatActivity implements
 
 
                                 //task = new Task(taskName, date, time);
-                                task = new Task(taskName, date, time, progress, alarmeBool);
+                                sousTask = new SousTache(taskName, date, time, progress, alarmeBool,idTorSTChoisi);
                                 Log.d("Todo_" + this.toString(), "alarm:" + alarmeCheck.isChecked());
 
                             }
 
                             if(faible.isChecked()){
-                                task.setPriority(Priorite.Faible);
+                                sousTask.setPriority(Priorite.Faible);
                             }
                             if(moyenne.isChecked()){
-                                task.setPriority(Priorite.Moyenne);
+                                sousTask.setPriority(Priorite.Moyenne);
                             }
                             if(forte.isChecked()) {
-                                task.setPriority(Priorite.Forte);
+                                sousTask.setPriority(Priorite.Forte);
                             }
 
 
@@ -714,12 +681,12 @@ public class ToDoListActivity extends AppCompatActivity implements
 
 
 
-                            task.save();
+                            sousTask.save();
 
                             refreshList();
 
-                            if(task.getAlarme()) {
-                                tDA.addAlarm(1,ToDoListActivity.this.getApplicationContext(),IDT+task.getId().intValue(),task.getTaskName(),intent,(int)task.getDate(),(int)task.getTime());
+                            if(sousTask.getAlarme()) {
+                                tDA.addAlarm(1,ToDoSousTacheListActivity.this.getApplicationContext(),sousTask.getId().intValue(),sousTask.getTaskName(),intent,(int)sousTask.getDate(),(int)sousTask.getTime());
                                 //new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
 
                             }

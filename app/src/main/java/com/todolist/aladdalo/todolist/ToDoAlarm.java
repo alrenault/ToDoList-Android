@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.orm.query.Condition;
 import com.orm.query.Select;
+import com.todolist.aladdalo.todolist.db.SousTache;
 import com.todolist.aladdalo.todolist.db.Task;
 
 import java.text.SimpleDateFormat;
@@ -42,70 +43,9 @@ public class ToDoAlarm {
 
         Log.d("Todo_"+this.toString(),"new ManageAlarm");
 
-      /*  //Intent intent=new Intent();
-
-        intent.putExtra(IDTaskName,taskName); //share taskname in intent
-
-        String dateStr=String.valueOf(taskDate);
-        String timeStr=String.valueOf(time);
-
-        String day=dateStr.substring(6,8);
-        String month=dateStr.substring(4,6);
-        String year=dateStr.substring(0,4);
-        String hour=timeStr.substring(1,3);
-        String min=timeStr.substring(3,5);
-
-        String dateTime;
-        dateTime=day+"/"+month+"/"+year;
-        dateTime+="(";
-        dateTime+=hour+":"+min;
-        dateTime+=")";
-
-        new ToDoNotif(0,context, taskName,dateTime);
-
-        intent.putExtra(IDTaskDate,dateTime);
-        intent.setAction(actionAlarm);
-
-        //Log.d("Todo_"+this.toString(),intent.getStringExtra(IDTaskName));
-        //intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-
-        //context.sendBroadcast(intent);
-
-        //Alarm
-        Calendar calendar=Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, parseInt(day));
-        calendar.set(Calendar.MONTH,parseInt(month)-1);
-        calendar.set(Calendar.YEAR, parseInt(year));
-
-        calendar.set(Calendar.HOUR_OF_DAY, parseInt(hour));
-        calendar.set(Calendar.MINUTE, parseInt(min));
-
-
-        //removeAllAlarm(context,taskName, intent);
-        addAlarm(context,idTask,taskName,intent,calendar);
-        getPendingID(context,taskName);
-        getAllKeyID(context);
-
-        /*removeAlarm(context,taskName, intent);
-        getAllKeyID(context);
-        addAlarm(context,idTask,taskName,intent,calendar);
-        getAllKeyID(context);*/
-
-        //Toast.makeText(context, "Alarm to:"+i, Toast.LENGTH_LONG).show();
-        //SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-        //Log.d("Todo_"+this.toString(),"Alarm to:"+sdf.format(calendar.getTime()));*/
-
 
     }
 
-    public void SavePendingID(int id,Context context){
-       /* List<Integer> pendIntentList=getPendingID(context);
-        if (pendIntentList.contains(id)) {
-            return;
-        }
-        pendIntentList.add(id);
-        */
-    }
 
     public void getAllKeyID(Context context){
         //List<String> pendIntentList=new ArrayList<>();
@@ -167,9 +107,7 @@ public class ToDoAlarm {
      * @param intent
      */
     public void removeAllAlarm(Context context,String taskName,Intent intent){
-        /*PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)calendar.getTimeInMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), pendingIntent);*/
+
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor sPf=prefs.edit();
@@ -218,10 +156,7 @@ public class ToDoAlarm {
         intent.putExtra(IDTask,idTask);
         intent.setAction(actionAlarm);
 
-        //Log.d("Todo_"+this.toString(),intent.getStringExtra(IDTaskName));
-        //intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
 
-        //context.sendBroadcast(intent);
 
         //Alarm
         Calendar calendar=Calendar.getInstance();
@@ -236,16 +171,6 @@ public class ToDoAlarm {
         //removeAllAlarm(context,taskName, intent);
         getPendingID(context,taskName);
         getAllKeyID(context);
-
-        /*removeAlarm(context,taskName, intent);
-        getAllKeyID(context);
-        addAlarm(context,idTask,taskName,intent,calendar);
-        getAllKeyID(context);*/
-
-        //Toast.makeText(context, "Alarm to:"+i, Toast.LENGTH_LONG).show();
-        //SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-        //Log.d("Todo_"+this.toString(),"Alarm to:"+sdf.format(calendar.getTime()));
-
 
 
 
@@ -271,6 +196,16 @@ public class ToDoAlarm {
                 .where(Condition.prop("alarme").eq(1))
                 .list();
         for(Task t : tasks){
+            addAlarm(0,context,t.getId().intValue(),t.getTaskName(),intent,(int)t.getDate(),(int)t.getTime());
+
+            Log.d("Todo_"+this.toString(),t.getTaskName()+":remettreAlarme");
+        }
+
+        List<SousTache> soustache;
+        soustache = Select.from(SousTache.class)
+                .where(Condition.prop("alarme").eq(1))
+                .list();
+        for(SousTache t : soustache){
             addAlarm(0,context,t.getId().intValue(),t.getTaskName(),intent,(int)t.getDate(),(int)t.getTime());
 
             Log.d("Todo_"+this.toString(),t.getTaskName()+":remettreAlarme");
