@@ -48,7 +48,9 @@
             android:layout_marginStart="@dimen/margin_start_edit"
             android:background="@android:drawable/ic_menu_edit"
             android:backgroundTint="@color/colorPrimary"
-            android:onClick="afficheParam" />
+            android:onClick="afficheParam"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
 
             <TextView
                 android:id="@+id/deadline"
@@ -123,7 +125,9 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/margin_end_finish"
             android:background="@drawable/checkmark_green"
-            android:onClick="finishTask" />
+            android:onClick="finishTask"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
 
         <ListView
             android:id="@+id/list_subtasks"
