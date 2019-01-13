@@ -2,10 +2,10 @@
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_item"
-    android:layout_width="300dp"
+    android:layout_width="180dp"
     android:layout_height="120dp"
     android:gravity="center"
     android:background="@drawable/widget_item_background"
     android:textColor="#333333"
     android:textStyle="bold"
-    android:textSize="22sp" />
+    android:textSize="18sp" />

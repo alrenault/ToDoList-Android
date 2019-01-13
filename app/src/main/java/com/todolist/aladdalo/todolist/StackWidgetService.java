@@ -43,8 +43,8 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                 .list();
         mCount = tasks.size();
         for (int i = 0; i < mCount; i++) {
-            if(tasks.get(i%tasks.size()).getTaskName().length() > 15){
-                mWidgetItems.add(new WidgetItem(tasks.get(i%tasks.size()).getTaskName().substring(0, 13) + "...\n" + tasks.get(i%tasks.size()).getDateString() + "\n" + tasks.get(i%tasks.size()).getTimeString()));
+            if(tasks.get(i%tasks.size()).getTaskName().length() > 12){
+                mWidgetItems.add(new WidgetItem(tasks.get(i%tasks.size()).getTaskName().substring(0, 10) + "...\n" + tasks.get(i%tasks.size()).getDateString() + "\n" + tasks.get(i%tasks.size()).getTimeString()));
             }else{
                 mWidgetItems.add(new WidgetItem(tasks.get(i%tasks.size()).getTaskName() + "\n" + tasks.get(i%tasks.size()).getDateString() + "\n" + tasks.get(i%tasks.size()).getTimeString()));
             }

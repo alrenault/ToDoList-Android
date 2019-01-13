@@ -33,6 +33,7 @@ import com.orm.query.Select;
 
 import com.todolist.aladdalo.todolist.db.Task;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -537,14 +538,25 @@ public class ToDoListActivity extends AppCompatActivity implements
                     mMonth = monthOfYear+1;
                     mDay = dayOfMonth;
 
+
                     addModTask.getTxtDate().setText(String.format(getResources().getString(R.string.date), dayOfMonth, (monthOfYear + 1), year));
                 }
             };
 
-            new DatePickerDialog(this, datePicker, c
+            DatePickerDialog dpd = new DatePickerDialog(this, datePicker, c
                     .get(Calendar.YEAR), c.get(Calendar.MONTH),
-                    c.get(Calendar.DAY_OF_MONTH)).show();
+                    c.get(Calendar.DAY_OF_MONTH));
 
+            Field mDatePickerField;
+            try {
+                mDatePickerField = dpd.getClass().getDeclaredField("mDatePicker");
+                mDatePickerField.setAccessible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            dpd.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+
+            dpd.show();
         }
         if (v == addModTask.getTxtTime()) {
 
@@ -574,7 +586,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         if(verite){
             //account.setActive(false);
-            mii.setIcon(R.drawable.icon2);
+            mii.setIcon(R.drawable.icon1);
         }else{
             //account.setActive(true);
             mii.setIcon(R.drawable.icon);
