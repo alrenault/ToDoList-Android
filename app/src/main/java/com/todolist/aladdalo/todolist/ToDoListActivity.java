@@ -160,14 +160,12 @@ public class ToDoListActivity extends AppCompatActivity implements
                         .where(Condition.prop("priority").notEq(0))
                         .orderBy("date")
                         .list();
-                System.out.println("PREMIER CAS");
             }
             else{
                 tasks = Select.from(Task.class)
                         .where(Condition.prop("priority").notEq(0))
                         .orderBy("priority desc")
                         .list();
-                System.out.println("DEUXIEME CAS");
             }
 
         }
@@ -176,7 +174,6 @@ public class ToDoListActivity extends AppCompatActivity implements
                     .where(Condition.prop("priority").eq(0))
                     .orderBy("date")
                     .list();
-            System.out.println("TROISIEME CAS");
 
         }
 
@@ -235,17 +232,6 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         refreshList();
     }
-
-    /*public void deleteTask(View view) {
-         View parent = (View) view.getParent();
-        TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
-        int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
-        System.out.println("--------------id : " + taskId);
-         task = Task.findById(Task.class, taskId);
-        task.delete();
-
-        refreshList();
-    }*/
 
     /**
      * Fini une tâche en cours

@@ -195,9 +195,6 @@ public class CreateTaskLayout {
         this.linearLayout = linearLayout;
         this.taskEditText = taskEditText;
         this.progressEditText = progressEditText;
-        this.faible = faible;
-        this.moyenne = moyenne;
-        this.forte = forte;
         this.alarmeCheck=alarmeCheck;
     }
 
