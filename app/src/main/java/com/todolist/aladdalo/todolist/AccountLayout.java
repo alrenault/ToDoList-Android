@@ -27,9 +27,6 @@ import java.util.List;
 /**
  * Classe statique qui encapsule des fonctions utiles a la creation des vues pour l'authentification et
  * les fonctions qui ouvrent les AlertDialog
- * @author PITROU Adrien
- * @since 12/01/19
- * @version 1.0
  * */
 public class AccountLayout {
     private static String ACCOUNT_TYPE = "ccc";
