@@ -104,6 +104,12 @@ public class AccountLayout {
 
         android.accounts.Account[] telAccounts = AccountLauncher.getPhoneAccounts(context);
 
+
+        //Pour aligner RadioBox avec le texte
+        LinearLayout.LayoutParams layoutParamsTxt = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParamsTxt.setMargins(0,10,0,0);
+
         for(android.accounts.Account account : telAccounts){
             LinearLayout layout = new LinearLayout(context);
             layout.setOrientation(LinearLayout.HORIZONTAL);
@@ -122,14 +128,16 @@ public class AccountLayout {
                 bouton.setChecked(true);
             }
             counter++;
+
+
             box.addView(bouton);
-            textes.addView(layout);
+            textes.addView(layout,layoutParamsTxt);
         }
 
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayout.addView(textes);
         linearLayout.addView(box);
+        linearLayout.addView(textes);
 
         return linearLayout;
     }
@@ -200,21 +208,21 @@ public class AccountLayout {
         }
     }
 
-    /* * *
+    /**
      * Ajoute les infos de compte sur le telephone
      * @param context le contexte de l'application
-     * @param String baseUsername le nom d'utilisateur de base
-     * */
+     * @param baseUsername baseUsername le nom d'utilisateur de base
+     **/
     public static void addnewaccount(final ToDoListActivity context, String baseUsername){
         addnewaccount(context, baseUsername, "");
     }
 
-    /* * *
+    /**
      * Ajoute les infos de compte sur le telephone
      * @param context le contexte de l'application
-     * @param String baseUsername le nom d'utilisateur de base
-     * @param String baseMdp le mdp de base
-     * */
+     * @param baseUsername baseUsername le nom d'utilisateur de base
+     * @param baseMdp baseMdp le mdp de base
+     **/
     public static void addnewaccount(final ToDoListActivity context, final String baseUsername, final String baseMdp){
 
         final LinearLayout linearLayout = createAccountLayout(context, baseUsername, baseMdp);

@@ -40,7 +40,7 @@
     <string name="trier_date">Trier par deadline</string>
     <string name="trier_prio">Trier par ordre de priorité</string>
     <string name="ajout_compte">Ajouter un compte</string>
-    <string name="sauvegarde_distant">Sauvegarder</string>
-    <string name="recevoir_distant">Recevoir</string>
+    <string name="sauvegarde_distant">Sauvegarder les tâches</string>
+    <string name="recevoir_distant">Recevoir les tâches</string>
     <string name="effacer_comptes">Effacer compte</string>
 </resources>
