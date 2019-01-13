@@ -60,12 +60,12 @@ public class AccountLayout {
 
         /*username*/
         final EditText usernameEditText = new EditText(context);
-        usernameEditText.setHint(R.string.desc_tache);
+        usernameEditText.setHint(R.string.username);
         usernameEditText.setText(username);
 
         /*mdp*/
         final EditText mdpEditText = new EditText(context);
-        mdpEditText.setHint(R.string.desc_tache);
+        mdpEditText.setHint(R.string.password);
         mdpEditText.setText(mdp);
 
         //Layout pour organiser l'AlerteDialog
@@ -168,8 +168,8 @@ public class AccountLayout {
                                 Log.v("aaa", "addnewaccount");
                                 addnewaccount(context, "", "");
                             }else {
-                                LinearLayout textes = (LinearLayout) linearLayout.getChildAt(0);
-                                RadioGroup group = (RadioGroup) linearLayout.getChildAt(1);
+                                LinearLayout textes = (LinearLayout) linearLayout.getChildAt(1);
+                                RadioGroup group = (RadioGroup) linearLayout.getChildAt(0);
 
                                 //Log.v("aaa","group : "+group);
                                 int radioButtonID = group.getCheckedRadioButtonId();

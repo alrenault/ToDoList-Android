@@ -48,4 +48,6 @@
     <string name="authentification">Authentification</string>
     <string name="message_auth">Saisir le compte a authentifier</string>
     <string name="message_new_account">Saisir nom de compte et mot de passe</string>
+    <string name="username">Adresse mail</string>
+    <string name="password">Mot de passe</string>
 </resources>
