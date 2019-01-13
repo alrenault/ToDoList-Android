@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -31,6 +33,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -110,6 +113,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_to_do_list);
         mTaskListView = (ListView) findViewById(R.id.list_todo);
 
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -143,7 +147,6 @@ public class ToDoListActivity extends AppCompatActivity implements
         tDA=new ToDoAlarm();
 
         tDA.restoreAlarm(intent,ToDoListActivity.this.getApplicationContext());
-
 
 
     }
@@ -188,6 +191,23 @@ public class ToDoListActivity extends AppCompatActivity implements
                     R.id.task_title, // where to put the String of data
                     tasks); // where to get all the data
             mTaskListView.setAdapter(mAdapter); // set it as the adapter of the ListView instance
+
+            mTaskListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+                public boolean onItemLongClick(AdapterView<?> arg0, View v,
+                                               int index, long arg3) {
+                    String str="Tâche envoyée:"+ ((Task)mTaskListView.getItemAtPosition(index)).getTaskName();
+                    //String str="Tâche envoyée:"+ Task.findById(Task.class,index+1).getTaskName();
+                    //Toast.makeText(getApplicationContext(), "partager:"+str, Toast.LENGTH_SHORT).show();
+
+                    Intent ShareIntent = new Intent(Intent.ACTION_SEND);
+                    ShareIntent.setType("text/plain");
+                    ShareIntent.putExtra(Intent.EXTRA_TEXT, str);
+                    startActivity(Intent.createChooser(ShareIntent, "Partager avec:"));
+                    return true;
+                }
+            });
+
         } else {
             mAdapter.clear();
             mAdapter.addAll(tasks);
@@ -196,12 +216,15 @@ public class ToDoListActivity extends AppCompatActivity implements
     }
 
     public void refreshList(){
+
         if(tabs.getTabAt(0).isSelected()){
             updateUI(true);
         }
         else{
             updateUI(false);
         }
+
+
     }
 
     public void deleteTask(Task task) {
@@ -261,7 +284,6 @@ public class ToDoListActivity extends AppCompatActivity implements
                         deleteTask(task);
                     }
                 })
-
                 .setPositiveButton(R.string.modifier, new DialogInterface.OnClickListener() {
 
                     @Override
@@ -348,6 +370,8 @@ public class ToDoListActivity extends AppCompatActivity implements
                             task.setProgress(progress);
                             task.save();
                             refreshList();
+
+
 
 
                         }

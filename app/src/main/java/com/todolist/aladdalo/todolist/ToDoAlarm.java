@@ -210,7 +210,7 @@ public class ToDoAlarm {
         dateTime+=")";
         if(act==1){
             //new ToDoNotif(0,context, taskName,dateTime,idTask);
-            Toast.makeText(context, "Alarm activated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Alarme activée", Toast.LENGTH_SHORT).show();
         }
 
 
