@@ -50,4 +50,7 @@
     <string name="message_new_account">Saisir nom de compte et mot de passe</string>
     <string name="username">Adresse mail</string>
     <string name="password">Mot de passe</string>
+
+    <!--Widget-->
+    <string name="empty_view_text">no remaining tasks</string>
 </resources>
