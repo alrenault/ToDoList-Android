@@ -586,7 +586,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         if(verite){
             //account.setActive(false);
-            mii.setIcon(R.drawable.icon2);
+            mii.setIcon(R.drawable.icon1);
         }else{
             //account.setActive(true);
             mii.setIcon(R.drawable.icon);
