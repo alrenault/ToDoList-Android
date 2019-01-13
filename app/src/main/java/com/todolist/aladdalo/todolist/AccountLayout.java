@@ -67,6 +67,7 @@ public class AccountLayout {
         final EditText mdpEditText = new EditText(context);
         mdpEditText.setHint(R.string.password);
         mdpEditText.setText(mdp);
+        mdpEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         //Layout pour organiser l'AlerteDialog
         final LinearLayout linearLayout = new LinearLayout(context);
