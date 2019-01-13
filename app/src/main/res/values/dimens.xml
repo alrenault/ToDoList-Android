@@ -23,4 +23,6 @@
 
     <dimen name="progress_bar_size">12dip</dimen>
 
+    <dimen name="widget_margin">8dp</dimen>
+
 </resources>

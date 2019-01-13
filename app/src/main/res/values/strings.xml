@@ -48,4 +48,7 @@
     <string name="authentification">Authentification</string>
     <string name="message_auth">Saisir le compte a authentifier</string>
     <string name="message_new_account">Saisir nom de compte et mot de passe</string>
+
+    <!--Widget-->
+    <string name="empty_view_text">This is the empty view</string>
 </resources>
