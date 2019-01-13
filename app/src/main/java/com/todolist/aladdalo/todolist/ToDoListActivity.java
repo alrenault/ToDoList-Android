@@ -415,6 +415,11 @@ public class ToDoListActivity extends AppCompatActivity implements
                 return true;
             case R.id.afficher_cacher_prio0:
                 enCours = !enCours;
+                if(enCours){
+                    item.setTitle(R.string.afficher_tache_fini);
+                }
+                else
+                    item.setTitle(R.string.cacher_tache_fini);
                 refreshList();
                 return true;
             case R.id.action_sauvegarde_distant:
