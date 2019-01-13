@@ -21,6 +21,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Adaptateur pour faire le lien entre l'acitivité et et la base de données de SugarOrm
+ */
 public class TaskAdapter extends ArrayAdapter<Task> {
 
     public TaskAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull List<Task> objects) {

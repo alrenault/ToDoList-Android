@@ -1,31 +1,45 @@
 package com.todolist.aladdalo.todolist.db;
 
-import android.provider.BaseColumns;
-
 import com.orm.SugarRecord;
-import com.orm.dsl.Table;
-import com.orm.dsl.Unique;
 import com.todolist.aladdalo.todolist.Priorite;
 
 import java.util.Objects;
 
+/**
+ * Classe créant une tâche.
+ * Etend SugarRecord pour en faire une table dans la base de donnée interne
+ */
 public class Task extends SugarRecord{
+
+    /**Nom (ou intitulé) de la tâche*/
     private String taskName;
 
+    /**Date de la deadline de la tâche*/
     private int date;
 
+    /** Heure de la deadline de la tâche*/
     private int time;
 
+    /**Priorité de la tâche*/
     private int priority;
 
+    /**Booléen indiquant si une alarme est activée pour la tâche ou non*/
     private boolean alarme;
 
+    /**Progression (en pourcentage) de la tâche*/
     private int progress;
 
+    /**Constructeur par défaut*/
     public Task(){
 
     }
 
+    /**
+     * Constructeur sans deadline ou priorité (par défaut à faible)
+     * @param taskName Intitulé de la tâche
+     * @param progress Pourcentage de progression de la tâche
+     * @param alarme Si une alarme a été créée ou non
+     */
     public Task(String taskName, int progress, boolean alarme){
 
         this.taskName = taskName;
@@ -36,7 +50,14 @@ public class Task extends SugarRecord{
         this.alarme=alarme;
     }
 
-
+    /**
+     * Constructeur sans priorité (par défaut à faible
+     * @param taskName Intitulé de la tâche
+     * @param date Date de la deadline
+     * @param time Heure de la deadline
+     * @param progress Pourcentage de progression de la tâche
+     * @param alarme Si une alarme a été créée ou non
+     */
     public Task(String taskName, int date, int time, int progress, boolean alarme){
 
         this.taskName = taskName;
@@ -47,6 +68,15 @@ public class Task extends SugarRecord{
         this.alarme=alarme;
     }
 
+    /**
+     * Constructeur contenant toutes les informations
+     * @param taskName Intitulé de la tâche
+     * @param date Date de la deadline
+     * @param time Heure de la deadline
+     * @param progress Pourcentage de progression de la tâche
+     * @param alarme Si une alarme a été créée ou non
+     * @param priority Priorité de la tâche
+     */
     public Task(String taskName, int date, int time, int progress, boolean alarme, int priority){
 
         this.taskName = taskName;
@@ -65,6 +95,10 @@ public class Task extends SugarRecord{
         return date;
     }
 
+    /**
+     * Retourne la date sous la forme d'une string de la forme suivante : dd/MM/yyyy
+     * @return La date de la deadline de la tâche
+     */
     public String getDateString(){
         String date = String.valueOf(this.date);
 
@@ -79,6 +113,10 @@ public class Task extends SugarRecord{
         return time;
     }
 
+    /**
+     * Retourne l'heure sous la forme d'une string de la forme suivante : HH:mm
+     * @return L'heure de la deadline de la tâche
+     */
     public String getTimeString(){
         String time = String.valueOf(this.time);
 
@@ -155,12 +193,4 @@ public class Task extends SugarRecord{
         return Objects.hash(getTaskName(), getDate(), getTime(), getPriority(), getAlarme(), getProgress());
     }
 
-        /*public static final String DB_NAME = "com.todolist.aladdalo.todolist.db";
-    public static final int DB_VERSION = 1;
-
-    public class TaskEntry implements BaseColumns {
-        public static final String TABLE = "tasks";
-
-        public static final String COL_TASK_TITLE = "title";
-    }*/
 }

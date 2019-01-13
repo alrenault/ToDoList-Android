@@ -2,6 +2,9 @@ package com.todolist.aladdalo.todolist;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Enum représentant la priorité sous forme d'entier afin de limiter les possibilités
+ */
 public enum Priorite{
     @SerializedName("0") Fini(0),
     @SerializedName("1") Faible(1),

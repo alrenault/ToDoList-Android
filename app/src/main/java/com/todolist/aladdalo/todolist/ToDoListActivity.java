@@ -17,12 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -44,40 +40,44 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Classe créant l'activité prinipale de l'application où l'on peut voir toutes les taĉhes
+ * @author RENAULT Alexis, BREGEON Dany, MONET Lois, PITROU Adrien
+ */
 public class ToDoListActivity extends AppCompatActivity implements
         View.OnClickListener {
 
+    /**La listeView permettant d'afficher les tâches sous forme de liste */
     private ListView mTaskListView;
 
+    /**L'adaptateur pour utiliser la base de données interne*/
     private TaskAdapter mAdapter;
 
-//    private EditText txtDate, txtTime;
-
+    /**Tableau d'onglet de l'application*/
     private TabLayout tabs;
+
+    /**Tache sur laquelle on travaille actuellement*/
     private Task task;
 
+    /**DatePicker pour la création/modification de tache*/
     DatePickerDialog.OnDateSetListener datePicker;
+
+    /**Calendrier pour la création/modification de tâche*/
     final Calendar c = Calendar.getInstance();
 
+    /**Variable pour l'utilisation du temps*/
     private int mYear=0, mMonth=0, mDay=0, mHour=0, mMinute=0;
 
     /**true pour trier par date, false par priorité*/
     private boolean enCours = true;
 
-//    LinearLayout linearLayout;
-//    EditText taskEditText;
-//    EditText progressEditText;
-//    RadioButton faible;
-//    RadioButton moyenne;
-//    RadioButton forte;
-//    CheckBox alarmeCheck;
-
-    //pour que les alarmes et notif soient liées a un seul intent pour simplifier
+    /**Pour que les alarmes et notif soient liées a un seul intent pour simplifier*/
     Intent intent;
 
-    //to manage alarm for a task
+    /**Pour gérer l'alarm d'une tâche*/
     ToDoAlarm tDA;
 
+    /**Layout de l'alertDialog pour la création/modification d'une tâche*/
     CreateTaskLayout addModTask;
 
 
@@ -143,6 +143,10 @@ public class ToDoListActivity extends AppCompatActivity implements
 
     }
 
+    /**
+     * Permet de mettre à jour l'affichage de l'activité à chaque appel
+     * @param orderBy Permet de savoir quel ordre utiliser
+     */
     private void updateUI(boolean orderBy) {
 
         List<Task> tasks;
@@ -207,6 +211,9 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Permet d'appeller updateUI en fonction de l'onglet en cours
+     */
     public void refreshList(){
 
         if(tabs.getTabAt(0).isSelected()){
@@ -219,6 +226,10 @@ public class ToDoListActivity extends AppCompatActivity implements
 
     }
 
+    /**
+     * Supprime une tâche
+     * @param task La tâche à supprimer
+     */
     public void deleteTask(Task task) {
         task.delete();
 
@@ -236,20 +247,26 @@ public class ToDoListActivity extends AppCompatActivity implements
         refreshList();
     }*/
 
+    /**
+     * Fini une tâche en cours
+     * @param view La vue correspondant à la tâche
+     */
     public void finishTask(View view){
         View parent = (View) view.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);
         int taskId = Integer.valueOf(String.valueOf(taskTextView.getText()));
-        System.out.println("--------------id : " + taskId);
         task = Task.findById(Task.class, taskId);
         task.setPriority(Priorite.Fini);
         task.setProgress(100);
-        System.out.println("--------------PRIORITE : " + task.getPriority());
         task.save();
 
         refreshList();
     }
 
+    /**
+     * Permet d'afficher l'arlertDialog pour la modification des paramètres d'une tâche
+     * @param view La vue correspondant à la tâche
+     */
     public void afficheParam(View view){
         View parent = (View) view.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_id);

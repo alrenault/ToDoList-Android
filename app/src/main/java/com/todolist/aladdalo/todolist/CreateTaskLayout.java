@@ -1,9 +1,6 @@
 package com.todolist.aladdalo.todolist;
 
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -12,26 +9,43 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.todolist.aladdalo.todolist.db.Task;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
+/**
+ * Classe créant l'alertDialog lors de la création ou la modification d'une tâche
+ */
 public class CreateTaskLayout {
 
-    ToDoListActivity activity;
+    /**Activité qui représente le contexte */
+    private ToDoListActivity activity;
 
-    private EditText txtDate, txtTime;
-    private LinearLayout linearLayout;
+    /**EditText pour l'intitulé de la tâche*/
     private EditText taskEditText;
+
+    /**EditText pour la date d'une tâche */
+    private EditText txtDate;
+
+    /**EditText pour l'heure d'une tâche*/
+    private EditText txtTime;
+
+    /**EditText pour la progression d'une tâche*/
     private EditText progressEditText;
-    private RadioButton faible;
-    private RadioButton moyenne;
-    private RadioButton forte;
-    private CheckBox alarmeCheck;
+
+    /**RadioGroup pour la gestion de la priorité*/
     private RadioGroup priority;
+
+    /**Si coché, la priorité de la tâche sera faible*/
+    private RadioButton faible;
+
+    /**Si coché, la priorité de la tâche sera moyenne*/
+    private RadioButton moyenne;
+
+    /**Si coché, la priorité de la tâche sera forte*/
+    private RadioButton forte;
+
+    /**CheckBox pour activer une alarme*/
+    private CheckBox alarmeCheck;
+
+    /**Le layout final*/
+    private LinearLayout linearLayout;
 
 
     public CreateTaskLayout(ToDoListActivity activity){
@@ -39,8 +53,16 @@ public class CreateTaskLayout {
     }
 
 
-
-        public void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault,int progress, boolean alarme){
+    /**
+     * Création du layout de l'alertDialog
+     * @param taskDefault L'intitulé de la tâche
+     * @param dateDefault La date de la deadline de la tâche
+     * @param timeDefault L'heure de la deadline de la tâche
+     * @param priorityDefault La priorité de la tâche
+     * @param progress La progression de la tâche
+     * @param alarme Si une alarme est activé ou non
+     */
+    public void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault,int progress, boolean alarme){
         /*---------------------------------------
         Crée le layout pour la création de tâche
         ----------------------------------------*/
@@ -78,16 +100,16 @@ public class CreateTaskLayout {
         textPriority.setPadding(0,10,0,0);
 
         /*RadioGroup pour la priorité*/
-        RadioGroup priority = new RadioGroup(activity);
+        priority = new RadioGroup(activity);
         priority.setOrientation(LinearLayout.HORIZONTAL);
 
         /*Les RadioButton du RadioGroup*/
-        final RadioButton faible = new RadioButton(activity);
+        faible = new RadioButton(activity);
         faible.setText(R.string.prioFaible);
         //faible.setChecked(true);
-        final RadioButton moyenne = new RadioButton(activity);
+        moyenne = new RadioButton(activity);
         moyenne.setText(R.string.prioMoyenne);
-        final RadioButton forte = new RadioButton(activity);
+        forte = new RadioButton(activity);
         forte.setText(R.string.prioForte);
 
         priority.addView(faible);
@@ -179,139 +201,46 @@ public class CreateTaskLayout {
         this.alarmeCheck=alarmeCheck;
     }
 
-//    public void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault,int progress, boolean alarme){
-//        /*---------------------------------------
-//        Crée le layout pour la création de tâche
-//        ----------------------------------------*/
-//
-//        /*Nom de la tâche*/
-//        taskEditText.setText(taskDefault);
-//
-//        //EditText pour la date
-//        txtDate.setText(dateDefault);
-//
-//
-//        //EditText pour l'heure
-//        txtTime.setText(timeDefault);
-//
-//        /*RadioGroup pour la priorité*/
-//        switch (priorityDefault){
-//            case 1 : priority.check(faible.getId());
-//                break;
-//            case 2 : priority.check(moyenne.getId());
-//                break;
-//            case 3 : priority.check(forte.getId());
-//                break;
-//            default : priority.check(faible.getId());
-//        }
-//        //----------------------------
-//
-//        //Progression
-//        progressEditText.setText(String.valueOf(progress));
-//
-//
-//        alarmeCheck.setChecked(alarme);
-//
-//        /*---------------------------------------
-//             Fin de la création du layout
-//        ----------------------------------------*/
-//
-////        activity.setTxtDate(txtDate);
-////        activity.setTxtTime(txtTime);
-////        activity.setLinearLayout(linearLayout);
-////        activity.setTaskEditText(taskEditText);
-////        activity.setProgressEditText(progressEditText);
-////        activity.setFaible(faible);
-////        activity.setMoyenne(moyenne);
-////        activity.setForte(forte);
-////        activity.setAlarmeCheck(alarmeCheck);
-//    }
 
-    public ToDoListActivity getActivity() {
-        return activity;
-    }
-
-    public void setActivity(ToDoListActivity activity) {
-        this.activity = activity;
-    }
 
     public EditText getTxtDate() {
         return txtDate;
-    }
-
-    public void setTxtDate(EditText txtDate) {
-        this.txtDate = txtDate;
     }
 
     public EditText getTxtTime() {
         return txtTime;
     }
 
-    public void setTxtTime(EditText txtTime) {
-        this.txtTime = txtTime;
-    }
-
     public LinearLayout getLinearLayout() {
         return linearLayout;
-    }
-
-    public void setLinearLayout(LinearLayout linearLayout) {
-        this.linearLayout = linearLayout;
     }
 
     public EditText getTaskEditText() {
         return taskEditText;
     }
 
-    public void setTaskEditText(EditText taskEditText) {
-        this.taskEditText = taskEditText;
-    }
-
     public EditText getProgressEditText() {
         return progressEditText;
-    }
-
-    public void setProgressEditText(EditText progressEditText) {
-        this.progressEditText = progressEditText;
     }
 
     public RadioButton getFaible() {
         return faible;
     }
 
-    public void setFaible(RadioButton faible) {
-        this.faible = faible;
-    }
-
     public RadioButton getMoyenne() {
         return moyenne;
-    }
-
-    public void setMoyenne(RadioButton moyenne) {
-        this.moyenne = moyenne;
     }
 
     public RadioButton getForte() {
         return forte;
     }
 
-    public void setForte(RadioButton forte) {
-        this.forte = forte;
-    }
-
     public CheckBox getAlarmeCheck() {
         return alarmeCheck;
-    }
-
-    public void setAlarmeCheck(CheckBox alarmeCheck) {
-        this.alarmeCheck = alarmeCheck;
     }
 
     public RadioGroup getPriority() {
         return priority;
     }
 
-    public void setPriority(RadioGroup priority) {
-        this.priority = priority;
-    }
 }
