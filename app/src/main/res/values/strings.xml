@@ -31,7 +31,7 @@
 
 
     <string name="afficher_tache_fini">Afficher les taches finies</string>
-    <string name="cacher_tache_fini">Cacher les taches finies</string>
+    <string name="cacher_tache_fini">Afficher les taches en cours</string>
     <string name="afficher_tache_en_cours">Tâches en cours</string>
     <string name="acc_name">typeTest</string>
     <string name="acc_authority">\"authTest\"</string>
@@ -43,4 +43,9 @@
     <string name="sauvegarde_distant">Sauvegarder les tâches</string>
     <string name="recevoir_distant">Recevoir les tâches</string>
     <string name="effacer_comptes">Effacer compte</string>
+
+    <!--AccoutLayout-->
+    <string name="authentification">Authentification</string>
+    <string name="message_auth">Saisir le compte a authentifier</string>
+    <string name="message_new_account">Saisir nom de compte et mot de passe</string>
 </resources>

@@ -1,28 +1,21 @@
 package com.todolist.aladdalo.todolist;
 
-import android.accounts.Account;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.menu.ActionMenuItemView;
-import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.text.InputType;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -30,13 +23,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.orm.SchemaGenerator;
 import com.orm.SugarContext;
 import com.orm.SugarDb;;
@@ -50,7 +39,6 @@ import com.todolist.aladdalo.todolist.db.Task;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -63,7 +51,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
     private TaskAdapter mAdapter;
 
-    private EditText txtDate, txtTime;
+//    private EditText txtDate, txtTime;
 
     private TabLayout tabs;
     private Task task;
@@ -76,13 +64,13 @@ public class ToDoListActivity extends AppCompatActivity implements
     /**true pour trier par date, false par priorité*/
     private boolean enCours = true;
 
-    LinearLayout linearLayout;
-    EditText taskEditText;
-    EditText progressEditText;
-    RadioButton faible;
-    RadioButton moyenne;
-    RadioButton forte;
-    CheckBox alarmeCheck;
+//    LinearLayout linearLayout;
+//    EditText taskEditText;
+//    EditText progressEditText;
+//    RadioButton faible;
+//    RadioButton moyenne;
+//    RadioButton forte;
+//    CheckBox alarmeCheck;
 
     //pour que les alarmes et notif soient liées a un seul intent pour simplifier
     Intent intent;
@@ -90,10 +78,14 @@ public class ToDoListActivity extends AppCompatActivity implements
     //to manage alarm for a task
     ToDoAlarm tDA;
 
+    CreateTaskLayout addModTask;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        addModTask = new CreateTaskLayout(this);
 
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm",Locale.FRANCE);
         Date dateReset = new Date();
@@ -266,7 +258,7 @@ public class ToDoListActivity extends AppCompatActivity implements
 
         Log.d("Todo_"+this.toString(),"aff:"+taskId+":"+task.getTaskName()+"|"+task.getAlarme());
 
-        createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority(),task.getProgress(), task.getAlarme());
+        addModTask.createTaskLayout(task.getTaskName(), task.getDateString(), task.getTimeString(), task.getPriority(),task.getProgress(), task.getAlarme());
 
         /*---------------------------------------
         Crée l'AlertDialog pour l'édition de tâche
@@ -276,7 +268,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.modif_tache)
                 .setMessage(R.string.faire_ensuite)
-                .setView(linearLayout)
+                .setView(addModTask.getLinearLayout())
                 .setNeutralButton("Supprimer", new DialogInterface.OnClickListener() {
 
                     @Override
@@ -289,21 +281,21 @@ public class ToDoListActivity extends AppCompatActivity implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         int progress = 0;
-                        if(!progressEditText.getText().toString().equals("")){
-                            progress = Integer.parseInt(progressEditText.getText().toString())%100;
+                        if(!addModTask.getProgressEditText().getText().toString().equals("")){
+                            progress = Integer.parseInt(addModTask.getProgressEditText().getText().toString())%100;
                         }
-                        if(!taskEditText.getText().toString().equals("")){
+                        if(!addModTask.getTaskEditText().getText().toString().equals("")){
 
                             int date;
                             int time;
-                            String taskName = String.valueOf(taskEditText.getText());
+                            String taskName = String.valueOf(addModTask.getTaskEditText().getText());
 
-                            if(txtDate.getText().toString().equals("")){ //si pas de date (peu importe si heure)
+                            if(addModTask.getTxtDate().getText().toString().equals("")){ //si pas de date (peu importe si heure)
                                 task.setTaskName(taskName);
                             }
                             else{
-                                String[] strDate = txtDate.getText().toString().split("/");
-                                String[] strTime = txtTime.getText().toString().split(":");
+                                String[] strDate = addModTask.getTxtDate().getText().toString().split("/");
+                                String[] strTime = addModTask.getTxtTime().getText().toString().split(":");
                                 String year;
 
                                 if(strDate[2].length() != 4)
@@ -331,17 +323,17 @@ public class ToDoListActivity extends AppCompatActivity implements
 
                             }
 
-                            if(faible.isChecked()){
+                            if(addModTask.getFaible().isChecked()){
                                 task.setPriority(Priorite.Faible);
                             }
-                            if(moyenne.isChecked()){
+                            if(addModTask.getMoyenne().isChecked()){
                                 task.setPriority(Priorite.Moyenne);
                             }
-                            if(forte.isChecked()) {
+                            if(addModTask.getForte().isChecked()) {
                                 task.setPriority(Priorite.Forte);
                             }
 
-                            if(alarmeCheck.isChecked() && !task.getAlarme()) {
+                            if(addModTask.getAlarmeCheck().isChecked() && !task.getAlarme()) {
 
                                 task.setAlarme(true);
                                 Log.d("Todo_"+this.toString(),"ajouterAlarme");
@@ -349,14 +341,14 @@ public class ToDoListActivity extends AppCompatActivity implements
                                 //new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
 
 
-                            }else if(!alarmeCheck.isChecked() && task.getAlarme()){
+                            }else if(!addModTask.getAlarmeCheck().isChecked() && task.getAlarme()){
                                 task.setAlarme(false);
                                 Log.d("Todo_"+this.toString(),"retirer alarme");
                                 tDA.removeAlarm(ToDoListActivity.this.getApplicationContext(),task.getTaskName(),intent,task.getId().intValue());
                                 //new ToDoAlarm(ToDoListActivity.this.getApplicationContext(), task.getTaskName(), (int)task.getDate(), (int)task.getTime(), intent, task.getId().intValue());//Start alarm
 
 
-                            }else if(alarmeCheck.isChecked() && task.getAlarme()){
+                            }else if(addModTask.getAlarmeCheck().isChecked() && task.getAlarme()){
                                 Log.d("Todo_"+this.toString(),"Modify retirer alarme");
                                 tDA.removeAlarm(ToDoListActivity.this.getApplicationContext(),task.getTaskName(),intent,task.getId().intValue());
                                 Log.d("Todo_"+this.toString(),"Modify ajouterAlarme");
@@ -443,144 +435,6 @@ public class ToDoListActivity extends AppCompatActivity implements
         }
     }
 
-    private void createTaskLayout(String taskDefault, String dateDefault, String timeDefault, int priorityDefault,int progress, boolean alarme){
-        /*---------------------------------------
-        Crée le layout pour la création de tâche
-        ----------------------------------------*/
-
-        /*Nom de la tâche*/
-        final EditText taskEditText = new EditText(this);
-        taskEditText.setHint(R.string.desc_tache);
-        taskEditText.setText(taskDefault);
-        taskEditText.setMaxHeight(200);
-
-        //EditText pour la date
-        txtDate= new EditText(this);
-        txtDate.setWidth(400);
-        txtDate.setHint(R.string.format_date);
-        txtDate.setText(dateDefault);
-        txtDate.setFocusable(false);
-        txtDate.setClickable(true);
-
-        //EditText pour l'heure
-        txtTime=new EditText(this);
-        txtTime.setWidth(400);
-        txtTime.setHint(R.string.format_heure);
-        txtTime.setText(timeDefault);
-        txtTime.setFocusable(false);
-        txtTime.setClickable(true);
-
-
-        //listener des EditText
-        txtDate.setOnClickListener(this);
-        txtTime.setOnClickListener(this);
-
-        /*TextView pour priorité*/
-        final TextView textPriority = new TextView(this);
-        textPriority.setText(R.string.txtPriorite);
-        textPriority.setPadding(0,10,0,0);
-
-        /*RadioGroup pour la priorité*/
-        RadioGroup priority = new RadioGroup(this);
-        priority.setOrientation(LinearLayout.HORIZONTAL);
-
-        /*Les RadioButton du RadioGroup*/
-        final RadioButton faible = new RadioButton(this);
-        faible.setText(R.string.prioFaible);
-        //faible.setChecked(true);
-        final RadioButton moyenne = new RadioButton(this);
-        moyenne.setText(R.string.prioMoyenne);
-        final RadioButton forte = new RadioButton(this);
-        forte.setText(R.string.prioForte);
-
-        priority.addView(faible);
-        priority.addView(moyenne);
-        priority.addView(forte);
-
-        switch (priorityDefault){
-            case 1 : priority.check(faible.getId());
-                break;
-            case 2 : priority.check(moyenne.getId());
-                break;
-            case 3 : priority.check(forte.getId());
-                break;
-            default : priority.check(faible.getId());
-        }
-        //----------------------------
-
-        //Progression
-        final TextView textProgress = new TextView(this);
-        textProgress.setText(R.string.desc_progress);
-        textProgress.setPadding(0,10,0,0);
-        final EditText progressEditText = new EditText(this);
-        progressEditText.setHint(R.string.progress_hint);
-        progressEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        progressEditText.setText(String.valueOf(progress));
-
-        /*Checkbox pour activer ou non l'alarme*/
-        final TextView textAlarme=new TextView(this);
-        textAlarme.setText(R.string.alarme);
-        textAlarme.setPadding(120,10,0,0);
-
-        final CheckBox alarmeCheck = new CheckBox(this);
-        alarmeCheck.setChecked(alarme);
-
-        LinearLayout.LayoutParams layoutParamsCheck = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParamsCheck.setMargins(120,0,0,0);
-
-
-        //Layout pour organiser l'AlerteDialog
-        final LinearLayout linearLayout = new LinearLayout(this);
-        final LinearLayout date = new LinearLayout(this);
-        final LinearLayout time = new LinearLayout(this);
-
-        date.setOrientation(LinearLayout.HORIZONTAL);
-        date.addView(txtDate);
-
-        time.setOrientation(LinearLayout.HORIZONTAL);
-        time.addView(txtTime);
-
-        final LinearLayout progressLayout = new LinearLayout(this);
-        final LinearLayout alarmeLayout = new LinearLayout(this);
-        final LinearLayout progressAlarm = new LinearLayout(this);
-
-        progressLayout.addView(textProgress);
-        progressLayout.addView(progressEditText);
-        progressLayout.setOrientation(LinearLayout.VERTICAL);
-        alarmeLayout.addView(textAlarme);
-        alarmeLayout.addView(alarmeCheck,layoutParamsCheck);
-        alarmeLayout.setOrientation(LinearLayout.VERTICAL);
-
-        progressAlarm.setOrientation(LinearLayout.HORIZONTAL);
-        progressAlarm.addView(progressLayout);
-        progressAlarm.addView(alarmeLayout);
-
-        linearLayout.addView(taskEditText);
-        linearLayout.addView(date);
-        linearLayout.addView(time);
-        linearLayout.addView(textPriority);
-        linearLayout.addView(priority);
-        linearLayout.addView(progressAlarm);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-        /*Définir la bonne taille pour le champ taskEditText*/
-        ViewGroup.LayoutParams params = taskEditText.getLayoutParams();
-        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        taskEditText.setLayoutParams(params);
-
-        /*---------------------------------------
-             Fin de la création du layout
-        ----------------------------------------*/
-
-        this.linearLayout = linearLayout;
-        this.taskEditText = taskEditText;
-        this.progressEditText = progressEditText;
-        this.faible = faible;
-        this.moyenne = moyenne;
-        this.forte = forte;
-        this.alarmeCheck=alarmeCheck;
-    }
 
     /**Créé et gère l'AlertDialog lors de la création de tâche**/
     public void addnewtask(){
@@ -591,7 +445,7 @@ public class ToDoListActivity extends AppCompatActivity implements
         String currentDate = format.format(date).substring(0,10);
         String currentHour = format.format(date).substring(11,16);
 
-        createTaskLayout("",currentDate,currentHour, 1,0, false);
+        addModTask.createTaskLayout("",currentDate,currentHour, 1,0, false);
         /*---------------------------------------
         Crée l'AlertDialog pour la création de tâche
         ----------------------------------------*/
@@ -600,23 +454,23 @@ public class ToDoListActivity extends AppCompatActivity implements
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.ajout_tache)
                 .setMessage(R.string.faire_ensuite)
-                .setView(linearLayout)
+                .setView(addModTask.getLinearLayout())
                 .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         int progress = 0;
-                        if(!progressEditText.getText().toString().equals("")){
-                            progress = Integer.parseInt(progressEditText.getText().toString())%100;
+                        if(!addModTask.getProgressEditText().getText().toString().equals("")){
+                            progress = Integer.parseInt(addModTask.getProgressEditText().getText().toString())%100;
                         }
-                        if(!taskEditText.getText().toString().equals("")){//si intitule de
+                        if(!addModTask.getTaskEditText().getText().toString().equals("")){//si intitule de
                             Task task;
                             int date;
                             int time;
                             boolean alarmeBool;
-                            String taskName = String.valueOf(taskEditText.getText());
+                            String taskName = String.valueOf(addModTask.getTaskEditText().getText());
 
-                            if(txtDate.getText().toString().equals("")){ //si pas de date (peut importe si heure)
+                            if(addModTask.getTxtDate().getText().toString().equals("")){ //si pas de date (peut importe si heure)
 
                                 alarmeBool=false;
 
@@ -625,30 +479,24 @@ public class ToDoListActivity extends AppCompatActivity implements
                             else{
                                 date = mYear*10000 + mMonth * 100 + mDay ;
                                 time = 10000 + mHour*100 + mMinute;
-                                alarmeBool=alarmeCheck.isChecked();
+                                alarmeBool=addModTask.getAlarmeCheck().isChecked();
 
 
                                 //task = new Task(taskName, date, time);
                                 task = new Task(taskName, date, time, progress, alarmeBool);
-                                Log.d("Todo_" + this.toString(), "alarm:" + alarmeCheck.isChecked());
+                                Log.d("Todo_" + this.toString(), "alarm:" + addModTask.getAlarmeCheck().isChecked());
 
                             }
 
-                            if(faible.isChecked()){
+                            if(addModTask.getFaible().isChecked()){
                                 task.setPriority(Priorite.Faible);
                             }
-                            if(moyenne.isChecked()){
+                            if(addModTask.getMoyenne().isChecked()){
                                 task.setPriority(Priorite.Moyenne);
                             }
-                            if(forte.isChecked()) {
+                            if(addModTask.getForte().isChecked()) {
                                 task.setPriority(Priorite.Forte);
                             }
-
-
-
-
-
-
 
                             task.save();
 
@@ -675,7 +523,7 @@ public class ToDoListActivity extends AppCompatActivity implements
     @Override
     public void onClick(View v) {
 
-        if (v == txtDate) {
+        if (v == addModTask.getTxtDate()) {
             datePicker = new DatePickerDialog.OnDateSetListener() {
 
                 @Override
@@ -686,7 +534,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                     mMonth = monthOfYear+1;
                     mDay = dayOfMonth;
 
-                    txtDate.setText(String.format(getResources().getString(R.string.date), dayOfMonth, (monthOfYear + 1), year));
+                    addModTask.getTxtDate().setText(String.format(getResources().getString(R.string.date), dayOfMonth, (monthOfYear + 1), year));
                 }
             };
 
@@ -695,7 +543,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                     c.get(Calendar.DAY_OF_MONTH)).show();
 
         }
-        if (v == txtTime) {
+        if (v == addModTask.getTxtTime()) {
 
             // Lance le Time Picker Dialog
             TimePickerDialog timePickerDialog = new TimePickerDialog(this,
@@ -707,7 +555,7 @@ public class ToDoListActivity extends AppCompatActivity implements
                             mHour = hourOfDay;
                             mMinute = minute;
 
-                            txtTime.setText(String.format(getResources().getString(R.string.heure),hourOfDay,minute));
+                            addModTask.getTxtTime().setText(String.format(getResources().getString(R.string.heure),hourOfDay,minute));
 
                         }
                     }, mHour, mMinute, false);
@@ -729,6 +577,7 @@ public class ToDoListActivity extends AppCompatActivity implements
             mii.setIcon(R.drawable.icon);
         }
     }
+
 
 
 }

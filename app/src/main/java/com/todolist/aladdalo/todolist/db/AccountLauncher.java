@@ -102,10 +102,10 @@ public class AccountLauncher{
         return null;
     }
 
-    /**
+    /* *
      * Interface pour la recuperation de donnees depuis firebase
-     *
-    public interface OnGetDataListener {
+     **/
+    /*public interface OnGetDataListener {
         public void onStart();
         public void onAddingDatabase(com.todolist.aladdalo.todolist.db.Account account);
         public void onAddingPhone(Account account);
@@ -182,6 +182,7 @@ public class AccountLauncher{
 
     /**
     * Supprime tout les comptes sauf celui passe en parametres
+     * @param accountExcept
     * */
     private static void clearDbAccountExcept(com.todolist.aladdalo.todolist.db.Account accountExcept){
         List<com.todolist.aladdalo.todolist.db.Account> accountRecupered = Select.from(com.todolist.aladdalo.todolist.db.Account.class).list();
@@ -194,6 +195,7 @@ public class AccountLauncher{
 
     /**
      * Supprime tout
+     * @param context le contexte de l'application
      * */
     public static void clearAccounts(ToDoListActivity context) {
         Log.v("aaa", "clearAllAccounts");

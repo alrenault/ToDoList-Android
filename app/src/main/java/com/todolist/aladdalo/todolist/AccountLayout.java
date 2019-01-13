@@ -157,8 +157,8 @@ public class AccountLayout {
             Log.v("aaa","linearLayout : "+linearLayout);
 
             AlertDialog dialog = new AlertDialog.Builder(context)
-                    .setTitle("Authentification")
-                    .setMessage("Saisir le compte a authentifier")
+                    .setTitle(R.string.authentification)
+                    .setMessage(R.string.message_auth)
                     .setView(linearLayout)
                     .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
 
@@ -233,7 +233,7 @@ public class AccountLayout {
         //Creation du AlertDialog
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.ajout_compte)
-                .setMessage("Saisir nom de compte et mot de passe")
+                .setMessage(R.string.message_new_account)
                 .setView(linearLayout)
                 .setPositiveButton(R.string.ajouter, new DialogInterface.OnClickListener() {
 
