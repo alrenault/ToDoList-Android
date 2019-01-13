@@ -18,19 +18,6 @@
         android:title="@string/authenticate"
         app:showAsAction="always" />
 
-<!-- <item
-    android:id="@+id/afficher_en_cours"
-    android:orderInCategory="300"
-    android:title="@string/afficher_tache_en_cours"
-    android:icon="@drawable/ic_add_box_black_24dp"
-    app:showAsAction="never"/> -->
-    <!--<item
-        android:id="@+id/menu_group"
-        android:icon="@drawable/icon_menu"
-        android:title="@string/ajout_tache"
-        app:showAsAction="ifRoom" >
-        <menu
-            android:width="45dp">-->
             <item
                 android:id="@+id/afficher_cacher_prio0"
                 android:orderInCategory="300"
@@ -56,8 +43,6 @@
                 android:title="@string/effacer_comptes"
                 android:icon="@drawable/icon_clear_accounts"
                 app:showAsAction="never"/>
-      <!--  </menu>
-    </item>-->
 
 </menu>
 
